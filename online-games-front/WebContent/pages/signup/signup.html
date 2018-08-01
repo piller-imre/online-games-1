@@ -1,0 +1,36 @@
+<h1>Welcome to Levi's Theme Park!</h1>
+
+<div>
+	<p>Sign up for entrance to the party!</p>
+</div>
+
+
+<div>
+	<h2>Sign up</h2>
+	
+<!-- 	<div ng-show="signUpError" > -->
+<!-- 		{{error}} -->
+<!-- 	</div> -->
+	<form name="form" ng-submit="signUp()">
+	    <div>
+	        <label for="username">Username</label>
+	        <input type="text" name="username" id="signUpUsername" class="" ng-model="signUp.username" required />
+	    </div>
+	    <div>
+	        <label for="password">Password</label>
+	        <input type="password" name="password" id="signUpPassword" ng-model="signUp.password" required />
+	    </div>
+	    <div>
+	        <label for="password">Password again</label>
+	        <input type="password" name="password" id="signUpPasswordAgain" ng-model="signUp.password2" required />
+	    </div>
+	    <div>
+	        <label for="email">Email</label>
+	        <input type="email" name="email" id="email" class="" ng-model="signUp.email" required />
+	    </div>
+	    <div>
+	        <button type="submit">Login</button>
+	    </div>
+	</form>
+</div>
+

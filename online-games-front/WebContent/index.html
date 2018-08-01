@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+	<meta charset="ISO-8859-2">
+	
+	<title>Online Games</title>
+	
+    <link	rel="stylesheet" 
+    		href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+    		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
+    		crossorigin="anonymous">
+	
+	<link rel="stylesheet" href="directives/chess/chess.css"/>
+
+    <link rel="stylesheet" href="styles.css" />
+    
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.19/angular-ui-router.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+			integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
+			crossorigin="anonymous"></script>
+    
+    <!-- App Scripts -->    
+    <script src="app.js"></script>
+	<script type="text/javascript" src="app.js"></script>
+	
+	<script type="text/javascript" src="directives/chess/chess.js"></script>
+	<script type="text/javascript" src="directives/sidebar/sidebar.js"></script>
+	
+	<script type="text/javascript" src="pages/login/login.js"></script>
+	<script type="text/javascript" src="pages/signup/signup.js"></script>
+    
+  </head>
+<body>
+
+<!-- Side bar -->
+<side-bar></side-bar>
+
+<!-- Content -->
+<ui-view></ui-view>
+
+
+</body>
+
+</html>
