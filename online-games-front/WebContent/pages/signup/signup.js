@@ -1,4 +1,4 @@
-controllers.controller('SignupController', [ '$rootscope', function($rootscope){
+controllers.controller('SignupController', [ function(){
 		
 	
 	
