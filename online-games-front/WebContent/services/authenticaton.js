@@ -2,6 +2,7 @@
 app.service('AuthenticationService', ['$http', '$location', '$localStorage', 
 	function ($http, $location, $localStorage) {
 		var vm = this;
+		
 		vm.login = function(username, password, callback) {
 			$http.post('/authenticate', { username: username, password: password })
 				.then(function (response) {

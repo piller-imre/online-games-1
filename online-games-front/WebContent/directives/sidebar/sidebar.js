@@ -1,4 +1,4 @@
-directives.directive('sideBar', ['AuthenticationService', function(AuthenticationService){
+directives.directive('sideBar', [function(){
 	return {
 		templateUrl: "directives/sidebar/sidebar.html"
 	}

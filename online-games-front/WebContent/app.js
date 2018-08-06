@@ -75,7 +75,9 @@ app.run(function($rootScope, $http, $location, $localStorage) {
 		var publicPages = [ '/login', '/signup', '/credits' ];
 		var restrictedPage = publicPages.indexOf($location.path()) === -1;
 		if (restrictedPage && !$localStorage.currentUser) {
-			$location.path('/login');
+			setTimeout(function(){
+				$location.path("/login"); 
+			},0);
 		}
 	});
 });
