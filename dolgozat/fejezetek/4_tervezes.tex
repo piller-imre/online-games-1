@@ -6,6 +6,8 @@
 % TODO: Adatbázis
 % Séma leírása
 
+
+
 % TODO: API
 % API-kat definiálni, amin majd kommunikálni lehet a backend résszel (Ez lenne a REST API megadása gyakorlatilag)
 % A szinkronizációs protokollokat is definiálni kellene
@@ -22,3 +24,36 @@
 % TODO: Játékszabályok ellenőrzése
 % Valid lépések ellenőrzése mindkét oldalon
 % Játéklogika elkészítésének tervei
+
+\Section{Adatbázis}
+
+Az adatbázisban két fontos szereplő típust, illetve azok állapotait kell nyilvántartanunk: a felhasználókat és a játékmeneteket. Habár közöttük is van kapcsolat, elemzés szempontjából szétválasztható kategóriák.\\
+
+\SubSection{Felhasználói adatok}
+A felhasználóhoz tartozó legfontosabb információk, amiket tárolni kell, a felhasználó:\\
+\begin{itemize}
+	\item felhasználóneve,
+	\item emailcíme,
+	\item jelszavához tartozó hash kód,
+	\item be van-e jelentkezve.
+\end{itemize}
+
+\SubSection{Meccsek adatai}
+A meccsek adatait érdemes állapotuk, ha úgy tetszik, életciklusuk szempontjából csoportosítani. Egy meccs életének fázisai:
+\begin{itemize}
+	\item Játék kezdeményezés:\\
+	Első a játék kezdeményezés, amit egy felhasználó hoz létre jelezvén, hogy játszani szeretne.\\
+	Ez után akár meg is szűnhet, ha a játékos megszakítja (például, hogy új beállításokkal indíthasson játékmenetet), kijelentkezik, vagy ő maga egy másik kezdeményezésre jelentkezik.\\
+	\item Aktív játékmenet:\\
+	A kezdeményezés aktív játékmenetté válik, ha egy játékos elfogad egy játékmenetet.\\
+	\item Lejátszott meccs:\\
+	A játék a végén pedig lejátszott meccs lesz. Az előző állapot minden állapotváltáskor törlődik egy kivétellel: a lejátszott meccsek adatai később sem tűnnek el, adataira statisztikai okokból később szükségünk lesz, ugyanis ezek alapján lehet felállítani a rangsorokat és az egyéni statisztikákat.
+\end{itemize}
+Életciklus alapján tehát megkülönböztetünk: játékkezdeményezést, aktív játékmenetet, és lejátszott meccset.
+
+Játékkezdeményezéskor még nem kell sok információ: a kezdeményező játékos neve, a játék típusa, és a játék paraméterei.\\
+A lejátszott meccseknél érdemes az azonos napon játszott, azonos típusú meccseket egy-egy rekordba összevonni, így egy-egy rekord tartalmazza, hogy egy-egy felhasználó melyik napon, milyen típusú játékban hány meccset játszott és hányat nyert meg.\\
+Az aktív játékmenethez tartozik a játék azonosítója, típusa, a játék állása (Json sztringben), a játékosok azonosítói, nevei, és hogy éppen ki jön (aktív játékos). Habár egy játékoshoz egyszerre csak egy játékmenet tartozik, egy játékmenet több játékost is kezel egyszerre amellett, hogy vannak egyszer szereplő adattagjai is. Ennek kezelésére a játékosokat külön táblába emeltem.
+
+Ezen szempontok alapján felvázolhatjuk adatbázisunk tábláit.
+
