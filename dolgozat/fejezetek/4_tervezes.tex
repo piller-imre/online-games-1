@@ -57,3 +57,30 @@ Az aktív játékmenethez tartozik a játék azonosítója, típusa, a játék �
 
 Ezen szempontok alapján felvázolhatjuk adatbázisunk tábláit.
 
+\Section{Bejelentkezés}
+
+\SubSection{Token használat}
+
+Mi lenne, ha nem lenne munkamenetünk, vagy ismertebb nevén sessionünk?
+
+A weboldalak a HTTP alapjain nyugszanak. Egy kérés, egy válasz. Ha egy erőforrást el akarunk érni, intézünk egy kérést a szerverhez, amire válaszként megkapunk egy HTML dokumentumot. Vagy egy képet. Vagy egy videót. 
+A probléma ott van, hogy a szerver nem tudja ezeket a lekérdezéseket egymáshoz kapcsolni. Nem tudja azt, hogy aki az előző lekérdezésben a helyes jelszót küldte, az ugyanaz az ember, aki most a szupertitkos fájlokhoz hozzá szeretne férni.
+
+Ezt a problémát oldja meg a session. Az első válasszal küldünk a böngészőnek egy sütit, benne egy azonosítóval, amit az innentől minden újabb kéréssel visszaküld. Szerveroldalon ehhez az azonosítóhoz rendeljük azokat az adatokat, amik ahhoz a sessionhöz, ahhoz a munkamenethez tartoznak.
+
+Ez elméletben szép és jó, azonban egy igen csúnya probléma van vele. A programozó.
+Kényelmes módszer, hogy bejelentkezéskor szépen betöltjük az egész user objektumot, majd eltároljuk a sessionben. És ha már ott tartunk, az összes megrendelését is. És a session fájl csak nő, és nő, és nő.
+Amellett, hogy rengeteg helyet foglal a diszken, komoly logikai problémákat is okozhat a sessionök ilyen jellegű használata. Hiszen mi történik, ha a felhasználó egy másik eszközről is bejelentkezik, teszem azt a telefonjáról, és onnan módosítja az adatait? Vagy mi történik akkor, ha egy felhasználó párhuzamosan két lekérdezést indít?
+
+mindkét folyamat betölti a session adatokat, majd mindkettő elkezd dolgozni a saját feladatán. A feldolgozás végeztével mindkettő visszaírja a sessiont a fájlba vagy adatbázisba. Vegyük észre azonban, hogy a második lekérdezés felülírja az első által végzett módosításokat. Vagy a munkamenet-kezelő ezt elkerülendő zárolja az adatokat, és egyszerre csak egy folyamatnak biztosít hozzáférést a sessionhöz, ami nem skálázódik túl jól.
+
+Nézzünk tehát alternatívát a bejelentkezésre!
+Amikor a felhasználó bejelentkezik felhasználónévvel és jelszóval, kiadunk egy egyedi azonosítót, egy tokent. Munkamenet-azonosító helyett ezt tároljuk el a sütiben. Amikor a felhasználó egy olyan oldalra téved, ahol a felhasználói adataira van szükség, a süti kiolvasásra kerül, és a token alapján betöltjük a felhasználó adatait az adatbázisból.
+
+Vagyis minden lekérdezésre kénytelenek vagyunk az auth tokent ellenőrizni. Elsőre azt sejtenénk, hogy ez nagyon nem hatékony, de ha jobban belegondolunk, a sessionöket ugyanúgy be kellett tölteni. Annyi a különbség, hogy most nem egy hatalmas amorf adathalmazt próbálunk kiszedni az adatbázisból, hanem egy nagyonis konkrét céllal nyúlunk hozzá. Az eredmény az, hogy ehhez a célhoz tudunk megfelelő adatbázist választani és optimalizálni.
+
+Sőt mi több, még egy nagyon fontos lehetőség nyílik meg előttünk. Mivel az auth tokeneket a felhasználóhoz kötötten tároljuk, lehetőségünk nyílik a felhasználó aktív tokenjeit kilistázni, hasonlóan mint ahogy a Facebook is csinálja.
+
+Ezen felül használhatjuk még űrlapok kezelésére és állapot megőrzésére, de ez még kevéssé támogatott.
+
+Forrás: http://weblabor.hu/cikkek/sessionmentes-weboldalak
