@@ -1,0 +1,19 @@
+ REQ = {}
+RES = {
+	'stats': [
+		{
+			'userid': <int>,
+			'username': <str>,
+			'results': [
+				{
+					'gameType': <int>,
+					'allMatches': <int>,
+					'winMatches': <int>
+				},
+				{
+					...
+				}
+			]
+		},
+	]
+}

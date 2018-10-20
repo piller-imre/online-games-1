@@ -1,0 +1,42 @@
+REQ {
+	'matchid': <int>,
+	'fields': [
+		[
+			{
+				'x': <int>,
+				'y': <int>,
+				'value': <int>
+			},
+			{
+				...
+			}
+		],
+		[
+			...
+		],
+	],
+	'action': {
+		'x': <int>,
+		'y': <int>,
+		'value': <int>
+	},
+	'players': {
+		'active_player': <int>,
+		'player1': <int>,
+		'player2': <int>
+	}
+	'turn': <int>
+}
+RES {
+	status: <boolean>,
+	win: <boolean>
+}
+
+
+
+
+
+
+
+
+

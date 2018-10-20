@@ -1,0 +1,34 @@
+<div></div>
+<h1>Welcome to Levi's Theme Park!</h1>
+
+<div>
+	<p>Login here to have fun!</p>
+</div>
+
+<!-- LOGIN -->
+<div>
+	<h2>Login</h2>
+	
+	<form name="form" ng-submit="form.$valid && login()" novalidate>
+        <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }">
+            <label for="username">Username</label>
+            <input type="text" name="username" class="form-control" ng-model="username" required />
+            <div ng-messages="form.$submitted && form.username.$error" class="help-block">
+                <div ng-message="required">Username is required</div>
+            </div>
+        </div>
+        <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.password.$invalid }">
+            <label for="password">Password</label>
+            <input type="password" name="password" class="form-control" ng-model="password" required />
+            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
+                <div ng-message="required">Password is required</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <button ng-disabled="loading" class="btn btn-primary">Login</button>
+            <img ng-if="loading" src="../../img/loading.png" />
+        </div>
+        <div ng-if="error" class="alert alert-danger">{{error}}</div>
+    </form>
+</div>
+

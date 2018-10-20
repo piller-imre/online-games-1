@@ -1,0 +1,24 @@
+REQ = {
+	'match': {
+		'userid': <int>,
+		'username': <str>,
+		'gameType' : <str>,
+		'setup': [
+			<int>,
+			...
+		]
+	}
+}
+RES = {
+	'success': <boolean>,
+	'match': {
+		'matchid': <int>,
+		'userid': <int>,
+		'username': <str>,
+		'gameType' : <str>,
+		'setup': [
+			<int>,
+			...
+		]
+	}
+}

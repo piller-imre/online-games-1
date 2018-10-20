@@ -1,0 +1,15 @@
+hu\lev\onlinegames\persist\UserDaoImpl.class
+hu\lev\onlinegames\App.class
+hu\lev\onlinegames\service\AuthServiceImpl.class
+hu\lev\onlinegames\service\TokenService.class
+hu\lev\onlinegames\service\UserService.class
+hu\lev\onlinegames\service\UserServiceImpl.class
+hu\lev\onlinegames\persist\UserDao.class
+hu\lev\onlinegames\model\request\LoginRq.class
+hu\lev\onlinegames\persist\TokenDao.class
+hu\lev\onlinegames\model\request\RegisterRq.class
+hu\lev\onlinegames\service\AuthService.class
+hu\lev\onlinegames\controller\LoginController.class
+hu\lev\onlinegames\service\TokenServiceImpl.class
+hu\lev\onlinegames\model\User.class
+hu\lev\onlinegames\persist\TokenDaoImpl.class

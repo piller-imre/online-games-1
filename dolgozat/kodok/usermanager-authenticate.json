@@ -1,0 +1,7 @@
+REQ = {
+	'username': <str>,
+	'password': <str>
+}
+RES = {
+	'token': <str>
+}

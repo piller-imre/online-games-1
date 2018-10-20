@@ -1,0 +1,258 @@
+\Chapter{Tervezés}
+
+% (8-10 oldal)
+% Architektúra áttekintése
+
+% TODO: Adatbázis
+% Séma leírása
+
+% TODO: API
+% API-kat definiálni, amin majd kommunikálni lehet a backend résszel (Ez lenne a REST API megadása gyakorlatilag)
+% A szinkronizációs protokollokat is definiálni kellene
+% Készíteni kellene hozzá szekvencia-diagramokat
+
+% TODO: Backend
+% Az alkalmazáslogika
+% Authentikáció
+
+% TODO: Frontend
+% Definiálni, hogy milyen lapokból áll majd az alkalmazás
+% Leírni a játéktér megadási módját, adatszerkezeteket
+
+% TODO: Játékszabályok ellenőrzése
+% Valid lépések ellenőrzése mindkét oldalon
+% Játéklogika elkészítésének tervei
+
+\Section{Általános funkciók}
+
+\SubSection{Belépés az oldalra}
+Az oldalra való belépéskor egy kezdőképernyő jelenik meg, ahol a játékos bejelentkezik a saját profiljába. A bejelentkezéshez szükséges megadni a felhasználónevet és a hozzá tartozó jelszót. Ha a felhasználó még nem regisztrált az oldalon, akkor a regisztráció gombra kattintva ezt is megteheti, majd ha a regisztráció sikeres volt, bejelentkezhet. A regisztrációhoz egy felhasználónév, emailcím (kétszer beírva), és jelszó megadása szükséges. Regisztráció és bejelentkezés után elérhetővé válik a személyes statisztika és megjelenés a rangsorban.
+
+\SubSection{Új jelszó igénylése (kijelentkezve)}
+Előfordul, hogy a felhasználó elfelejti felhasználónevét vagy jelszavát. Ebben az esetben lehetőség van rá, hogy új jelszót igényeljen. Ennek menete, hogy rákattint az "Elfelejtettem a jelszavamat" gombra/linkre, megadja felhasználónevét vagy emailcímét. Ezután emailt küldünk a megadott helyre. Ez az email tartalmaz egy kódot és a játékos felhasználónevét, és egy linket egy oldalra, ahol meg kell adnia az emailben küldött kódot, a felhasználónevét, és az új jelszavát kétszer. A "jelszó megváltoztatása" gombra kattintva az adatok validálódnak, és siker esetén a játékos bejelentkezhet immár új jelszóval.
+
+\SubSection{Jelszó megváltoztatása (bejelentkezve)}
+A jelszó megváltoztatására lehetőség van bejelentkezett állapotban is. Ez az egyszerűbb eset. A profil ill. beállítások oldalon a "jelszó megváltoztatása" gombra kattintva megjelenik egy űrlap, ahol meg kell adni a régi jelszót, majd az új jelszót kétszer. Az "ok" gombra kattintva az adatok validálódnak, és legközelebb már az új jelszóval léphet be a felhasználó.
+
+\SubSection{Ransorok, szabályzat, készítői információk megtekintése}
+Ezek statikus oldalak, melyek információt biztosítanak a felhasználó számára. Interaktivitásra itt nincs lehetőség. A rangsorokat dinamikusabbá lehet tenni, ha lapozós felületet biztosítunk neki, így egyszerre csak egy kiválasztott rangsort jelenít meg.
+A játék során készített statisztikák:
+\begin{itemize}
+	\item összes játszma (globális),
+	\item összes játszma játéktípusonként (globális),
+	\item személyes (a felhasználó saját statisztikái)
+\end{itemize}
+A felhasználó saját statisztikái és rangsorai megjelennek a profilon is. Továbbá az elérhető játékosok listáján a többi (éppen bejelentkezett) felhasználó statisztikáit is megtehetjük, amely segít annak felmérésében, hogy a megfelelő szintű játékost választhassuk ellenfélnek.
+
+\SubSection{Hibák észlelése, jelzése}
+Egy szoftver megírása során rendkívül fontos, hogy az elkészült terméket alaposan tesztelje, mielőtt élesben kiadja azt a felhasználóknak. De alapos tesztelés után is gyakori, hogy maradnak benne kisebb-nagyobb hibák, - akár figyelmetlenségből, akár hardverkülönbségek miatt, akár egy eset különlegessége miatt, stb., - amiket már csak a felhasználók tapasztalnak, vesznek észre. Olyan is lehet, hogy a szoftver kiválóan működik, de egy-egy felhasználónak akad egy jó ötlete, hogy hogyan lehetne még javítani rajta a jobb felhasználó élmény, biztonság, teljesítmény érdekében. Ezek mind-mind fontos információk a fejlesztő számára, így lehetőséget kell teremteni a felhasználóknak, hogy ezeket mind elmondhassák.
+
+E célból kell egy olyan oldal, ahol írhatnak nekünk. Ehhez megadhatunk egy emailcímet is az oldalon, és a felhasználó írhat a saját levelező rendszeréből, de a manapság felhasználói szempontból ez már "túl sok kattintásnak" számít, így érdemesebb egy űrlapot készíteni, ahova a felhasználó leírja az észrevételeit, megnyomja a "küldés" gombot, és már kapjuk is az emailt.
+
+\SubSection{Játék indítása}
+A játék indítás oldalon több féle képpen is indíthatunk játékot. Legegyszerűbb módja, ha a kihívás listából kiválasztunk egyet. Az "elfogadás" gombra kattintva már indul is a játék.
+
+Ha nem találunk kedvünkre való kihívást, mi magunk is létrehozhatunk egyet. Kiválaszthatjuk, hogy melyik játékkal szeretnénk játszani, és milyen szabályokkal. Létrehozás után a kihívásunk bekerül a listába, és várjuk, míg partnerünk akad. Ha menet közben meggondoljuk magunkat, és mégse szeretnénk kihívást létrehozni, lehetőség van a létrehozás megszakítására, ("megszakítás" gomb). Elfogadás után indul a játék.
+
+\SubSection{Kihívás törlése}
+Ha létrehozás után meggondoltuk magunkat, és mégsem szeretnénk a kihívásunkat (pl. nincs rá partnerünk vagy változtatnánk a szabályokon), lehetőségünk van kitörölni a listából a "kihívás törlése" gombbal. Ezután létrehozhatunk egy új kihívást, vagy elfogadhatjuk másét.
+Továbbá, ha van kihívásunk a listában, és közben elfogadjuk más kihívását, a miénk automatikusan törlődik.
+
+\SubSection{Interaktivitás bábúkkal}
+Miután betöltődött a játék, a játékosok felváltva, ún. körönként játszanak. Interaktivitásra a saját körünkben van lehetőségünk a játék szabályoknak megfelelően, pl. egy bábú/karakter elhelyezése a táblán, lépés egy bábuval.
+
+\SubSection{Feladás}
+Ha a vége előtt ki szeretnénk lépni a játékból, a "feladás" gombra kell kattintatunk. Ebben vége a játéknak, az ellenfél nyer, megjelennek az eredmények, majd visszatérhetünk a "játék indítása" felületre.
+
+\Section{Adatbázis}
+
+Az adatbázisban két fontos szereplő típust, illetve azok állapotait kell nyilvántartanunk: a felhasználókat és a játékmeneteket. Habár közöttük is van kapcsolat, elemzés szempontjából szétválasztható kategóriák.
+
+\SubSection{Felhasználói adatok}
+A felhasználóhoz tartozó legfontosabb információk, amiket tárolni kell, a felhasználó:
+\begin{itemize}
+	\item felhasználóneve,
+	\item emailcíme,
+	\item jelszavához tartozó hash kód,
+	\item be van-e jelentkezve.
+\end{itemize}
+
+\SubSection{Meccsek adatai}
+A meccsek adatait érdemes állapotuk, ha úgy tetszik, életciklusuk szempontjából csoportosítani. Egy meccs életének fázisai:
+\begin{itemize}
+	\item Játék kezdeményezés:
+	
+	Első a játék kezdeményezés, amit egy felhasználó hoz létre jelezvén, hogy játszani szeretne.
+	Ez után akár meg is szűnhet, ha a játékos megszakítja (például, hogy új beállításokkal indíthasson játékmenetet), kijelentkezik, vagy ő maga egy másik kezdeményezésre jelentkezik.
+	\item Aktív játékmenet:
+	
+	A kezdeményezés aktív játékmenetté válik, ha egy játékos elfogad egy játékmenetet.
+	\item Lejátszott meccs:
+	
+	A játék a végén pedig lejátszott meccs lesz. Az előző állapot minden állapotváltáskor törlődik egy kivétellel: a lejátszott meccsek adatai később sem tűnnek el, adataira statisztikai okokból később szükségünk lesz, ugyanis ezek alapján lehet felállítani a rangsorokat és az egyéni statisztikákat.
+\end{itemize}
+Életciklus alapján tehát megkülönböztetünk: játékkezdeményezést, aktív játékmenetet, és lejátszott meccset.
+
+Játékkezdeményezéskor még nem kell sok információ: a kezdeményező játékos neve, a játék típusa, és a játék paraméterei.
+
+A lejátszott meccseknél érdemes az azonos napon játszott, azonos típusú meccseket egy-egy rekordba összevonni, így egy-egy rekord tartalmazza, hogy egy-egy felhasználó melyik napon, milyen típusú játékban hány meccset játszott és hányat nyert meg.
+
+Az aktív játékmenethez tartozik a játék azonosítója, típusa, a játék állása (Json sztringben), a játékosok azonosítói, nevei, és hogy éppen ki jön (aktív játékos). Habár egy játékoshoz egyszerre csak egy játékmenet tartozik, egy játékmenet több játékost is kezel egyszerre amellett, hogy vannak egyszer szereplő adattagjai is. Ennek kezelésére a játékosokat külön táblába emeltem.
+
+Ezen szempontok alapján felvázolhatjuk adatbázisunk tábláit.
+
+\Section{Bejelentkezés}
+
+\SubSection{Token használat}
+Mi lenne, ha nem lenne munkamenetünk, vagy ismertebb nevén sessionünk?
+
+A weboldalak a HTTP alapjain nyugszanak. Egy kérés, egy válasz. Ha egy erőforrást el akarunk érni, intézünk egy kérést a szerverhez, amire válaszként megkapunk egy HTML dokumentumot. Vagy egy képet. Vagy egy videót. 
+A probléma ott van, hogy a szerver nem tudja ezeket a lekérdezéseket egymáshoz kapcsolni. Nem tudja azt, hogy aki az előző lekérdezésben a helyes jelszót küldte, az ugyanaz az ember, aki most a szupertitkos fájlokhoz hozzá szeretne férni.
+
+Ezt a problémát oldja meg a session. Az első válasszal küldünk a böngészőnek egy sütit, benne egy azonosítóval, amit az innentől minden újabb kéréssel visszaküld. Szerveroldalon ehhez az azonosítóhoz rendeljük azokat az adatokat, amik ahhoz a sessionhöz, ahhoz a munkamenethez tartoznak.
+
+Ez elméletben szép és jó, azonban egy igen csúnya probléma van vele. A programozó.
+Kényelmes módszer, hogy bejelentkezéskor szépen betöltjük az egész user objektumot, majd eltároljuk a sessionben. És ha már ott tartunk, az összes megrendelését is. És a session fájl csak nő, és nő, és nő.
+Amellett, hogy rengeteg helyet foglal a diszken, komoly logikai problémákat is okozhat a sessionök ilyen jellegű használata. Hiszen mi történik, ha a felhasználó egy másik eszközről is bejelentkezik, teszem azt a telefonjáról, és onnan módosítja az adatait? Vagy mi történik akkor, ha egy felhasználó párhuzamosan két lekérdezést indít?
+
+mindkét folyamat betölti a session adatokat, majd mindkettő elkezd dolgozni a saját feladatán. A feldolgozás végeztével mindkettő visszaírja a sessiont a fájlba vagy adatbázisba. Vegyük észre azonban, hogy a második lekérdezés felülírja az első által végzett módosításokat. Vagy a munkamenet-kezelő ezt elkerülendő zárolja az adatokat, és egyszerre csak egy folyamatnak biztosít hozzáférést a sessionhöz, ami nem skálázódik túl jól.
+
+Nézzünk tehát alternatívát a bejelentkezésre!
+Amikor a felhasználó bejelentkezik felhasználónévvel és jelszóval, kiadunk egy egyedi azonosítót, egy tokent. Munkamenet-azonosító helyett ezt tároljuk el a sütiben. Amikor a felhasználó egy olyan oldalra téved, ahol a felhasználói adataira van szükség, a süti kiolvasásra kerül, és a token alapján betöltjük a felhasználó adatait az adatbázisból.
+
+Vagyis minden lekérdezésre kénytelenek vagyunk az auth tokent ellenőrizni. Elsőre azt sejtenénk, hogy ez nagyon nem hatékony, de ha jobban belegondolunk, a sessionöket ugyanúgy be kellett tölteni. Annyi a különbség, hogy most nem egy hatalmas amorf adathalmazt próbálunk kiszedni az adatbázisból, hanem egy nagyonis konkrét céllal nyúlunk hozzá. Az eredmény az, hogy ehhez a célhoz tudunk megfelelő adatbázist választani és optimalizálni.
+
+Sőt mi több, még egy nagyon fontos lehetőség nyílik meg előttünk. Mivel az auth tokeneket a felhasználóhoz kötötten tároljuk, lehetőségünk nyílik a felhasználó aktív tokenjeit kilistázni, hasonlóan mint ahogy a Facebook is csinálja.
+
+Ezen felül használhatjuk még űrlapok kezelésére és állapot megőrzésére, de ez még kevéssé támogatott.
+
+%Forrás: http://weblabor.hu/cikkek/sessionmentes-weboldalak
+
+%TODO JWT ismertetése
+
+\Section{REST API}
+
+Ahhoz, hogy a front-end alkalmazunk kommunikálni tudjon a szerverrel, egy kommunikációs felületet kell definiálnunk. Ezt a felületet interfésznek nevezzük, és itt kell megadnunk, hogy milyen kérésre mi a teendő, és hogy mi legyen a válasz. Ennek a módszernek még egy nagy előnye, hogy a komponensek, a front-end és a backend könnyen cserélhetővé válik. Feltétele csupán, hogy helyesen implementálja az interfészt.
+
+Napjainkban nem divat a szerver oldalon generált weboldal, webkomponensek átküldése. Már csak erőforrást küldöznek, és az oldal a front enden generálódik...
+
+%TODO ismertetés befejezése
+
+Az endpointokat hívhatjuk magyarul végpontoknak is. Egy endpointot tekinthetünk egy csomópontnak, vagy egy erősebb szálnak, ami segít csoportokba rendezni az elérhető szolgáltatásokat. Egyúttal megadják, hogy ezeket a szolgáltatásokat konkrétan milyen webcímen érhetjük el. Az alkalmazás az alábbi endpointokat tartalmazza:
+\begin{itemize}
+	\item /usermanager/: A felhasználó ki- és beléptetését, regisztrációját, stb. segíti.
+	\item /match/: A játék elindítást kezeli.
+	\item /fiveinarow/: A malom játékot vezérli.
+	\item /checkers/: A dáma játékot vezérli.
+	\item /stats/: Lekérdezi és összeállítja a statisztikákat.
+\end{itemize}
+
+\SubSection{/usermanager/authenticate}
+POST: Validálja a felhasználó nevét és jelszavát.
+Siker esetén elküldi az azonosító tokent.
+Sikertelen művelet esetén hibaüzenetet küld a felhasználónak.
+
+\lstinputlisting[caption={\textit{/usermanager/authenticate kérés és válasz minta}}, label={lst:ASD}]{kodok/usermanager-authenticate.json}
+
+\SubSection{/usermanager/saveuser}
+POST: Validálja a felhasználó által megadott értékeket, és elmenti az új profilt az adatbázisba.
+Siker esetén megerősítő üzenetet küld a mentés sikeréről.
+Sikertelen művelet esetén hibaüzenetet küld a felhasználónak.
+
+\lstinputlisting[caption={\textit{/usermanager/saveuser kérés és válasz minta}}, label={lst:ASD}]{kodok/usermanager-saveuser.json}
+
+\SubSection{/usermanager/updatepassword}
+POST: Validálja a felhasználó által megadott értékeket, és elmenti az új jelszót az adatbázisba.
+Siker esetén megerősítő üzenetet küld a mentés sikeréről.
+Sikertelen művelet esetén hibaüzenetet küld a felhasználónak.
+
+\lstinputlisting[caption={\textit{/usermanager/updatepassword kérés és válasz minta}}, label={lst:ASD}]{kodok/usermanager-updatepassword.json}
+
+\SubSection{/usermanager/getnewpassword}
+POST: Validálja az adatokat, (ellenőrzi, hogy a felhasználó létezik-e az adatbázisban), majd küld egy megerősítő emailt a felhasználó címére, a linkkel, amin tovább haladva megadhatja új jelszavát.
+Siker esetén elküldi, hogy a validáció sikeres. (Csak ez után jelenik meg az űrlap az új jelszó megadásához).
+Sikertelen művelet esetén hibaüzenet küld a felhasználónak.
+
+\lstinputlisting[caption={\textit{/usermanager/getnewpassword kérés és válasz minta}}, label={lst:ASD}]{kodok/usermanager-getnewpassword.json}
+
+\SubSection{match/list}
+GET: Ellenőrzi a felhasználót, majd lekérdezi és válaszként elküldi a várakozó meccsek (kihívások) adatainak listáját.
+
+\lstinputlisting[caption={\textit{/match/list kérés és válasz minta}}, label={lst:ASD}]{kodok/match-list.json}
+
+\SubSection{match/create}
+POST: Inicializál egy kihívást és elmenti az adatbázisba. (Emellett gondoskodni kell róla, hogy a többi felhasználó számára is megjelenjen az új kihívás).
+Siker esetén egy azonosítóval gyarapítva visszaküldi a meccs objektumot, és hogy a létrehozás sikeres.
+Sikertelen művelet esetén hibaüzenet küld a felhasználónak.
+
+\lstinputlisting[caption={\textit{/match/create kérés és válasz minta}}, label={lst:ASD}]{kodok/match-create.json}
+
+\SubSection{match/delete}
+POST: Kitöröl egy kihívást és elmenti az adatbázisba. (Emellett gondoskodni kell róla, hogy a többi felhasználó számára is eltűnjön az új kihívás).
+Siker esetén elküldi, hogy a törlés sikeres.
+Sikertelen művelet esetén hibaüzenet küld a felhasználónak.
+
+\lstinputlisting[caption={\textit{/match/delete kérés és válasz minta}}, label={lst:ASD}]{kodok/match-delete.json}
+
+\SubSection{match/start}
+POST: Akkor hívódik meg, amikor egy játékos elfogad egy kihívást. Megkapja az ezidáig várakozó játszma és a játékos azonosítóját. Lekéri a várakozó játék adatait, létre hozz egy aktív játszmát, amit elment az adatbázisban is, majd törli a várakozó játékot. Ha bármelyik játékosnak volt aktív kihívása, azt törli az adatbázisból.
+Sikeres mentés esetén megerősítésképpen visszaküldi a meccs adatait tartalmazó objektumot.
+Sikertelen művelet esetén hibaüzenetet küld a felhasználónak.
+
+\lstinputlisting[caption={\textit{/match/start kérés és válasz minta}}, label={lst:ASD}]{kodok/match-start.json}
+
+\SubSection{match/checkstart}
+GET: Megkapja a játékos azonosítóját és ellenőrzi, hogy a játékos szerepel -e aktív játékban. Ha a válasz igen, elküldi a meccs adatait tartalmazó objektumot. Ha még nincs játékban, az objektum értéke null.
+
+\lstinputlisting[caption={\textit{/match/checkstart kérés és válasz minta}}, label={lst:ASD}]{kodok/match-checkstart.json}
+
+\SubSection{/fiveinarow/action}
+POST: Mikor a soron következő játékos elvégzi a lépést (vagy ezzel egyenértékű cselekvést, pl. elhelyez egy csapdát), megkapja a meccs állását és a cselekvés adatait. Ezek segítségével ellenőrzi a lépés helyességét és hogy nyert -e a játékos, majd elmenti az adatbázisba.
+Siker esetén elküldi a kiértékelés eredményét, hogy volt-e nyerés, és sikerült -e a mentés. Ha nem sikerült, hibaüzenetet küld.
+
+\lstinputlisting[caption={\textit{/fiveinarow/action kérés és válasz minta}}, label={lst:ASD}]{kodok/fiveinarow-action.json}
+
+\SubSection{/fiveinarow/checkaction}
+GET: Rendszeres időközönként meghívódik annak ellenőrzésére, hogy az ellenfél "lépett" -e már. Megnézi, hogy az adatbázisban tárolt kör száma nagyobb -e, mint a kapotté. Ha igen, visszaküldi a meccs objektumot, ha nem, akkor az objektum null.
+
+\lstinputlisting[caption={\textit{/fiveinarow/checkaction kérés és válasz minta}}, label={lst:ASD}]{kodok/fiveinarow-checkaction.json}
+
+\SubSection{/fiveinarow/timeout}
+%TODO fill it
+
+\SubSection{/fiveinarow/giveup}
+POST: Megkapja a felhasználó azonosítóját és a meccs objektumot, és elmenti az eredményt a meccs objektumba. Visszatérési értéke a mentés sikeressége.
+\lstinputlisting[caption={\textit{/fiveinarow/giveup kérés és válasz minta}}, label={lst:ASD}]{kodok/fiveinarow-giveup.json}
+
+\SubSection{/checkers/checkaction}
+%TODO fill it
+
+
+\SubSection{/checkers/action}
+%TODO fill it
+
+
+\SubSection{/checkers/timeout}
+%TODO fill it
+
+
+\SubSection{/checkers/giveup}
+%TODO fill it
+
+
+\SubSection{stats/global}
+GET: Lekéri a szükséges adatokat az adatbázisból, majd összeállítja és visszaküldi a rendezett ranglistát.
+
+\lstinputlisting[caption={\textit{/stats/global kérés és válasz minta}}, label={lst:ASD}]{kodok/stats-global.json}
+
+\SubSection{stats/globalbygametype}
+GET: Lekéri a szükséges adatokat az adatbázisból, majd összeállítja és visszaküldi a rendezett ranglistát.
+
+\lstinputlisting[caption={\textit{/stats/globalbygametype kérés és válasz minta}}, label={lst:ASD}]{kodok/stats-globalbygametype.json}
+
+\SubSection{stats/personal}
+GET: Megkapja a felhasználó azonosítóját, majd lekéri a szükséges adatokat az adatbázisból, majd összeállítja és visszaküldi a rendezett ranglistát.
+
+\lstinputlisting[caption={\textit{/stats/personal kérés és válasz minta}}, label={lst:ASD}]{kodok/stats-personal.json}
+
+

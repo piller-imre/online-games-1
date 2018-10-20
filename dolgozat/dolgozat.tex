@@ -1,0 +1,42 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{dolgozat}
+\usepackage{svg}
+\usepackage{listings}
+\lstset{
+	language=Java,
+	backgroundcolor=\color{white},
+	breaklines=true,
+	captionpos=b,
+	frame=single,
+	keepspaces=true,
+	keywordstyle=\color{blue},	
+}
+
+\begin{document}
+\include{cimlap/cimlap}
+
+\pagestyle{myheadings}
+
+\include{feladatkiiras/feladatkiiras}
+
+\tableofcontents
+
+\newpage
+
+\pagestyle{fancy}
+
+\include{fejezetek/1_bevezetes}
+\include{fejezetek/2_online_tablas_jatekok}
+\include{fejezetek/3_tablas_jatekok_specifikacioja}
+\include{fejezetek/4_tervezes}
+\include{fejezetek/5_implementacio}
+\include{fejezetek/6_tesztek_eredmenyek}
+\include{fejezetek/7_osszegzes}
+\include{fejezetek/8_bovitesi_lehetosegek.tex}
+
+\include{hasznalat/hasznalat}
+\include{irodalomjegyzek/irodalom}
+
+\end{document}
+
