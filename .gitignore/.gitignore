@@ -53,3 +53,16 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+
+# Java build result files
+*.class
+*.war
+*.jar
+
+# LaTeX build result files
+*.aux
+*.toc
+*.thm
+*.log
+
+*.gz
