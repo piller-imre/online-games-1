@@ -9,3 +9,44 @@
 % A játékállapot kezelésének konkrét implementációja
 
 
+
+\SubSection{UserController}
+A UserController fő feladata magával a felhasználó személyével kapcsolatos kérések kezelése. Ide tartozik
+\begin{itemize}
+	\item a regisztráció,
+	\item a bejelentkezés,
+	\item a kijelentkezés,
+	\item jelszó megváltoztatása,
+	\item a elfelejtett jelszó kezelése,
+	\item és a felhasználó törlése.
+\end{itemize}
+
+
+
+
+\SubSection{MatchController}
+A MatchController, ahogy a neve is sugallja a meccsek kezelésével kapcsolatos kéréseket dolgozza fel. Ennek feladata
+\begin{itemize}
+	\item a kihívások (meccs kezdeményezések) létrehozása,
+	\item törlése,
+	\item a kihívások listájának lekérdezése,
+	\item és az aktív játékmenet létrehozása elfogadáskor.
+\end{itemize}
+
+
+
+
+\SubSection{FiveInARowController}
+Az amőba kontrollere értelem szerűen már a megkezdett, amőba játéktípusú meccs kéréseit kezeli. Ezek az alábbiak:
+\begin{itemize}
+	\item az aktív játékos lép,
+	\item lépett -e az ellenfél,
+	\item lejárt a lépéshez megengedett idő (timeout),
+	\item játék feladása
+\end{itemize}
+
+
+
+
+\SubSection{CheckersController}
+Hasonló jellegű kéréseket kell teljesítenie, mint egyéb típusú játékok esetén, a játék sajátosságai miatt minden játéktípusnak külön kontrollerre és metódusokra van szüksége.

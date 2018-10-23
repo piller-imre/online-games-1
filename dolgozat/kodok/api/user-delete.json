@@ -1,0 +1,7 @@
+REQ = {
+	'userid': <int>
+	'password': <str>
+}
+RES = {
+	'success': <boolean>
+}

@@ -64,6 +64,7 @@ CREATE TABLE `online_games_db`.`match_active` (
   `id` INT NOT NULL,
   `game_type_fk` INT NOT NULL,
   `board_state` VARCHAR(1000) NOT NULL,
+  `turn` INT NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `match_active_game_type_fk`
     FOREIGN KEY (`game_type_fk`)
