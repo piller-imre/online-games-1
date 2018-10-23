@@ -369,11 +369,99 @@ Hasonló jellegű kéréseket kell teljesítenie, mint egyéb típusú játékok
 
 \Section{Frontend}
 
+\SubSection{Komponensek}
+A frontend a korábban megfogalmazott igényeket figyelembe véve az alábbi oldalakból fog állni:
+\begin{itemize}
+	\item bejelentkezés (főoldal),
+	\item regisztráció,
+	\item elfelejtett jelszó,
+	\item bemutatkozás,
+	\item játékszabályok,
+	\item használati feltételek,
+	\item profil,
+	\item beállítások,
+	\item játék indítás,
+	\item aktív játéktér,
+	\item statisztikák.
+\end{itemize}
+A játéktér kivételével minden oldalon megjelenik egy menüsor, ami segítheti a felhasználót a navigációban. Mivel bizonyos funkciókhoz bejelentkezés szükséges, így a menüsornak is alkalmazkodni kell a felhasználó állapotához. Ezt tokenek segítségével valósítjuk meg, melyről később bővebben is esik szó.
+
+Továbbá a játéktérre csak a játék indítás oldalon keresztül lehet eljutni, az elfelejtett jelszóhoz és a regisztrációhoz pedig lesz egy-egy link a főoldalon, így a menüsorban ezek nem jelennek meg. Ha játéktérre a megengedettől eltérő módon lépne be valaki, a hiányzó adatok és ellenfél híján hibát kapnánk. Megoldásként, bármilyen hiba esetén a felhasználót átirányítjuk a játék indítás oldalra.
+
+Vendég felhasználóként (tehát bárki számára) csak az alábbi linkek érhetők el:
+\begin{itemize}
+	\item bejelentkezés,
+	\item regisztráció,
+	\item elfelejtett jelszó,
+	\item bemutatkozás,
+	\item játékszabályok,
+	\item használati feltételek.
+\end{itemize}
+
+\SubSection{Bejelentkezés}
+Ez a főoldal, ami néhány mondatban köszönti a vendég felhasználót az oldalról, aki itt bejelentkezhet az alkalmazásba egy űrlapon keresztül.
+Sikeres bejelentkezés esetén megjeleníti a felhasználó profilját és a menüben megjelenik a kijelentkezés gomb.
+További linkek az oldalon:
+\begin{itemize}
+	\item regisztráció,
+	\item elfelejtett jelszó.
+\end{itemize}
+Elfelejtett jelszó esetén újabb űrlap jelenik meg, amivel a felhasználó elküldheti felhasználónevét és/vagy jelszavát.
+
+
+\SubSection{Regisztráció}
+Egy formot jelenít meg, amelyben a felhasználó megadhatja a regisztrációhoz szükséges adatokat. Elküldés után a felhasználó visszajelzést kap a regisztráció sikerességéről.
+
+\SubSection{Elfelejtett jelszó}
+Ez az oldal akkor jelenik meg, ha az elfelejtett jelszó kapcsán küldött emailben található linkre kattintunk. Itt a felhasználónak egy újabb űrlapon kétszer meg kell adnia az új jelszót. Elküldés után a mentés sikerességéről értesítést jelenít meg.
+
+\SubSection{Bemutatkozás, Játék szabályok, Használati feltételek}
+Általános, tájékoztató jellegű leírások. Statikus adatokat megjelenítő oldalak, akció nincs.
+
+\SubSection{Profil}
+(Felhasználó)név szerint köszönti a bejelentkezett felhasználót. Megjelenik egy menü a további lehetőségekről, és akár néhány személyes információ is (pl. avatar, nyerési arány, egy véletlen szerű vicc, stb).
+
+\SubSection{Játék kiválasztása}
+Itt két fontos opciót találhatunk, amely a képernyőt két részre osztja.
+
+Az egyik oldalon táblázat formájában böngészhetünk a meccsek közül. Ezek soronként tartalmazzák a kihívó játékos nevét, a játék típusát, és a lehetséges szabálymódosításokat. Ha találunk kedvünkre való meccset, kiválasztva azt, majd az "ok" gombra kattintva kezdhetjük is a játékot.
+
+Ha egyik felkínált lehetőség sem tetszik, tekintsünk a másik oldalra, ahol magunk is létrehozhatunk egy meccset. Ezen az oldalon megjelenik egy menü a játéktípusok felsorolásával és a választható szabályváltoztatásokkal. Ha minden opciót beállítottunk, az ehhez az oldalhoz tartozó "ok" gombbal hozzáadhatjuk kihívásunkat az említett kihívás listához. Egy felhasználó egyszerre csak egy kihívást kezdeményezhet, ilyenkor a kihívás hozzáadása gomb tiltásra kerül. Saját kihívásunkat a lista más színnel jelöli, mint a többit. Saját kihívásunkat kijelölve megjelenik egy törlés gomb. 
+
+Innen kezdve 3 lehetőségünk lesz:
+\begin{itemize}
+	\item várunk egy ellenfélre,
+	\item töröljük a kezdeményezésünket, (majd létrehozhatunk egy másik kihívást),
+	\item választunk egy meccset a listából, (ebben az esetben az általunk létrehozott meccs törlődik).
+\end{itemize}
+
+\SubSection{Játéktér}
+Megjelenik a játéktér a játéktípushoz tartozó interaktív elemekkel.
+% TODO interaktív elemek játékonként
+
+A játék végén (ha a játék szabályosan véget ért vagy az egyik játékos feladta) megjelenik az eredmény-hirdetés. A tovább gombra kattintva a Játék indítása oldalra visz.
+
+\SubSection{Rangsorok}
+Itt jelennek meg a játék során készített statisztikák:
+összes játszma száma (globális)
+játszmák száma játéktípusonként (globális)
+nyerési arány összesen (felhasználónként)
+nyerési arány játéktípusonként (felhasználónként)
+A statisztikák elkészíthetők úgy is, hogy egyszerre csak egy (kiválasztott) listát mutasson.
+
+\SubSection{Beállítások}
+A felhasználó bizonyos mértékig személyre szabhatja az alkalmazást. Egyelőre csak a jelszavát tudja majd megváltoztatni, de később implementálni lehet pl. avatar képek feltöltését, szín séma megváltoztatását, stb. A változások mentése előtt meg kell adni az érvényes jelszót.
+
+A mentések sikerességéről visszajelzést jelenít meg (sikeres vagy hibaüzenet).
+
+\SubSection{Kijelentkezés}
+A kijelentkezés gombra kattintva a felhasználó kijelentkezhet az alkalmazásból. Az alkalmazás ekkor törli a bejelentkezéskor kapott tokent, majd átirányítja a felhasználót a bejelentkezés oldalra. Külön oldal nem tartozik hozzá.
+
+
 
 % TODO: Játékszabályok ellenőrzése
 % Valid lépések ellenőrzése mindkét oldalon
 % Játéklogika elkészítésének tervei
-
 
 \Section{Játékszabályok ellenőrzése}
 
@@ -409,6 +497,7 @@ Ezen felül használhatjuk még űrlapok kezelésére és állapot megőrzésér
 
 %TODO JWT ismertetése
 
+\Section{JWT}
 
 
 
