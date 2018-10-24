@@ -59,25 +59,26 @@ directives.directive('fiveInARow', ['CanvasService', '$timeout', function(Canvas
 
 				if (isClickInBoard(board, x, y)){									// if click happened on board
 					var field = getClickedField(board, x, y);						// get clicked field by index
-					field.value = match.fields[field.x][field.y].value;				// get value on field
+					field.value = match.fields[field.x][field.y].value;				// get value of field
 					console.log(field.x + "," + field.y + ' - ' + field.value);
 					if(field.value == 0){											// if field is empty
 						match.fields[field.x][field.y].value = match.activePlayer;					// record value
 						drawCharacter(match.fields[field.x][field.y], board, match.activePlayer, ctx);		// draw character
-						if (checkWin(field, match.activePlayer, match.fields)){						// check win
-							// TODO collect match result
-							$timeout(function(){
+						$timeout(function(){
+							if (checkWin(field, match.activePlayer, match.fields)){						// check win
 								alert("Player " + match.activePlayer + "wins!");
 								match.fields = initFields(board, 0);
+								match.activePlayer = 1;
 								drawBoard(board, ctx);
-							}, 200);
-						}
+							} else {
+								match.activePlayer = match.activePlayer == 1 ? 2 : 1;	// switch player								
+							}
+						}, 200);
 					}
 					else if (field.value == 4) {
-						// TODO
 						activateTrap(match.fields[field.x][field.y], board, ctx);
+						match.activePlayer = match.activePlayer == 1 ? 2 : 1;	// switch player
 					}
-					match.activePlayer = match.activePlayer == 1 ? 2 : 1;	// switch player
 				}
 			}, false);
 			
@@ -154,17 +155,21 @@ directives.directive('fiveInARow', ['CanvasService', '$timeout', function(Canvas
 			}
 
 			function checkWin(field, player, fields){	// TODO if parameters get deleted, change fields to match.fields!!!
-				var startX = field.x - 4 < 0 ? 0 : field.x - 4;			// init min and max indexes, so we check fields in board
-				var startY = field.y - 4 < 0 ? 0 : field.y - 4;
-				var endX = field.x + 4 > fields.length ? fields.length : field.x + 4;
-				var endY = field.y + 4 > fields[0].length ? fields[0].length-1 : field.y + 4;
+				var startX = field.x - 4;			// init min and max indexes, so we check fields in board
+				var startY = field.y - 4;
+				var endX = field.x + 4;
+				var endY = field.y + 4;
 				
 				// diagonals first, there is a bigger chance to win this way, save some energy
 				// diagonal from top-left
 				var lengthSoFar = 0;
-				for(var i = startX, j = startY; i<endX && j<endY; i++){
-					if (fields[i][j].value == player){
-						lengthSoFar++;
+				for(var i = startX, j = startY; i<=endX && j<=endY; i++){
+					if (i >= 0 && i < fields.length && j >= 0 && j < fields[0].length){
+						if (fields[i][j].value == player){
+							lengthSoFar++;
+						} else if (lengthSoFar < 5){
+							lengthSoFar = 0;
+						}
 					}
 					j++;
 				}
@@ -172,9 +177,13 @@ directives.directive('fiveInARow', ['CanvasService', '$timeout', function(Canvas
 
 				// diagolal from bottom-left
 				lengthSoFar = 0;
-				for(var i = startX, j = endY; i<endX && j>=startY; i++){
-					if (fields[i][j].value == player){
-						lengthSoFar++;
+				for(var i = startX, j = endY; i<=endX && j>=startY; i++){
+					if (i >= 0 && i < fields.length && j >= 0 && j < fields[0].length){
+						if (fields[i][j].value == player){
+							lengthSoFar++;
+						} else if (lengthSoFar < 5){
+							lengthSoFar = 0;
+						}
 					}
 					j--;
 				}
@@ -182,18 +191,26 @@ directives.directive('fiveInARow', ['CanvasService', '$timeout', function(Canvas
 
 				// vertical
 				lengthSoFar = 0;
-				for(var j=startY; j<endY ; j++){
-					if (fields[field.x][j].value == player){
-						lengthSoFar++;
+				for(var j=startY; j<=endY ; j++){
+					if (j >= 0 && j < fields[0].length){
+						if (fields[field.x][j].value == player){
+							lengthSoFar++;
+						} else if (lengthSoFar < 5){
+							lengthSoFar = 0;
+						}
 					}
 				}
 				if (lengthSoFar >= 5){ return true; }
 
 				// horizontal
 				var lengthSoFar = 0;
-				for(var i=startX; i<endX ; i++){
-					if (fields[i][field.y].value == player){
-						lengthSoFar++;
+				for(var i=startX; i<=endX ; i++){
+					if (i >= 0 && i < fields.length){
+						if (fields[i][field.y].value == player){
+							lengthSoFar++;
+						} else if (lengthSoFar < 5){
+							lengthSoFar = 0;
+						}
 					}
 				}
 				if (lengthSoFar >= 5){ return true; }
@@ -219,7 +236,7 @@ directives.directive('fiveInARow', ['CanvasService', '$timeout', function(Canvas
 
 			function activateTrap(field, board, ctx){
 				// change field value
-				field.value = 0;
+				field.value = 3;
 
 				// change field color to red
 				ctx.fillStyle = "#FF0000";
@@ -232,6 +249,7 @@ directives.directive('fiveInARow', ['CanvasService', '$timeout', function(Canvas
 					ctx.fillStyle = board.backgroundColor;
 					ctx.fillRect(field.x, field.y, board.squareSize, board.squareSize);
 					ctx.strokeRect(field.x, field.y, board.squareSize, board.squareSize);
+					field.value = 0;
 				}, 3000);
 			}
         }
