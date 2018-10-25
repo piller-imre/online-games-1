@@ -38,12 +38,13 @@ Menete: A játékosok felváltva helyeznek egy-egy jelet a tábla valamelyik, m�
 \SubSection{Személyre szabhatóság}
 Személyre szabhatóság szempontjából a legjobb alapanyag. Nézzük is, mi mindennel lehet feldobni!
 \begin{itemize}
+	
 	\item Tiltott mezők:
 	
 	A pályán olyan mezőket helyezünk el véletlen szerűen, amelyre nem rakhatunk karaktert.
 	\item Csapda mezők:
 	
-	A pályán olyan mezőket helyezünk el véletlen szerűen, amelyekre, ha karaktert tesznek, a karakter kitörlődik (végez vele a csapda).
+	A pályán olyan mezőket helyezünk el véletlen szerűen, amelyekre, ha karaktert tesznek, a mező bepirosodik pár másodpercre és a karakter nem kerül kirajzolásra (végez vele a csapda). Ez után a kör átadódik a másik játékosnak. A csapda aktiválódása után a mező semlegessé válik, tehát ugyan úgy lehet rá karaktert tenni, mint bármelyik üres mezőre.
 	\item Eltüntető karakter
 	
 	A játék kezdetekor mindkét játékos kap néhány különleges karaktert, amelyet letéve "kiradírozhat" 1 vagy 5 több karaktert a pályáról.
@@ -54,6 +55,41 @@ Személyre szabhatóság szempontjából a legjobb alapanyag. Nézzük is, mi mi
 	
 	A játék kezdetekor mindkét játékos kap néhány karaktert, amelyet letéve csapdát helyezhet el.	
 \end{itemize}
+
+\SubSection{Tábla reprezentáció}
+
+A táblának a megrajzolása egyszerű, csak egy négyzetrácsra van szükség (továbbiakban vászon). A mezők számontartása és indexelése már érdekesebb. Esetünkben egy három dimenziós objektumban rögzítjük a mezőket. Első dimenzió reprezentálja a x indexet a vízszintes léptetéshez, második dimenzió az y indexet függőleges léptetéshez, a harmadik pedig a szükséges adatokat tartalmazó objektumokat jelenti. Szemléletesebb megfogalmazásban lesz egy tömbünk, ami tömböket tárol, amikben adat objektumok lesznek. Ezekben az adat objektumokban tároljuk el a mező koordinátáit a vásznon, a mező állapotát számmal jelölve, és szükség esetén bármilyen a mezőre vonatkozó információt. Egy tábla elvi megjelenítését mutatja be a \ref{fig:field-repr} ábra.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.6\linewidth]{kepek/field-representation.png}
+	\caption{\textit{Tábla reprezentáció}}
+	\label{fig:field-repr}
+\end{figure}
+
+A mezők állapotai az alábbiak lehetnek:
+\begin{itemize}	
+	\item 0 - semleges
+	\item 1 - kezdő játékos
+	\item 2 - másik játékos
+	\item 3 - tiltott mező
+	\item 4 - csapda mező
+\end{itemize}
+
+Fontos különbséget tennünk az index és a koordináták között. Az index az elméleti, a koordináták a fizikai elhelyezést jelölik. Utóbbi a kirajzoláshoz szükséges.
+
+Tehát a 2. sor 3. oszlopában található mező állapotára így hivatkozhatunk: mező[3][2].állapot.
+
+\SubSection{Szabály ellenőrzés}
+
+Az első dolog, amit meg kell vizsgálnunk, amikor egy játékos letesz egy karaktert, a mező állapota. Ilyenkor lekérjük a kiválasztott mező indexeit, majd ez alapján kikeressük a mező értékeinket tároló objektumból a mező állapotát. Ha a mező semleges, kirakjuk a mezőre a karaktert. Ha csapda, akkor annak megfelelően járunk el. Ha már egy játékos karakterét tartalmazza, vagy a mező tiltott, nem történik semmi, nem kerül ki a karakter, a játékosnak másik mezőt kell választani.
+
+Ha sikerült kitenni a karaktert, ellenőriznünk kell, hogy nem nyert -e a játékos. Ránézésre ugyan nyilván való, és egy szempillantás alatt látszik az eredmény, de hogy magyarázzuk el a számítógépnek?
+
+A nyertes kombinációk kijöhetnek vízszintesen, függőlegesen, vagy átlósan (ebből kettő is van). Tehát ezeket a vonalakat kell megnézni. Ezt tehetjük úgy is, hogy végig nézzük az összes ilyen vonalat, hogy van -e nyertes kombináció a táblán. Egy nagy pálya esetén ez illetlenül erőforrás igényes lenne. Mivel minden karakter lerakást ellenőrzünk, így elég mindig csak a legutoljára letett karaktert és környezetét vizsgálni. Így a vizsgálandó területet máris lecsökkentettük egy 9*9 nagyságú négyzetre. Elkezdjük számolni a játékos karakterét, ha elérjük az öt egyforma karaktert, a játékos nyert. Ebben az esetben az ellenőrzést megszakíthatjuk, nincs már szükség a többi irány ellenőrzésére. Előfordulhat azonban, hogy az öt egyforma karakter nem egymás mellett helyezkedik el, ezért, ha olyan karakter következik, ami különbözik, a számlálót 0-ra kell állítani.
+
+Még egy szempont az ellenőrzés során a pálya széle. Ebben az esetben a vizsgálandó terület túlnyúlhat a pályán, és ebben az esetben az indexek negatívvá válhatnak, így nem létező indexű elemeket keresnénk. Ennek kiküszöbölésének egy módja, ha minden irány előtt kiszámoljuk az érintett mezők kezdő és záró indexekeit a pályán, és csak ezeken iterálunk végig. Erre nehéz általános képletet adni, így én mégis megengedem a negatív indexeket, de az ilyen mezőket kihagyom az ellenőrzésből.
+
 
 \Section{Dáma (hagyományos)}
 
@@ -86,6 +122,7 @@ Az nyeri meg a játékot, aki lépésképtelen helyzetbe szorítja ellenfelét (
 
 %forrás:
 %https://hu.wikipedia.org/wiki/D%C3%A1maj%C3%A1t%C3%A9k
+%http://mek.oszk.hu/00000/00056/html/133.htm
 
 \SubSection{Személyre szabhatóság}
 A dámában az egyéni változtatások mellett néhány az amőbában említettet is érdemes alkalmazni.
