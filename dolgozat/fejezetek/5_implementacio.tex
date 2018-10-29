@@ -8,45 +8,54 @@
 % Ebbe a fejezetbe kerülhetnek majd a kódpéldák. Az elejébe annyira nem kellene majd.
 % A játékállapot kezelésének konkrét implementációja
 
+\Section{Felhasznált technológiák}
 
+\SubSection{MySQL}
+A MySql az egyik legnépszerűbb nyílt forráskódú adatbázis kezelő rendszer, amelyet az Oracle Corporation fejlesztett és támogat. Relációs adatbázisokkal dolgozik, tehát egy nagy adathalmaz helyett az adatokat táblákban tárolja az adatokkal, a táblázat szerkezetekkel, a táblák kapcsolataival, és referencia kulcsaival együtt. Gyors, megbízható, skálázható, és könnyen tanulható. \cite{mysql} 
 
-\SubSection{UserController}
-A UserController fő feladata magával a felhasználó személyével kapcsolatos kérések kezelése. Ide tartozik
+\SubSection{Java EE}
+A Java a Sun által kifejlesztett programozási nyelv és futtatóplatform. A Java nyelv alapjaiban a C++-ra hasonlít, de azzal szemben magas szintű fejlesztést tesz lehetővé. Natív módon támogatja a többszálú programozást és objektum-orientált megoldásai is jóval túlmutatnak a korábbi nyelvekén.
+
+A Java futtatóplatform alapját a Java bájtkód értelmezésére képes JVM képezi, amely gyakorlatilag minden elterjedt operációs rendszerre elérhető. \cite{javaee}
+
+A Java Platform, Enterprise Edition, röviden Java EE, több programkönyvtárat tartalmaz és támogatja a többrétegű, elosztott alkalmazások készítését.
+
+\SubSection{Spring}
+A Spring Framework egy moduláris Java keretrendszer, amit azzal a szándékkal alkottak meg, hogy a Java EE alkalmazások programozását könnyebbé tegyék. Néhány előnye:
 \begin{itemize}
-	\item a regisztráció,
-	\item a bejelentkezés,
-	\item a kijelentkezés,
-	\item jelszó megváltoztatása,
-	\item a elfelejtett jelszó kezelése,
-	\item és a felhasználó törlése.
+	\item Könnyű súlyú, kevéssé invazív fejlesztés a régi jó Java objektumokkal (POJO - plain old Java object).
+	\item Egyszerűbb teszt írás és kód újra felhasználhatóság.
+	\item Loose coupling. Laza kapcsolódást jelent, ami a komponensek függetlenségére utal.
+	\item Függőségek egyszerűbb hozzáadása a komponensekhez. (Dependency Injection).
+	\item Ismétlődő, redundáns kódrészek (boilerplate kódok) redukálása.
+	\item Tranzakció kezelés segítése. \cite{spring}
 \end{itemize}
 
+\SubSection{Hibernate}
+A Hibernate egy Spring által támogatott ORM technikát megvalósító program könyvtár. Az adatbázisból való lekérésekhez, és az adatbázisban való módosításhoz az objektumainkat tábla oszlopokká kell alakítanunk, lekéréskor pedig fordítva, tábla oszlopainkat kell objektummá alakítani. Ezt hívják ORM-nek (Object Relation Mapping). A Hibernate ezen felül összeállítja SQL parancsainkat, lekérdezéseinket, és kezeli a kapcsolatkiépítést az adatbázissal. Jelentősen csökkenti az adatkezeléshez szükséges kód mennyiségét. \cite{spring}
+
+\SubSection{Maven}
+Az Apache Maven (röviden csak Maven) egy projekt kezelő és értelmező eszkösz, amely a project object model (POM) koncepciójára épül. A Maven irányítja a projekt buildelését, fordítását megfelelő formátumra, a függőségek importálását, tehát a projekt felépítését futtatható alkalmazássá. \cite{maven}
+
+\SubSection{TomCat}
+Az Apache Tomcat szoftver egy alkalmazás szerver, amely a Java Servlet, JavaServer Pages, Java Expression Language és Java WebSocket egy nyílt forráskódú implementációja. \cite{tomcat}
+
+\SubSection{HTML, CSS, JavaScript}
+Minden mai weboldal a HTML, a CSS, és a JavaScript. A HTML az oldal szerkezetét írja le, a CSS a megjelenését, a JavaScript pedig a viselkedést.
+
+\SubSection{AngularJs}
+Az AngularJS egy Google által fejlesztett, nyílt forráskódú JavaScript keretrendszer dinamikus webes alkalmazásokhoz. Segítségével nagyban egyszerűsödik a webes alkalmazások frontend fejlesztése és az alkalmazások komponensei egyértelműen elkülönülnek, és rengeteg felesleges boilerplate kód elhagyható. \cite{angularjs}
+
+\SubSection{Git}
+A git egy ingyenes és nyílt forráskódú, elosztott verzió kezelő rendszer, amit arra terveztek, hogy a legkisebbtől a legnagyobb projektekig mindent gyorsan és hatékonyan kezeljen. \cite{git}
+
+\Section{Backend}
 
 
+\Section{Frontend}
 
-\SubSection{MatchController}
-A MatchController, ahogy a neve is sugallja a meccsek kezelésével kapcsolatos kéréseket dolgozza fel. Ennek feladata
-\begin{itemize}
-	\item a kihívások (meccs kezdeményezések) létrehozása,
-	\item törlése,
-	\item a kihívások listájának lekérdezése,
-	\item és az aktív játékmenet létrehozása elfogadáskor.
-\end{itemize}
+\SubSection{Nyerés ellenőrzés}
 
+Minden érvényes karakter lerakás után ellenőrizni kell, hogy a játékos nem nyert -e. Ennek implementációját mutatja a \ref{lst:fiveinarow-checkwin} ábra.
 
-
-
-\SubSection{FiveInARowController}
-Az amőba kontrollere értelem szerűen már a megkezdett, amőba játéktípusú meccs kéréseit kezeli. Ezek az alábbiak:
-\begin{itemize}
-	\item az aktív játékos lép,
-	\item lépett -e az ellenfél,
-	\item lejárt a lépéshez megengedett idő (timeout),
-	\item játék feladása
-\end{itemize}
-
-
-
-
-\SubSection{CheckersController}
-Hasonló jellegű kéréseket kell teljesítenie, mint egyéb típusú játékok esetén, a játék sajátosságai miatt minden játéktípusnak külön kontrollerre és metódusokra van szüksége.
+\lstinputlisting[caption={\textit{/match/checkstart kérés és válasz minta}}, label={lst:fiveinarow-checkwin}]{kodok/javascript/fiveinarow-checkwin.js}

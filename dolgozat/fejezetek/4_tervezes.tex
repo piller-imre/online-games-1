@@ -69,10 +69,7 @@ Miután betöltődött a játék, a játékosok felváltva, ún. körönként j�
 \SubSection{Feladás}
 Ha a vége előtt ki szeretnénk lépni a játékból, a "feladás" gombra kell kattintatunk. Ebben vége a játéknak, az ellenfél nyer, megjelennek az eredmények, majd visszatérhetünk a "játék indítása" felületre.
 
-
-% Adatbázis
-% Séma leírása
-
+% ADATBÁZIS
 
 \Section{Adatbázis}
 
@@ -90,20 +87,20 @@ A felhasználóhoz tartozó legfontosabb információk, amiket tárolni kell, a 
 \SubSection{Meccsek adatai}
 A meccsek adatait érdemes állapotuk, ha úgy tetszik, életciklusuk szempontjából csoportosítani. Egy meccs életének fázisai:
 \begin{itemize}
-	\item Játék kezdeményezés:
+	\item Kihívás:
 	
-	Első a játék kezdeményezés, amit egy felhasználó hoz létre jelezvén, hogy játszani szeretne.
+	Első a kihívás, amit egy felhasználó hoz létre jelezvén, hogy játszani szeretne.
 	Ez után akár meg is szűnhet, ha a játékos megszakítja (például, hogy új beállításokkal indíthasson játékmenetet), kijelentkezik, vagy ő maga egy másik kezdeményezésre jelentkezik.
 	\item Aktív játékmenet:
 	
-	A kezdeményezés aktív játékmenetté válik, ha egy játékos elfogad egy játékmenetet.
+	A kihívás aktív játékmenetté válik, ha egy játékos elfogad egy játékmenetet.
 	\item Lejátszott meccs:
 	
 	A játék a végén pedig lejátszott meccs lesz. Az előző állapot minden állapotváltáskor törlődik egy kivétellel: a lejátszott meccsek adatai később sem tűnnek el, adataira statisztikai okokból később szükségünk lesz, ugyanis ezek alapján lehet felállítani a rangsorokat és az egyéni statisztikákat.
 \end{itemize}
-Életciklus alapján tehát megkülönböztetünk: játékkezdeményezést, aktív játékmenetet, és lejátszott meccset.
+Életciklus alapján tehát megkülönböztetünk: kihívást, aktív játékmenetet, és lejátszott meccset.
 
-Játékkezdeményezéskor még nem kell sok információ: a kezdeményező játékos neve, a játék típusa, és a játék paraméterei.
+Kihíváskor még nem kell sok információ: a kezdeményező játékos neve, a játék típusa, és a játék paraméterei.
 
 A lejátszott meccseknél érdemes az azonos napon játszott, azonos típusú meccseket egy-egy rekordba összevonni, így egy-egy rekord tartalmazza, hogy egy-egy felhasználó melyik napon, milyen típusú játékban hány meccset játszott és hányat nyert meg.
 
@@ -118,6 +115,23 @@ Ezen szempontok alapján felvázolhatjuk adatbázisunk tábláit, melyet a \ref{
 	\label{fig:er-model}
 \end{figure}
 
+% MODEL OSZÁLYOK
+
+\Section{Modell osztályok}
+
+Miután felvázoltuk az adatbázist és meghatároztuk az eltárolandó adatot, ez alapján rögzíthetjük a szükséges modell osztályokat.
+
+\SubSection{User modell}
+Elsőként a User (felhasználó) osztállyal kell foglalkoznunk, ami minden más osztállyal kapcsolatban áll.
+
+\SubSection{Kihívás modell}
+
+\SubSection{Aktív meccs modell}
+
+\SubSection{Lejátszott játék modell}
+
+\SubSection{Játéktípus modell}
+(enum)
 
 % API
 % API-kat definiálni, amin majd kommunikálni lehet a backend résszel (Ez lenne a REST API megadása gyakorlatilag)
@@ -129,9 +143,7 @@ Ezen szempontok alapján felvázolhatjuk adatbázisunk tábláit, melyet a \ref{
 
 Ahhoz, hogy a frontend alkalmazásunk kommunikálni tudjon a szerverrel, egy kommunikációs felületet kell definiálnunk. Ezt a felületet interfésznek nevezzük, és itt kell megadnunk, hogy milyen kérésre mi a teendő, és hogy mi legyen a válasz. Ennek a módszernek még egy nagy előnye, hogy a komponensek, a frontend és a backend könnyen cserélhetővé válik. Feltétele csupán, hogy helyesen implementálja az interfészt.
 
-Napjainkban nem divat a szerver oldalon generált weboldal, webkomponensek átküldése. Már csak az erőforrást (pl. egy lekért adathalmazt) küldenek át, és az oldal a frontenden generálódik.
-
-%TODO ismertetés befejezése
+Napjainkban nem divat a szerver oldalon generált weboldal, webkomponensek átküldése. Már csak az erőforrást (pl. egy lekért adathalmazt) küldenek át, és az oldal a frontenden generálódik. Ez az alapja a REST APInak is. Gyakran bevetett szokás ilyen környezetben, hogy a HTTP metódusokat (GET, PUT, stb.) az ún. CRUD műveletekhez rendelik. A CRUD a create (létrehozás, beszúrás), read (olvasás, lekérdezés), update (frissítés, módosítás) és delete (törlés) angol szavak kezdőbetűiből áll össze. A GET kérés megfelel a readingnek, a POST a létrehozásnak, a PUT a módosításnak, és a DELETE a törlésnek.
 
 Az endpointokat hívhatjuk magyarul végpontoknak is. Egy endpointot tekinthetünk egy csomópontnak, vagy egy erősebb szálnak, ami segít csoportokba rendezni az elérhető szolgáltatásokat. Egyúttal megadják, hogy ezeket a szolgáltatásokat konkrétan milyen webcímen érhetjük el. Az alkalmazás az alábbi endpointokat tartalmazza:
 \begin{itemize}
@@ -141,9 +153,6 @@ Az endpointokat hívhatjuk magyarul végpontoknak is. Egy endpointot tekinthetü
 	\item /checkers/: A dáma játékot vezérli.
 	\item /stats/: Lekérdezi és összeállítja a statisztikákat.
 \end{itemize}
-
-% TODO CRUD
-% Ezeket a műveleteket CRUD-nak is hívják a create (létrehozás, beszúrás), read (olvasás, lekérdezés), update (frissítés, módosítás) és delete (törlés) angol szavak kezdőbetűiből áll össze.
 
 % USER
 
@@ -250,6 +259,7 @@ Siker esetén elküldi a kiértékelés eredményét, hogy volt-e nyerés, és s
 \SubSection{/checkers/giveup}
 %TODO fill it
 
+% STATS
 
 \SubSection{stats/global}
 \texttt{GET}: Lekéri a szükséges adatokat az adatbázisból, majd összeállítja és visszaküldi a rendezett ranglistát. (\ref{lst:stats-global} ábra).
@@ -271,37 +281,37 @@ Siker esetén elküldi a kiértékelés eredményét, hogy volt-e nyerés, és s
 
 A készülő alkalmazás felépítésének tervezéskor két szempontot érdemes figyelembe venni: az egyik a HTTP kliens-szerver architektúra, a másik az MVC architektúra.
 
-%TODO hivatkozást rendezni! (képre és idézetre is)
 \SubSection{HTTP kliens-szerver architektúra}
-Minden egyes HTTP protokollt használó kommunikáció esetében van egy kérés és egy válasz, ahogy ezt az [hivatkozás] ábra is mutatja. Az ügyfél böngészője egyetlen kérést intéz a szerverhez, amely alapján a szerver meghatározza a kért erőforrást és válaszul visszaküldi a kért állomány tartalmát. Ezt követően az ügyfél böngészője értelmezi a választ és megjeleníti a kapott tartalmat. A kérés az igényelt erőforráson kívül más információkat is tartalmaz. Ilyen információ például az ügyfél böngészőjének a típusa. A kérés általában sima szöveges információ, a válasz pedig lehet szöveg, illetve bináris adat is.
+Minden egyes HTTP protokollt használó kommunikáció esetében van egy kérés és egy válasz. Az ügyfél böngészője egyetlen kérést intéz a szerverhez, amely alapján a szerver meghatározza a kért erőforrást és válaszul visszaküldi a kért állomány tartalmát. Ezt követően az ügyfél böngészője értelmezi a választ és megjeleníti a kapott tartalmat. A kérés az igényelt erőforráson kívül más információkat is tartalmaz. Ilyen információ például az ügyfél böngészőjének a típusa. A kérés általában sima szöveges információ, a válasz pedig lehet szöveg, illetve bináris adat is. \cite{java-web-tech}
 
-%TODO Általános leírás + vázlat képen
 \SubSection{MVC architektúra}
-%Elsőként a Xerox írta le a 1980-as évek végén, azóta más GUI alkalmaz ások készítésére alkalmas környezet is átvette ezt a modellt.
+%Elsőként a Xerox írta le a 1980-as évek végén, azóta más GUI alkalmazások készítésére alkalmas környezet is átvette ezt a modellt.
 Az alapgondolat az, hogy egy alkalmazás adatait, ezek megjelenítését, illetve ezek kapcsolatát három önálló egységre bontja szét, amelyek nevei: Model (modell), View (megjelenítés), illetve Controller (vezérlés). A szétbontás célja az, hogy rugalmas alkalmazásokat készíthessünk, például kicserélhessük az adatok megjelenítését a többi rész változtatása nélkül.
 % Egyre szélesebb körben terjednek el a mobiltelefonok, PDA-k, amelyek internetkapcsolat segítségével alkalmassá váltak tartalom megjelenítésére. Csakhogy ezek mérete különböző, így ugyanazon tartalmat más és más formában kell megjeleníteni. Gyakorlatilag úgy kell elkészíteni az alkalmazást, hogy ez képes legyen a kommunikációs eszköznek megfelelő tartalmat előállítani. Ennek megvalósítása szükségessé tette az alkalmazásoknak három részre bontását: modell (Model), megjelenítés (View) és vezérlés (Controller).
 
 A modell részt rendszerint az adatok és ezek elérési logikája képezi. Ez a rész az, amely a legritkábban változik. A vezérlés a közvetítő a modell és a megjelenítés között, amely vagy aktualizálja a modellt, vagy pedig egy új nézetet jelenít meg. A megjelenítés pedig sokféle lehet. Ha időközben ugyanazon alkalmazáshoz egy új kommunikációs eszközt akarunk csatlakoztatni, akkor csak az ennek megfelelő megjelenítési réteggel kell kiegészíteni az alkalmazást. Tehát ennek a tervezési mintának a betartása is nagymértékben hozzájárul az alkalmazások rugalmasságának növeléséhez.
 
-%TODO hivatkozást beszúrni!!!!  (képre és idézetre is)
 %A [hivatkozás] ábra egy űrlap kitöltésének MVC architektúráját szemlélteti, amely során az űrlapadatok a megjelenítési rétegből átkerülnek a vezérlési réteghez, ahol megtörténik az adatok ellenőrzése. Hibás adatok esetén a vezérlés új megjelenítést generál, amely figyelmezteti a felhasználót a hibákra. Ha helyesek voltak az adatok, eltárolódnak a modell rétegben. Egy másik lehetséges forgatókönyv az, amikor az űrlap bizonyos adatok lekérdezését valósítja meg. Ebben az esetben a vezérlés feladata az adatok lekérése a modell rétegből és az ezt tartalmazó új nézetet előállítása és eljuttatása az ügyfélhez.
 
 Az MVC tervezési minta először grafikus interfészek (desktop alkalmazások) készítésével kapcsolatban jelent meg, később alkalmazták például webalkalmazások architektúrájaként is. Webalkalmazások esetében a vezérlési réteg feladata a kérések feldolgozása és továbbítása a megfelelő komponens fele. Így a vezérlési rész felügyeli az alkalmazást, a modell pedig az alkalmazás állapotát tárolja. Összefoglalva, a következő előnyökkel rendelkezik egy MVC architektúrájú alkalmazás:
 \begin{itemize}
 	\item Lehetővé teszi több, különböző megjelenítés illesztését ugyanazon modellhez.
-	\item Szétválasztja az alkalmazás üzleti logika, adatelérés, illetve megjelenítés részeit, amely növeli az alkalmazás rugalmasságát.
+	\item Szétválasztja az alkalmazás üzleti logika, adatelérés, illetve megjelenítés részeit, amely növeli az alkalmazás rugalmasságát. \cite{java-web-tech}
 \end{itemize}
-
-%forrás: Antal Margit, Java web technológiák, Scientia Kiadó, 2010
 
 \SubSection{Szerkezet összegzés}
 
 A két fent említett szerkezetet alkalmazva az alábbi alkalmazás vázat kapjuk:
 
-A HTTP protokollnak megfelelően először definiáljuk a klienst (fronendet) és a szervert (backendet), majd ezekben helyezzük el az MVC komponenseket. Magától értetődő, hogy a View teljes mértékben a frontend része, a Model, - ami gyakorlatilag az adatbázist és adat kezelő logikát jelenti-, pedig a backendé. Az érdekes rész a Controller, mivel esetünkben a lépéseket és az űrlap adatait mindkét oldalon ellenőrizni kell, így a frontend és a backend is tartalmaz üzleti logikát. Lásd, a képen!
-%TODO hivatkozás a képre!
+A HTTP protokollnak megfelelően először definiáljuk a klienst (fronendet) és a szervert (backendet), majd ezekben helyezzük el az MVC komponenseket. Magától értetődő, hogy a View teljes mértékben a frontend része, a Model, - ami gyakorlatilag az adatbázist és adat kezelő logikát jelenti-, pedig a backendé. Az érdekes rész a Controller, mivel esetünkben a lépéseket és az űrlap adatait mindkét oldalon ellenőrizni kell, így a frontend és a backend is tartalmaz üzleti logikát. (\ref{fig:mixed-arch})
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.5\linewidth]{kepek/mixed-arch.png}
+	\caption{\textit{Az MVC megoszlása a backend és a frontend között}}
+	\label{fig:mixed-arch}
+\end{figure}
 
-% TODO: Backend
+% Backend
 % Az alkalmazáslogika
 % Authentikáció
 \Section{Backend}
@@ -330,7 +340,7 @@ Mint láthattuk az alkalmazásnak sok kisebb funkciója van külön fajta kéré
 \end{itemize}
 Ezek mélyebb ismertetését a következőkben olvashatjuk.
 
-\SubSection{UserController}
+\Subsubection{UserController}
 A UserController fő feladata magával a felhasználó személyével kapcsolatos kérések kezelése. Ide tartozik
 \begin{itemize}
 	\item a regisztráció,
@@ -341,7 +351,7 @@ A UserController fő feladata magával a felhasználó személyével kapcsolatos
 	\item és a felhasználó törlése.
 \end{itemize}
 
-\SubSection{MatchController}
+\Subsubection{MatchController}
 A MatchController, ahogy a neve is sugallja a meccsek kezelésével kapcsolatos kéréseket dolgozza fel. Ennek feladata
 \begin{itemize}
 	\item a kihívások (meccs kezdeményezések) létrehozása,
@@ -350,7 +360,7 @@ A MatchController, ahogy a neve is sugallja a meccsek kezelésével kapcsolatos 
 	\item és az aktív játékmenet létrehozása elfogadáskor.
 \end{itemize}
 
-\SubSection{FiveInARowController}
+\Subsubection{FiveInARowController}
 Az amőba kontrollere értelem szerűen már a megkezdett, amőba játéktípusú meccs kéréseit kezeli. Ezek az alábbiak:
 \begin{itemize}
 	\item az aktív játékos lép,
@@ -359,10 +369,10 @@ Az amőba kontrollere értelem szerűen már a megkezdett, amőba játéktípus�
 	\item játék feladása
 \end{itemize}
 
-\SubSection{CheckersController}
+\Subsubection{CheckersController}
 Hasonló jellegű kéréseket kell teljesítenie, mint egyéb típusú játékok esetén, a játék sajátosságai miatt minden játéktípusnak külön kontrollerre és metódusokra van szüksége.
 
-% TODO: Frontend
+% Frontend
 % Definiálni, hogy milyen lapokból áll majd az alkalmazás
 % Leírni a játéktér megadási módját, adatszerkezeteket
 
@@ -461,10 +471,10 @@ A kijelentkezés gombra kattintva a felhasználó kijelentkezhet az alkalmazásb
 % Valid lépések ellenőrzése mindkét oldalon
 % Játéklogika elkészítésének tervei
 
-\Section{Játékszabályok ellenőrzése}
+\Section{Játék logika}
 
-
-
+\SubSection{Amőba játékmenet}
+...
 
 \Section{Authentikáció}
 
@@ -489,8 +499,7 @@ Vagyis minden lekérdezésre kénytelenek vagyunk az auth tokent ellenőrizni. E
 
 Sőt mi több, még egy nagyon fontos lehetőség nyílik meg előttünk. Mivel az auth tokeneket a felhasználóhoz kötötten tároljuk, lehetőségünk nyílik a felhasználó aktív tokenjeit kilistázni, hasonlóan mint ahogy a Facebook is csinálja.
 
-Ezen felül használhatjuk még űrlapok kezelésére és állapot megőrzésére, de ez még kevéssé támogatott.
-
+Ezen felül használhatjuk még űrlapok kezelésére és állapot megőrzésére, de ez még kevéssé támogatott. \cite{session}
 %Forrás: http://weblabor.hu/cikkek/sessionmentes-weboldalak
 
 %TODO JWT ismertetése

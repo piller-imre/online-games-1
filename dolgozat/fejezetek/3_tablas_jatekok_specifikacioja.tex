@@ -29,11 +29,8 @@ Az alkalmazás egyik menüpontjában pedig találunk majd bemutatkozó leírást
 \SubSection{Játékszabály}
 Az amőba a legismertebb és legegyszerűbb táblás játékok egyike. Általában négyzetrácsos papíron játsszák. A négyzetháló mérete lehet egyenlő a rendelkezésre álló papír méretével, de kisebb terület is kijelölhető.
 
-Menete: A játékosok felváltva helyeznek egy-egy jelet a tábla valamelyik, még üres négyzetébe. Mindenki a saját jelével játszik. (A leggyakoribb jelek az X és az O.) Az nyer, akinek sikerül saját jeleiből ötöt egyenes vonalban - vízszintesen, függőlegesen vagy átlósan - egymás mellé helyeznie.
-
-%forrás:
-%http://mek.niif.hu/00000/00056/html/132.htm
-%https://www.okosjatek.hu/jatekok_papiron
+Menete: A játékosok felváltva helyeznek egy-egy jelet a tábla valamelyik, még üres négyzetébe. Mindenki a saját jelével játszik. (A leggyakoribb jelek az X és az O.) Az nyer, akinek sikerül saját jeleiből ötöt egyenes vonalban - vízszintesen, függőlegesen vagy átlósan - egymás mellé helyeznie. \cite{fiveinarow-rules}
+%forrás: http://mek.niif.hu/00000/00056/html/132.htm
 
 \SubSection{Személyre szabhatóság}
 Személyre szabhatóság szempontjából a legjobb alapanyag. Nézzük is, mi mindennel lehet feldobni!
@@ -58,7 +55,7 @@ Személyre szabhatóság szempontjából a legjobb alapanyag. Nézzük is, mi mi
 
 \SubSection{Tábla reprezentáció}
 
-A táblának a megrajzolása egyszerű, csak egy négyzetrácsra van szükség (továbbiakban vászon). A mezők számontartása és indexelése már érdekesebb. Esetünkben egy három dimenziós objektumban rögzítjük a mezőket. Első dimenzió reprezentálja a x indexet a vízszintes léptetéshez, második dimenzió az y indexet függőleges léptetéshez, a harmadik pedig a szükséges adatokat tartalmazó objektumokat jelenti. Szemléletesebb megfogalmazásban lesz egy tömbünk, ami tömböket tárol, amikben adat objektumok lesznek. Ezekben az adat objektumokban tároljuk el a mező koordinátáit a vásznon, a mező állapotát számmal jelölve, és szükség esetén bármilyen a mezőre vonatkozó információt. Egy tábla elvi megjelenítését mutatja be a \ref{fig:field-repr} ábra.
+A táblának a megrajzolása egyszerű, csak egy négyzetrácsra van szükség (továbbiakban vászon). A mezők számontartása és indexelése már érdekesebb. Esetünkben egy három dimenziós objektumban rögzítjük a mezőket. Első dimenzió reprezentálja az x sorindexet a vízszintes léptetéshez, második dimenzió az y oszlopindexet függőleges léptetéshez, a harmadik pedig a szükséges adatokat tartalmazó objektumokat jelenti. Szemléletesebb megfogalmazásban lesz egy tömbünk, ami tömböket tárol, amikben adat objektumok lesznek. Ezekben az adat objektumokban tároljuk el a mező koordinátáit a vásznon, a mező állapotát számmal jelölve, és szükség esetén bármilyen a mezőre vonatkozó információt. Egy tábla elvi megjelenítését mutatja be a \ref{fig:field-repr} ábra.
 
 \begin{figure}[!h]
 	\centering
@@ -88,7 +85,7 @@ Ha sikerült kitenni a karaktert, ellenőriznünk kell, hogy nem nyert -e a ját
 
 A nyertes kombinációk kijöhetnek vízszintesen, függőlegesen, vagy átlósan (ebből kettő is van). Tehát ezeket a vonalakat kell megnézni. Ezt tehetjük úgy is, hogy végig nézzük az összes ilyen vonalat, hogy van -e nyertes kombináció a táblán. Egy nagy pálya esetén ez illetlenül erőforrás igényes lenne. Mivel minden karakter lerakást ellenőrzünk, így elég mindig csak a legutoljára letett karaktert és környezetét vizsgálni. Így a vizsgálandó területet máris lecsökkentettük egy 9*9 nagyságú négyzetre. Elkezdjük számolni a játékos karakterét, ha elérjük az öt egyforma karaktert, a játékos nyert. Ebben az esetben az ellenőrzést megszakíthatjuk, nincs már szükség a többi irány ellenőrzésére. Előfordulhat azonban, hogy az öt egyforma karakter nem egymás mellett helyezkedik el, ezért, ha olyan karakter következik, ami különbözik, a számlálót 0-ra kell állítani.
 
-Még egy szempont az ellenőrzés során a pálya széle. Ebben az esetben a vizsgálandó terület túlnyúlhat a pályán, és ebben az esetben az indexek negatívvá válhatnak, így nem létező indexű elemeket keresnénk. Ennek kiküszöbölésének egy módja, ha minden irány előtt kiszámoljuk az érintett mezők kezdő és záró indexekeit a pályán, és csak ezeken iterálunk végig. Erre nehéz általános képletet adni, így én mégis megengedem a negatív indexeket, de az ilyen mezőket kihagyom az ellenőrzésből.
+Még egy szempont az ellenőrzés során a pálya széle. Ebben az esetben a vizsgálandó terület túlnyúlhat a pályán, és ebben az esetben az indexek negatívvá válhatnak, így nem létező indexű elemeket keresnénk. Ennek kiküszöbölésének egy módja, ha minden irány ellenőrzése előtt kiszámoljuk az érintett mezők kezdő és záró indexekeit a pályán, és csak ezeken iterálunk végig. Erre nehéz általános képletet adni, így én mégis megengedem a negatív indexeket, de az ilyen mezőket kihagyom az ellenőrzésből,  ill. nem nyertes mezőként kezelem.
 
 
 \Section{Dáma (hagyományos)}
@@ -118,11 +115,9 @@ Egy másik szabályvariáció szerint a dáma egyetlen lépéssel több bábut i
 
 Ha egy bábu ütéssel éri el az utolsó sort, a szabályoknak megfelelően dámává válik. Ha ebből a helyzetből – immár dámaként – újabb ütésre nyílik lehetőség, az ütéssorozat azonnal folytatható.
 
-Az nyeri meg a játékot, aki lépésképtelen helyzetbe szorítja ellenfelét (ez azt is jelentheti, hogy az ellenfélnek már nincsen bábuja, mindet leütöttük).
+Az nyeri meg a játékot, aki lépésképtelen helyzetbe szorítja ellenfelét (ez azt is jelentheti, hogy az ellenfélnek már nincsen bábuja, mindet leütöttük). \cite{checkers-rules}
 
-%forrás:
-%https://hu.wikipedia.org/wiki/D%C3%A1maj%C3%A1t%C3%A9k
-%http://mek.oszk.hu/00000/00056/html/133.htm
+%forrás: http://mek.oszk.hu/00000/00056/html/133.htm
 
 \SubSection{Személyre szabhatóság}
 A dámában az egyéni változtatások mellett néhány az amőbában említettet is érdemes alkalmazni.
