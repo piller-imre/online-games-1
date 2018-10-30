@@ -1,0 +1,6 @@
+User {
+	id: <int>,
+	userName: <string>,
+	passwordHash: <string>,
+	email: <string>
+}

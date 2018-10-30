@@ -1,0 +1,8 @@
+MatchDone {
+	'matchid': <int>,
+	'date': <date
+	'gameType': <enum>,>,
+	'matchCountTotal': <int>
+	'matchWonTotal': <int>
+	'playerId': <int>
+}

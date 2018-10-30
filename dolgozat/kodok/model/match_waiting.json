@@ -1,0 +1,9 @@
+MatchWaiting {
+	'id': <int>,
+	'userId': <int>,
+	'gameType': <enum>,
+	'options': [
+		<enum>,
+		...
+	]
+}

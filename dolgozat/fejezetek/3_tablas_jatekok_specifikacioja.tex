@@ -53,7 +53,7 @@ Személyre szabhatóság szempontjából a legjobb alapanyag. Nézzük is, mi mi
 	A játék kezdetekor mindkét játékos kap néhány karaktert, amelyet letéve csapdát helyezhet el.	
 \end{itemize}
 
-\SubSection{Tábla reprezentáció}
+\SubSection{Tábla reprezentáció}\label{board-repr}
 
 A táblának a megrajzolása egyszerű, csak egy négyzetrácsra van szükség (továbbiakban vászon). A mezők számontartása és indexelése már érdekesebb. Esetünkben egy három dimenziós objektumban rögzítjük a mezőket. Első dimenzió reprezentálja az x sorindexet a vízszintes léptetéshez, második dimenzió az y oszlopindexet függőleges léptetéshez, a harmadik pedig a szükséges adatokat tartalmazó objektumokat jelenti. Szemléletesebb megfogalmazásban lesz egy tömbünk, ami tömböket tárol, amikben adat objektumok lesznek. Ezekben az adat objektumokban tároljuk el a mező koordinátáit a vásznon, a mező állapotát számmal jelölve, és szükség esetén bármilyen a mezőre vonatkozó információt. Egy tábla elvi megjelenítését mutatja be a \ref{fig:field-repr} ábra.
 

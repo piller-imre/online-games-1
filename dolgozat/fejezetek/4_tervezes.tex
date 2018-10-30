@@ -115,29 +115,11 @@ Ezen szempontok alapján felvázolhatjuk adatbázisunk tábláit, melyet a \ref{
 	\label{fig:er-model}
 \end{figure}
 
-% MODEL OSZÁLYOK
-
-\Section{Modell osztályok}
-
-Miután felvázoltuk az adatbázist és meghatároztuk az eltárolandó adatot, ez alapján rögzíthetjük a szükséges modell osztályokat.
-
-\SubSection{User modell}
-Elsőként a User (felhasználó) osztállyal kell foglalkoznunk, ami minden más osztállyal kapcsolatban áll.
-
-\SubSection{Kihívás modell}
-
-\SubSection{Aktív meccs modell}
-
-\SubSection{Lejátszott játék modell}
-
-\SubSection{Játéktípus modell}
-(enum)
 
 % API
 % API-kat definiálni, amin majd kommunikálni lehet a backend résszel (Ez lenne a REST API megadása gyakorlatilag)
 % A szinkronizációs protokollokat is definiálni kellene
 % Készíteni kellene hozzá szekvencia-diagramokat
-
 
 \Section{REST API}
 
@@ -153,6 +135,8 @@ Az endpointokat hívhatjuk magyarul végpontoknak is. Egy endpointot tekinthetü
 	\item /checkers/: A dáma játékot vezérli.
 	\item /stats/: Lekérdezi és összeállítja a statisztikákat.
 \end{itemize}
+
+%TODO CIMKÉKET ELLENŐRIZNI!
 
 % USER
 
@@ -340,7 +324,7 @@ Mint láthattuk az alkalmazásnak sok kisebb funkciója van külön fajta kéré
 \end{itemize}
 Ezek mélyebb ismertetését a következőkben olvashatjuk.
 
-\Subsubection{UserController}
+\subsubsection{UserController}
 A UserController fő feladata magával a felhasználó személyével kapcsolatos kérések kezelése. Ide tartozik
 \begin{itemize}
 	\item a regisztráció,
@@ -351,7 +335,7 @@ A UserController fő feladata magával a felhasználó személyével kapcsolatos
 	\item és a felhasználó törlése.
 \end{itemize}
 
-\Subsubection{MatchController}
+\subsubsection{MatchController}
 A MatchController, ahogy a neve is sugallja a meccsek kezelésével kapcsolatos kéréseket dolgozza fel. Ennek feladata
 \begin{itemize}
 	\item a kihívások (meccs kezdeményezések) létrehozása,
@@ -360,7 +344,7 @@ A MatchController, ahogy a neve is sugallja a meccsek kezelésével kapcsolatos 
 	\item és az aktív játékmenet létrehozása elfogadáskor.
 \end{itemize}
 
-\Subsubection{FiveInARowController}
+\subsubsection{FiveInARowController}
 Az amőba kontrollere értelem szerűen már a megkezdett, amőba játéktípusú meccs kéréseit kezeli. Ezek az alábbiak:
 \begin{itemize}
 	\item az aktív játékos lép,
@@ -369,8 +353,58 @@ Az amőba kontrollere értelem szerűen már a megkezdett, amőba játéktípus�
 	\item játék feladása
 \end{itemize}
 
-\Subsubection{CheckersController}
+\subsubsection{CheckersController}
 Hasonló jellegű kéréseket kell teljesítenie, mint egyéb típusú játékok esetén, a játék sajátosságai miatt minden játéktípusnak külön kontrollerre és metódusokra van szüksége.
+
+
+% MODEL OSZÁLYOK
+
+\SubSection{Modell osztályok}
+
+Miután felvázoltuk az adatbázist és meghatároztuk az eltárolandó adatot, ez alapján rögzíthetjük a szerver oldalon szükséges modell osztályokat, amelynek a következőket kell tartalmaznia: azonosító, felhasználónév, a jelszó hashkódja, emailcím.
+
+
+\subsubsection{Felhasználó modell}
+Elsőként a User (felhasználó) osztállyal kell foglalkoznunk, ami minden más osztállyal kapcsolatban áll. (\ref{lst:user} ábra).
+
+\lstinputlisting[caption={\textit{A felhasználó modell osztály adattagjai}}, label={lst:user}]{kodok/model/user.json}
+
+\subsubsection{Kihívás modell}
+A kihívás modell a várakozó meccseket reprezentálja, amelyeket a felhasználók hoznak létre. Tartalma a kihívás azonosítója, a felhasználó azonosítója, a játék típusa, és egy tömbben a kiválasztott beállítások. (\ref{lst:match_waiting} ábra).
+
+\lstinputlisting[caption={\textit{A kihívás modell osztály adattagjai}}, label={lst:match_waiting}]{kodok/model/match_waiting.json}
+
+\subsubsection{Aktív meccs modell}
+Az aktív meccsek adatmezői a meccs, a játékosok azonosítói, a soron következő játékos száma (1 vagy 2), a játék típusa, a játék állása, és hogy hanyadik körnél tartunk (\ref{lst:match_active} ábra). Mivel az adatbázisban az aktív meccsek játékosait külön táblába kellett emelnünk, a könnyebb konverzió érdekében ezeket a modellben is egy külön osztályba emeljük ki. A játék állását az adatbázisba mindig sztringként tároljuk el, ám a könnyebb kezelhetőség és az ellenőrzések érdekében objektumként is szükségünk van rá, ezért mindkét formában benne kell lennie.
+
+\lstinputlisting[caption={\textit{Az aktív meccs modell osztály adattagjai}}, label={lst:match_active}]{kodok/model/match_active.json}
+
+\subsubsection{Játékosok modell}
+A játékosok modell szerkezete egyszerű, csak három azonosítót tartalmaz: a két résztvevő és a soron következő játékos számát (\ref{lst:players} ábra).
+
+\lstinputlisting[caption={\textit{A játékosok modell osztály adattagjai}}, label={lst:players}]{kodok/model/players.json}
+
+\subsubsection{Játékállás modell}
+Mivel a különböző játékokhoz különböző táblák tartozhatnak, így minden típusra érdemes külön modell osztályt írni.
+
+Az amőba játékállás reprezentálását már a \ref{board-repr} pontban tárgyaltuk. Az így megadott mátrixban tárolt objektum halmazt a \ref{lst:fields} ábra szemlélteti.
+
+\lstinputlisting[caption={\textit{A játékállás modell osztály adattagjai}}, label={lst:fields}]{kodok/model/fields.json}
+
+\subsubsection{Lejátszott játék modell}
+%TODO match done pontosítani!!!
+A statisztikák generálásához szükséges megőriznünk a játékeredményeket. (\ref{lst:match_done} ábra).
+
+\lstinputlisting[caption={\textit{A lejátszott játék modell osztály adattagjai}}, label={lst:match_done}]{kodok/model/match_done.json}
+
+\subsubsection{Enumok}
+A sztringek kezelése kissé nehézkesebb, mint a számoké, ugyanakkor érdemes rögzíteni, hogy melyik szám melyik játékra utal. Ezért a \texttt{játéktípusokat}, és az egyéni szabályok beállításait enumokban fogjuk tárolni.
+
+Mivel a különböző játéktípusokhoz különböző egyéni szabályok tartozhatnak, így a \texttt{játékszabályoknak} játéktípusonként egy enum osztályt kell készítenünk.
+
+És mivel a pálya mezőinek is kötött, hogy milyen értékeket lehet adni, így játéktípusonként szükségünk lesz egy-egy \texttt{érték} enumra is.
+
+%TODO STAT OSZTÁLYOKAT IS LEÍRNI!
 
 % Frontend
 % Definiálni, hogy milyen lapokból áll majd az alkalmazás
@@ -441,7 +475,7 @@ Ha egyik felkínált lehetőség sem tetszik, tekintsünk a másik oldalra, ahol
 Innen kezdve 3 lehetőségünk lesz:
 \begin{itemize}
 	\item várunk egy ellenfélre,
-	\item töröljük a kezdeményezésünket, (majd létrehozhatunk egy másik kihívást),
+	\item töröljük a kihívásunkat, (majd létrehozhatunk egy másik kihívást),
 	\item választunk egy meccset a listából, (ebben az esetben az általunk létrehozott meccs törlődik).
 \end{itemize}
 
@@ -495,16 +529,15 @@ mindkét folyamat betölti a session adatokat, majd mindkettő elkezd dolgozni a
 Nézzünk tehát alternatívát a bejelentkezésre!
 Amikor a felhasználó bejelentkezik felhasználónévvel és jelszóval, kiadunk egy egyedi azonosítót, egy tokent. Munkamenet-azonosító helyett ezt tároljuk el a sütiben. Amikor a felhasználó egy olyan oldalra téved, ahol a felhasználói adataira van szükség, a süti kiolvasásra kerül, és a token alapján betöltjük a felhasználó adatait az adatbázisból.
 
-Vagyis minden lekérdezésre kénytelenek vagyunk az auth tokent ellenőrizni. Elsőre azt sejtenénk, hogy ez nagyon nem hatékony, de ha jobban belegondolunk, a sessionöket ugyanúgy be kellett tölteni. Annyi a különbség, hogy most nem egy hatalmas amorf adathalmazt próbálunk kiszedni az adatbázisból, hanem egy nagyonis konkrét céllal nyúlunk hozzá. Az eredmény az, hogy ehhez a célhoz tudunk megfelelő adatbázist választani és optimalizálni.
+Vagyis minden lekérdezésre kénytelenek vagyunk az auth tokent ellenőrizni. Elsőre azt sejtenénk, hogy ez nagyon nem hatékony, de ha jobban belegondolunk, a sessionöket ugyanúgy be kellett tölteni. Annyi a különbség, hogy most nem egy hatalmas amorf adathalmazt próbálunk kiszedni az adatbázisból, hanem egy nagyon is konkrét céllal nyúlunk hozzá. Az eredmény az, hogy ehhez a célhoz tudunk megfelelő adatbázist választani és optimalizálni.
 
 Sőt mi több, még egy nagyon fontos lehetőség nyílik meg előttünk. Mivel az auth tokeneket a felhasználóhoz kötötten tároljuk, lehetőségünk nyílik a felhasználó aktív tokenjeit kilistázni, hasonlóan mint ahogy a Facebook is csinálja.
 
 Ezen felül használhatjuk még űrlapok kezelésére és állapot megőrzésére, de ez még kevéssé támogatott. \cite{session}
-%Forrás: http://weblabor.hu/cikkek/sessionmentes-weboldalak
 
 %TODO JWT ismertetése
 
-\Section{JWT}
+\SubSection{JWT}
 
 
 

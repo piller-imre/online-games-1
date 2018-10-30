@@ -63,7 +63,7 @@ directives.directive('fiveInARow', [
 				player2 : 12,		// user id
 				activePlayer : 1,	// player 1
 				fields : null,		// board state, first status null
-				rules : [1]
+				options : [1]
 			}
 			
 			var match = {
@@ -72,12 +72,12 @@ directives.directive('fiveInARow', [
 				player2 : initInfo.player2,
 				activePlayer : initInfo.activePlayer,
 				fields : initInfo.fields ? initInfo.fields : man.initFields(vm.board, 0),
-				rules : initInfo.rules
+				options : initInfo.options
 			};
         	        	
 			man.drawBoard(vm.board, ctx);
-			if (angular.isDefined(match.rules) && match.rules != null){
-				if (match.rules.indexOf(1) != -1){
+			if (angular.isDefined(match.options) && match.options != null){
+				if (match.options.indexOf(1) != -1){
 					man.initTraps(match.fields);
 				}
 			}

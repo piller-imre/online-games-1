@@ -1,0 +1,5 @@
+Field {
+	'x': <int>,
+	'y': <int>,
+	'value': <enum>
+} 
