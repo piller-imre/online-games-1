@@ -28,12 +28,16 @@ public class LoginController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping(
+			value = "/test", 
+			method = RequestMethod.GET,
+			produces = {"application/json"})
 	@ResponseBody
-	public ResponseEntity<String> test() {
+	public ResponseEntity<String[]> test() {
+		String[] bla = {"tea", "meleg", "hó", "és minden mi jó"};
 		return ResponseEntity
 				.status(HttpStatus.OK)
-				.body("Fasza");
+				.body(bla);
 	}
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)

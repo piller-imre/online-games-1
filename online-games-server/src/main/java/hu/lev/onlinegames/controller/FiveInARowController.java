@@ -13,27 +13,27 @@ public class FiveInARowController {
     @RequestMapping(value = "/fiveinarow/action", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> action() {
-		
+		return null;
 	}
 
     // CHECK ACTION
     @RequestMapping(value = "/fiveinarow/checkaction", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<String> checkAction() {
-		
+    	return null;
 	}
 
     // TIMEOUT
     @RequestMapping(value = "/fiveinarow/timeout", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> timeOut() {
-		
+    	return null;
 	}
 
     // GIVE UP
     @RequestMapping(value = "/fiveinarow/giveup", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> giveUp() {
-		
+    	return null;
 	}
-
+}

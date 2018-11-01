@@ -1,5 +1,8 @@
 package hu.lev.onlinegames.persist;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class TokenDaoImpl implements TokenDao {
 
 //	@Override

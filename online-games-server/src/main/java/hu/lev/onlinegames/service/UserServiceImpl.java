@@ -4,10 +4,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.persist.UserDao;
 
+@Service
 public class UserServiceImpl implements UserService {
 
 	@Autowired

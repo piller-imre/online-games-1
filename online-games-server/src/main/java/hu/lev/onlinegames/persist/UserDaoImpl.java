@@ -6,16 +6,20 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import hu.lev.onlinegames.model.User;
 
+@Component
 public class UserDaoImpl implements UserDao {
 
 //	@Override
 	public int getUserIdByPassword(User user) {
 		// TODO getUserIdByPassword
 		String snippet = "SELECT * FROM user WHERE username = " + user.getUsername() + " AND password = " + user.getPassword() + ";";
-		return 0;
+		
+		return 1;
 	}
 
 //	@Override

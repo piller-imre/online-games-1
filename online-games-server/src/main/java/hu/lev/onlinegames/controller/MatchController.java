@@ -13,34 +13,34 @@ public class MatchController {
     @RequestMapping(value = "/match", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<String> getList() {
-		
+    	return null;
 	}
 
     // CREATE MATCH
     @RequestMapping(value = "/match", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> create() {
-		
+    	return null;
 	}
 
     // DELETE MATCH
     @RequestMapping(value = "/match", method = RequestMethod.DELETE)
 	@ResponseBody
 	public ResponseEntity<String> delete() {
-		
+    	return null;
 	}
 
     // ACCEPT AND START NEW MATCH
     @RequestMapping(value = "/match/start", method = RequestMethod.POST)
 	@ResponseBody
 	public ResponseEntity<String> start() {
-		
+    	return null;
 	}
 
     // CHECK ACTION HAPPENING
 	@RequestMapping(value = "/match/start", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<String> checkStart() {
-		
+		return null;
 	}
 }
