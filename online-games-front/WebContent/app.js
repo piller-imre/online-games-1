@@ -63,7 +63,7 @@ app.config([ '$urlRouterProvider', '$stateProvider',
 // USER AUTHORISATION
 app.run(function($rootScope, $http, $location, $localStorage) {
 	
-	$rootScope.baseUrl = 'http://localhost:8000/api';
+	$rootScope.baseUrl = 'http://localhost:9000/online-games';
 	
 	// keep user logged in after page refresh
 	if ($localStorage.currentUser) {

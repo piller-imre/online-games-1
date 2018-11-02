@@ -1,0 +1,12 @@
+#ranks {
+    width: 90%;
+}
+
+#ranks table{
+    width: 600px;
+    display: table;
+}
+
+#ranks th{
+    text-align: center;
+}

@@ -14,13 +14,13 @@ controllers.controller('LoginController', [
 		
         vm.login = function() {
             vm.loading = true;
-            AuthenticationService.login($scope.username, vm.password, function (result) {
+            AuthenticationService.login(vm.username, vm.password, function (result) {
                 if (result === true) {
                     $location.path('/welcome');
                 } else {
                     vm.error = 'Username or password is incorrect';
-                    vm.loading = false;
                 }
+                vm.loading = false;
             });
 		};
 }]);
