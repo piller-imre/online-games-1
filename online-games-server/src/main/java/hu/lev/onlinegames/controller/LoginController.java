@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.lev.onlinegames.model.Token;
 import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.model.request.LoginRq;
 import hu.lev.onlinegames.model.request.RegisterRq;
@@ -42,7 +43,8 @@ public class LoginController {
 	
 	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> login(@RequestBody LoginRq req) {
+	public Token login(@RequestBody LoginRq req) {
+		Token token = new Token();
 		if(req.getUsername() != null || req.getPassword() != null) {
 			String password = authService.getHash(req.getPassword()); // get hashcode of password
 			User user = new User(req.getUsername(), password);
@@ -50,17 +52,10 @@ public class LoginController {
 			int userId = authService.authenticate(user);
 
 			if(userId > 0) {
-				String token = tokenService.createJWT(user.getUsername(), 10000);
-				tokenService.saveToken(userId, token);
-				return ResponseEntity
-						.status(HttpStatus.OK)
-						.body(token);
+				token.setToken(tokenService.createJWT(user.getUsername(), 10000));
 			}
 		}
-		// case of missing or incorrect fields
-		return ResponseEntity
-				.status(HttpStatus.FORBIDDEN)
-				.body("Incorrect username or password");
+		return token;
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)

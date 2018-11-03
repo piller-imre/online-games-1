@@ -1,0 +1,113 @@
+
+<div id="ranks" class="center">
+    <h1>RANKS</h1>
+
+    <!-- select which stat -->
+    <div class="center">
+        <button ng-click="tab=1">Teljes összesítés</button>
+        <button ng-click="tab=2">Játék típusonként</button>
+        <button ng-click="tab=3">Saját statisztika</button>
+    </div>
+    
+    
+    <!-- select which game -->
+    <div ng-if="tab==2" class="center">
+        <div class="empty-space-50"></div>
+        <button ng-click="setGameIndex($index)" ng-repeat="type in statsByGameType">{{type.gameType}}</button>
+    </div>
+    
+
+    <div class="empty-space-100"></div>
+    
+    <!-- 1. global stats -->
+    <div ng-if="tab==1" class="center">
+        <p>Összes lejátszott játék: {{globalStats.allMatches}}</p>
+        
+        <div class="empty-space-50"></div>
+
+        <table class="table table-hover center">
+            <caption>Játszmák típusonként:</caption>
+            <tr>
+                <th>Játék</th>
+                <th>Meccsek száma</th>
+            </tr>
+            <tr ng-repeat="type in globalStats.allMatchesbyGameType">
+                <td>{{type.gameType}}</td>
+                <td>{{type.matches}}</td>
+            </tr>
+        </table>
+
+        <div class="empty-space-100"></div>
+
+        <table class="table table-hover center">
+                <caption>Legtöbbet nyert játékosok:</caption>
+                <tr>
+                    <th>Helyezés</th>
+                    <th>Felhasználó</th>
+                    <th>Összes nyertes játszma</th>
+                    <th>Összes játszma</th>
+                    <th>Nyerési arány</th>
+                </tr>
+                <tr ng-repeat="user in globalStats.globalRanks">
+                    <td>{{$index +1}}.</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.allMatches}}</td>
+                    <td>{{user.winMatches}}</td>
+                    <td>{{user.winMatches / user.allMatches * 100 | number: 0}} %</td>
+                </tr>
+        </table>
+    </div>
+
+    
+    
+    <!-- 2. stats by game type -->
+    
+    <!-- show table -->
+    <div ng-show="tab==2" class="center">
+        <table ng-model="gameIndex" class="table table-hover center">
+            <caption>{{statsByGameType[gameIndex].gameType}}:</caption>
+            <tr>
+                <th>Helyezés</th>
+                <th>Felhasználó</th>
+                <th>Összes nyertes játszma</th>
+                <th>Összes játszma</th>
+                <th>Nyerési arány</th>
+            </tr>
+            <tr ng-repeat="user in statsByGameType[gameIndex].results">
+                <td>{{$index +1}}.</td>
+                <td>{{user.username}}</td>
+                <td>{{user.allMatches}}</td>
+                <td>{{user.winMatches}}</td>
+                <td>{{user.winMatches / user.allMatches * 100 | number: 0}} %</td>
+            </tr>
+        </table>
+        2
+    </div>
+        
+    <!-- 3. personal stats -->
+    <div ng-show="tab==3" class="center">
+        <p>Összes lejátszott játék: {{personalStats.allMatches}}</p>
+        <p>Összes nyertes játék: {{personalStats.winMatches}}</p>
+        <p>Nyerési arány: {{personalStats.winMatches / personalStats.allMatches * 100 | number: 0}} %</p>
+        
+        <div class="empty-space-50"></div>
+
+        <table class="table table-hover center">
+                <caption>Legtöbbet nyert játékosok:</caption>
+                <tr>
+                    <th>Játék</th>
+                    <th>Összes nyertes játszma</th>
+                    <th>Összes játszma</th>
+                    <th>Nyerési arány</th>
+                    <th>Helyezés</th>
+                </tr>
+                <tr ng-repeat="type in personalStats.statsByGameType">
+                    <td>{{type.gameType}}</td>
+                    <td>{{type.allMatches}}</td>
+                    <td>{{type.winMatches}}</td>
+                    <td>{{type.winMatches / type.allMatches * 100 | number: 0}} %</td>
+                    <td>{{type.rank}}.</td>
+                </tr>
+        </table>
+    </div>
+</div>

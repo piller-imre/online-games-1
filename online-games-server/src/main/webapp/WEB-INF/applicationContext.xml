@@ -25,10 +25,18 @@
       </bean>
     </mvc:message-converters>
   </mvc:annotation-driven>
-
-
+  
   <context:component-scan base-package="hu.lev" />
 
+  <mvc:resources mapping="/**" location="WebContent" />
+  <mvc:view-controller path="/WebContent" view-name="index"/>
+  <mvc:default-servlet-handler />
+  
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" id="htmlre">
+    <property name="prefix" value="/WEB-INF/"/>
+    <property name="suffix" value=".html"/>
+  </bean>
+  
 
   <bean id="xstreamMarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
     <property name="autodetectAnnotations" value="true" />
