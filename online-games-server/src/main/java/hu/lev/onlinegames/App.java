@@ -3,6 +3,7 @@ package hu.lev.onlinegames;
 
 import javax.persistence.PersistenceException;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -15,26 +16,37 @@ import hu.lev.onlinegames.model.User;
 public class App {
 
 	public static void main(String[] args) {
-
-		User u = new User("wegvhvrt", "wet", "dgthfgh@vmi.huzat");
+		
+		User user = new User("tes", "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08", "test@test.com");
+		int id = 0;
+		
 		try {
-		Configuration con = new Configuration()
-				.configure()
-				.addAnnotatedClass(User.class);
-		ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
-		SessionFactory sf = con.buildSessionFactory(reg);
-		Session session = sf.openSession();
-		Transaction tx = session.beginTransaction();
-		
-		int id = (int) session.save(u);			
-		System.out.println("id: " + id);
-		
-		tx.commit();
-		session.close();
-		} catch (PersistenceException e) {
+			Configuration con = new Configuration()
+					.configure()
+					.addAnnotatedClass(User.class);
+			ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
+			SessionFactory sf = con.buildSessionFactory(reg);
+			Session session = sf.openSession();
+			Transaction tx = session.beginTransaction();
+			
+			Query q = session.createQuery("select id from User where username = :a and password = :b");
+			q.setParameter("a", user.getUsername());
+			q.setParameter("b", user.getPassword());
+			
+			id = (int) q.uniqueResult();
+			
+			tx.commit();
+			session.close();
+			
+		} catch (NullPointerException e) {
+			id = 0;
+			e.printStackTrace();
+		} catch (Exception e) {
+			id = -2;
 			e.printStackTrace();
 		}
     	
+		System.out.println(id);   	
 	}
 
 }

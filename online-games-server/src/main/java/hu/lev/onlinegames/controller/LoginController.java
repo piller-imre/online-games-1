@@ -41,22 +41,22 @@ public class LoginController {
 				.body(bla);
 	}
 	
-	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-	@ResponseBody
-	public Token login(@RequestBody LoginRq req) {
-		Token token = new Token();
-		if(req.getUsername() != null || req.getPassword() != null) {
-			String password = authService.getHash(req.getPassword()); // get hashcode of password
-			User user = new User(req.getUsername(), password);
-			
-			int userId = authService.authenticate(user);
-
-			if(userId > 0) {
-				token.setToken(tokenService.createJWT(user.getUsername(), 10000));
-			}
-		}
-		return token;
-	}
+//	@RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Token login(@RequestBody LoginRq req) {
+//		Token token = new Token();
+//		if(req.getUsername() != null || req.getPassword() != null) {
+//			String password = authService.getHash(req.getPassword()); // get hashcode of password
+//			User user = new User(req.getUsername(), password);
+//			
+//			int userId = authService.authenticate(user);
+//
+//			if(userId > 0) {
+//				token.setToken(tokenService.createJWT(user.getUsername(), 10000));
+//			}
+//		}
+//		return token;
+//	}
 	
 //	@RequestMapping(value = "/register", method = RequestMethod.POST)
 //	@ResponseBody

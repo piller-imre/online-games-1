@@ -10,15 +10,15 @@ import hu.lev.onlinegames.persist.UserDao;
 @Service
 public class AuthServiceImpl implements AuthService {
 	
-	@Autowired
-	private UserDao userDao;
-
-	public int authenticate(User user) {		
-		return userDao.getUserIdByPassword(user);
-	}
-
-	public String getHash(String text) {
-		return DigestUtils.sha256Hex(text);
-	}
+//	@Autowired
+//	private UserDao userDao;
+//
+//	public int authenticate(User user) {		
+//		return userDao.getUserIdByPassword(user);
+//	}
+//
+//	public String getHash(String text) {
+//		return DigestUtils.sha256Hex(text);
+//	}
 	
 }

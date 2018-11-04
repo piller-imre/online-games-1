@@ -9,7 +9,7 @@ app.service('AuthenticationService', ['$http', '$location', '$localStorage', '$r
 			var url = baseUrl + '/user/authenticate';
 			$http.post(url, data)
 				.then(function(response){
-					console.log('Response: ' + JSON.stringify(response));
+					console.log('Response: ' + response.data);
 					if (response.data.token) {
 						$localStorage.currentUser = { 
 							userid: response.data.userid, 

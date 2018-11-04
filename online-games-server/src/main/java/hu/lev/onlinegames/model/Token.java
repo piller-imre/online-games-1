@@ -7,7 +7,7 @@ public class Token {
 	
 	public Token() {
 		this.token = null;
-		this.userid = -1;
+		this.userid = 0;
 		this.username = null;
 	}
 	

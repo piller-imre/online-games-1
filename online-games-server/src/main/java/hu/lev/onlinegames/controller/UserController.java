@@ -24,26 +24,12 @@ public class UserController {
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 
-	@Autowired
-	private AuthService authService;
+//	@Autowired
+//	private AuthService authService;
 	
-	@Autowired
-	private TokenService tokenService;
 	
 	@Autowired
 	private UserService userService;
-
-//		@RequestMapping(
-//				value = "/user/test2", 
-//				method = RequestMethod.POST,
-//				produces = {"application/json"})
-//		@ResponseBody
-//		public ResponseEntity<String[]> test() {
-//			String[] bla = {"tea", "meleg", "hó", "és minden mi jó"};
-//			return ResponseEntity
-//					.status(HttpStatus.OK)
-//					.body(bla);
-//		}
 
     // REGISTER USER
     @RequestMapping(value = "/user", method = RequestMethod.POST)
@@ -56,7 +42,7 @@ public class UserController {
 	    		&& req.getPassword().equals(req.getPasswordConfirmed())
 	    		&& userService.validateEmail(req.getEmail())){
     		
-    		String password = authService.getHash(req.getPassword()); // get hashcode of password
+    		String password = userService.getHash(req.getPassword()); // get hashcode of password
 			User user = new User(
 					req.getUsername(),
 					password,
@@ -84,18 +70,12 @@ public class UserController {
     @RequestMapping(value = "/user/authenticate", method = RequestMethod.POST)
 	@ResponseBody
 	public Token authenticate(@RequestBody LoginRq req) {
-		Token token = new Token();
+		Token token = null;
 		if(req.getUsername() != null || req.getPassword() != null) {
-			String password = authService.getHash(req.getPassword()); // get hashcode of password
+			String password = userService.getHash(req.getPassword()); // get hashcode of password
 			User user = new User(req.getUsername(), password);
 			
-			int userId = authService.authenticate(user);
-
-			if(userId > 0) {
-				token.setToken(tokenService.createJWT(user.getUsername(), 10000));
-				token.setUserid(userId);
-				token.setUsername(user.getUsername());
-			}
+			token = userService.authenticate(user);
 		}
 		return token;
 	}
