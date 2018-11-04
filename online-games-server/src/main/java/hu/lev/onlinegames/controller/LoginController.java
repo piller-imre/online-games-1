@@ -58,37 +58,37 @@ public class LoginController {
 		return token;
 	}
 	
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	@ResponseBody
-	public ResponseEntity<String> register(@RequestBody RegisterRq req) {
-		if(req.getUsername() != null &&
-			req.getPassword() != null &&
-			req.getPasswordConfirmed() != null &&
-			req.getEmail() != null &&
-			userService.validateEmail(req.getEmail()) &&
-			req.getPassword() == req.getPasswordConfirmed()) {
-			
-			String password = authService.getHash(req.getPassword()); // get hashcode of password
-			User user = new User(
-					req.getUsername(),
-					password,
-					req.getEmail());
-			boolean saveSuccess = userService.registerUser(user);
-			
-			if(saveSuccess) {
-				return ResponseEntity
-						.status(HttpStatus.CREATED)			// 201
-						.body("Registration successfull, please login to have fun!");
-			} else {
-				return ResponseEntity
-						.status(HttpStatus.NOT_ACCEPTABLE)	// 406
-						.body("User already exists (or server error)");
-			}
-		}
-
-		// case of missing or incorrect fields
-		return ResponseEntity
-				.status(HttpStatus.EXPECTATION_FAILED)
-				.body("Incorrect fields");
-	}
+//	@RequestMapping(value = "/register", method = RequestMethod.POST)
+//	@ResponseBody
+//	public ResponseEntity<String> register(@RequestBody RegisterRq req) {
+//		if(req.getUsername() != null &&
+//			req.getPassword() != null &&
+//			req.getPasswordConfirmed() != null &&
+//			req.getEmail() != null &&
+//			userService.validateEmail(req.getEmail()) &&
+//			req.getPassword().equals(req.getPasswordConfirmed())) {
+//			
+//			String password = authService.getHash(req.getPassword()); // get hashcode of password
+//			User user = new User(
+//					req.getUsername(),
+//					password,
+//					req.getEmail());
+//			boolean saveSuccess = userService.registerUser(user);
+//			
+//			if(saveSuccess) {
+//				return ResponseEntity
+//						.status(HttpStatus.CREATED)			// 201
+//						.body("Registration successfull, please login to have fun!");
+//			} else {
+//				return ResponseEntity
+//						.status(HttpStatus.NOT_ACCEPTABLE)	// 406
+//						.body("User already exists (or server error)");
+//			}
+//		}
+//
+//		// case of missing or incorrect fields
+//		return ResponseEntity
+//				.status(HttpStatus.EXPECTATION_FAILED)
+//				.body("Incorrect fields");
+//	}
 }

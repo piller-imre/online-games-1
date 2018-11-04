@@ -1,48 +1,55 @@
-<h1>Welcome to Levi's Theme Park!</h1>
+<div id="register">
+    <div class="empty-space-20"></div>
 
-<div>
-	<p>Register for entrance to the party!</p>
-</div>
+    <h1 class="left-space">Üdvözöllek Levi vidámparkjában!</h1>
 
+    <div class="empty-space-20"></div>
 
-<div>
-	<h2>Register</h2>
-	
-<!-- 	<div ng-show="registerError" > -->
-<!-- 		{{error}} -->
-<!-- 	</div> -->
-	<form name="form" ng-submit="register()">
-	    <div>
-	        <label for="username">Username</label>
-	        <input type="text" name="username" id="registerUsername" class="" ng-model="username" required />
-            <div ng-messages="form.$submitted && form.username.$error" class="help-block">
-                <div ng-message="required">Username is required</div>
+    <h4 class="left-space">Regisztrálj be a kalandhoz!</h4>
+    
+    <div class="empty-space-50"></div>
+    
+	<div class="container">
+		<form name="form" ng-submit="form.$valid && register()" novalidate>
+			<div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }">
+		        <label for="username">Felhasználónév</label>
+		        <input type="text" name="username" id="registerUsername" class="form-control" ng-model="username" required />
+	            <div ng-messages="form.$submitted && form.username.$error" class="help-block">
+	                <div ng-message="required">Felhasznólnév megadása kötelező!</div>
+	            </div>
+		    </div>
+			<div class="form-group" ng-class="{ 'has-error': form.$submitted && form.password.$invalid }">
+		        <label for="password">Jelszó</label>
+		        <input type="password" name="password" id="registerPassword" class="form-control" ng-model="password" required />
+	            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
+	                <div ng-message="required">Jelszó megadása kötelező</div>
+	            </div>
+		    </div>
+			<div class="form-group" ng-class="{ 'has-error': form.$submitted && form.passwordConfirmed.$invalid }">
+		        <label for="password">Jelszó újra</label>
+		        <input type="password" name="password" id="registerPasswordAgain" class="form-control" ng-model="passwordConfirmed" required />
+	            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
+	                <div ng-message="required">Megerősítő jelszó megadása kötelező!</div>
+	            </div>
+		    </div>
+			<div class="form-group" ng-class="{ 'has-error': form.$submitted && form.email.$invalid }">
+		        <label for="email">Email</label>
+		        <input type="email" name="email" id="email"  class="form-control" ng-model="email" required />
+	            <div ng-messages="form.$submitted && form.email.$error" class="help-block">
+	                <div ng-message="email">érvénytelen email cí­m</div>
+	            </div>
+		    </div>
+		    <div class="form-group">
+                <button class="btn btn-primary">Regisztráció</button>
+<!--                 <button ng-disabled="loading" class="btn btn-primary">Login</button> -->
+<!--                 <img ng-if="loading" src="img/loading.png" /> -->
             </div>
-	    </div>
-	    <div>
-	        <label for="password">Password</label>
-	        <input type="password" name="password" id="registerPassword" ng-model="password" required />
-            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
-                <div ng-message="required">Password is required</div>
-            </div>
-	    </div>
-	    <div>
-	        <label for="password">Password again</label>
-	        <input type="password" name="password" id="registerPasswordAgain" ng-model="passwordConfirmed" required />
-            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
-                <div ng-message="required">Password confirmation is required</div>
-            </div>
-	    </div>
-	    <div>
-	        <label for="email">Email</label>
-	        <input type="email" name="email" id="email" class="" ng-model="email" required />
-            <div ng-messages="form.$submitted && form.password.$error" class="help-block">
-                <div ng-message="email">This needs to be a valid email</div>
-            </div>
-	    </div>
-	    <div>
-	        <button type="submit">Register</button>
-	    </div>
-	</form>
+            <div ng-if="error" class="alert alert-danger">{{error}}</div>
+		</form>
+		
+		<div>
+			{{ errorText }}
+		</div>
+	</div>
 </div>
 

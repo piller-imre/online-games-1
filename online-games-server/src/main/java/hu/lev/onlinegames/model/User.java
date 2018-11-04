@@ -1,6 +1,7 @@
 package hu.lev.onlinegames.model;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 public class User {
 	
 	@Id
+	@GeneratedValue(generator="increment")
 	private int id;
 	private String username;
 	private String password;

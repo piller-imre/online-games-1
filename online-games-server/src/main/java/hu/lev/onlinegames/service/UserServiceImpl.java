@@ -1,7 +1,7 @@
 package hu.lev.onlinegames.service;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,16 +15,20 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
-
 //	@Override
 	public boolean validateEmail(String emailStr) {
-	        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
-	        return matcher.find();
+		boolean result = true;
+		   try {
+		      InternetAddress emailAddr = new InternetAddress(emailStr);
+		      emailAddr.validate();
+		   } catch (AddressException ex) {
+		      result = false;
+		   }
+		   return result;
 	}
 	
 //	@Override
-	public boolean registerUser(User user) {
+	public int registerUser(User user) {
 		return userDao.insertUser(user);
 	}
 

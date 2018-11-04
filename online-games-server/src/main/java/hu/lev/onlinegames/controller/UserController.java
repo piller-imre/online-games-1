@@ -3,7 +3,6 @@ package hu.lev.onlinegames.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.lev.onlinegames.model.Token;
 import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.model.request.LoginRq;
+import hu.lev.onlinegames.model.request.RegisterRq;
 import hu.lev.onlinegames.service.AuthService;
 import hu.lev.onlinegames.service.TokenService;
 import hu.lev.onlinegames.service.UserService;
@@ -33,23 +33,37 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-		@RequestMapping(
-				value = "/user/test2", 
-				method = RequestMethod.POST,
-				produces = {"application/json"})
-		@ResponseBody
-		public ResponseEntity<String[]> test() {
-			String[] bla = {"tea", "meleg", "hó", "és minden mi jó"};
-			return ResponseEntity
-					.status(HttpStatus.OK)
-					.body(bla);
-		}
+//		@RequestMapping(
+//				value = "/user/test2", 
+//				method = RequestMethod.POST,
+//				produces = {"application/json"})
+//		@ResponseBody
+//		public ResponseEntity<String[]> test() {
+//			String[] bla = {"tea", "meleg", "hó", "és minden mi jó"};
+//			return ResponseEntity
+//					.status(HttpStatus.OK)
+//					.body(bla);
+//		}
 
     // REGISTER USER
     @RequestMapping(value = "/user", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> register() {
-    	return null;
+	public int register(@RequestBody RegisterRq req) {
+    	int id = -1;
+    	if(req.getUsername() != null
+	    		&& req.getPassword() != null
+	    		&& req.getPasswordConfirmed() != null
+	    		&& req.getPassword().equals(req.getPasswordConfirmed())
+	    		&& userService.validateEmail(req.getEmail())){
+    		
+    		String password = authService.getHash(req.getPassword()); // get hashcode of password
+			User user = new User(
+					req.getUsername(),
+					password,
+					req.getEmail());
+    		id = userService.registerUser(user);
+    	}
+    	return id;
 	}
 
     // UPDATE USER
