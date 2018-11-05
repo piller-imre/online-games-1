@@ -53,18 +53,31 @@ public class TokenServiceImpl implements TokenService {
 	}
 	
 //	@Override
-	public boolean saveToken(int userId, String token) {
-		return tokenDao.saveToken(userId, token);
+	public Claims parseJWT(String jwt) {
+	    
+		Claims claims = null; 
+		try {
+			//This line will throw an exception if it is not a signed JWS (as expected)
+		    claims = Jwts.parser()
+		       .setSigningKey(DatatypeConverter.parseBase64Binary(secret))
+		       .parseClaimsJws(jwt).getBody();
+		    System.out.println("Username: " + claims.getId());
+		    System.out.println("Expiration: " + claims.getExpiration());
+		} catch (Exception e) {
+			System.out.println("Invalid JWT!");
+		}
+	    
+	    return claims;
 	}
-
-
-//	@Override
-	public void parseJWT(String jwt) {
-	    //This line will throw an exception if it is not a signed JWS (as expected)
-	    Claims claims = Jwts.parser()         
-	       .setSigningKey(DatatypeConverter.parseBase64Binary(secret))
-	       .parseClaimsJws(jwt).getBody();
-	    System.out.println("Username: " + claims.getId());
-	    System.out.println("Expiration: " + claims.getExpiration());
+	
+	public int getId(String jwt) {
+		Claims claims = parseJWT(jwt);
+		int id = 0;
+		
+		if(claims != null) {
+			id = Integer.parseInt(claims.getId());
+		}
+		
+		return id;
 	}
 }

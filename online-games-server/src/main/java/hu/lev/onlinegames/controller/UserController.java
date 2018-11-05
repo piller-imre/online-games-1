@@ -14,19 +14,13 @@ import hu.lev.onlinegames.model.Token;
 import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.model.request.LoginRq;
 import hu.lev.onlinegames.model.request.RegisterRq;
-import hu.lev.onlinegames.service.AuthService;
-import hu.lev.onlinegames.service.TokenService;
 import hu.lev.onlinegames.service.UserService;
 
 @RestController
 public class UserController {
 	
 	Logger logger = LoggerFactory.getLogger(UserController.class);
-	
-
-//	@Autowired
-//	private AuthService authService;
-	
+		
 	
 	@Autowired
 	private UserService userService;

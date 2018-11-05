@@ -39,7 +39,8 @@ app.config([ '$urlRouterProvider', '$stateProvider',
 
 			.state('choose-game', {
 				url : '/choose-game',
-				templateUrl : 'pages/choose-game/choose-game.html'
+				templateUrl : 'pages/choose-game/choose-game.html',
+				controller: 'ChooseGameController'
 			})
 
 			.state('game-play', {

@@ -3,25 +3,17 @@ package hu.lev.onlinegames.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.lev.onlinegames.model.Token;
-import hu.lev.onlinegames.model.User;
-import hu.lev.onlinegames.model.request.LoginRq;
-import hu.lev.onlinegames.model.request.RegisterRq;
-import hu.lev.onlinegames.service.AuthService;
 import hu.lev.onlinegames.service.TokenService;
 import hu.lev.onlinegames.service.UserService;
 
 @RestController
 public class LoginController {
 	
-	@Autowired
-	private AuthService authService;
 	
 	@Autowired
 	private TokenService tokenService;

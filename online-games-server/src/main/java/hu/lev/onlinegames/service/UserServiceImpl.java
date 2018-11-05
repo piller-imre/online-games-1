@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 		int userid = userDao.getUserIdByPassword(user);
 		if(userid > 0) {
 			token = new Token();
-			token.setToken(tokenService.createJWT(user.getUsername(), 10000));
+			token.setToken(tokenService.createJWT(userid + "", 600000));
 			token.setUserid(userid);
 			token.setUsername(user.getUsername());
 		}

@@ -1,0 +1,23 @@
+#choose-game {
+    overflow: hidden;
+}
+
+#waiting-match-list {
+    float: left;
+    margin: 50px;
+}
+
+#create-match {
+    float: left;
+    margin: 50px;
+    text-align: initial;
+}
+
+#create-match legend {
+    border-bottom: 0px;
+    color: darkgray;
+}
+
+#create-match label {
+    margin-left: 30px;
+}
