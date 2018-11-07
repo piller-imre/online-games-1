@@ -16,15 +16,15 @@ INSERT INTO `online_games_db`.`game_type` (`id`, `name`) VALUES ('3', 'Malom');
 
 -- game_type_options
 
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('1', 'Véletlenszerű csapdák', 'A pályán véletleszerűen elhelyez 50 csapdát. Ha valaki rá akar tenni egy karaktert, a csapda aktiválódik, a karaktert nem helyezi el, és a következő játékos jön.', '1');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('2', 'Tiltott mezők', 'A pályán véletlenszerűen elhelyez 50 tiltott mezőt, amelyre nem lehet karaktert tenni.', '1');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('3', 'Kirakható csapdák', 'A játék kezdetekor mindkét játékos kap 10-10 csapdát, amelyet játék közben a saját körében kitehet a karaktere helyett. A karaktert utána egyik játékos sem látja.', '1');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('4', 'Eltűnő karakterek', 'A játék minden körben véletlenszerűen üresre állít egy mezőt, akár csapda, akár fal, akár karakter van rajta.', '1');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('5', 'Szabály1', 'Leírás1', '2');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('6', 'Szabály2', 'Leírás2', '2');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('7', 'Szabály3', 'Leírás3', '2');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('8', 'Szabály4', 'Leírás4', '3');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('9', 'Szabály5', 'Leírás5', '3');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('10', 'Szabály6', 'Leírás6', '3');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('11', 'Szabály7', 'Leírás7', '3');
-INSERT INTO `online_games_db`.`game_type_options` (`id`, `name`, `description`, `game_type`) VALUES ('12', 'Szabály8', 'Leírás8', '3');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('1', 'Véletlenszerű csapdák', 'A pályán véletleszerűen elhelyez 50 csapdát. Ha valaki rá akar tenni egy karaktert, a csapda aktiválódik, a karaktert nem helyezi el, és a következő játékos jön.', '1');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('2', 'Tiltott mezők', 'A pályán véletlenszerűen elhelyez 50 tiltott mezőt, amelyre nem lehet karaktert tenni.', '1');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('3', 'Kirakható csapdák', 'A játék kezdetekor mindkét játékos kap 10-10 csapdát, amelyet játék közben a saját körében kitehet a karaktere helyett. A karaktert utána egyik játékos sem látja.', '1');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('4', 'Eltűnő karakterek', 'A játék minden körben véletlenszerűen üresre állít egy mezőt, akár csapda, akár fal, akár karakter van rajta.', '1');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('5', 'Szabály1', 'Leírás1', '2');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('6', 'Szabály2', 'Leírás2', '2');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('7', 'Szabály3', 'Leírás3', '2');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('8', 'Szabály4', 'Leírás4', '3');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('9', 'Szabály5', 'Leírás5', '3');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('10', 'Szabály6', 'Leírás6', '3');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('11', 'Szabály7', 'Leírás7', '3');
+INSERT INTO `online_games_db`.`game_type_option` (`id`, `name`, `description`, `game_type_fk`) VALUES ('12', 'Szabály8', 'Leírás8', '3');
