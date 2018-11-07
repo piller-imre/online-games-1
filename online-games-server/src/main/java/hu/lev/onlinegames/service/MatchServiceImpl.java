@@ -21,5 +21,4 @@ public class MatchServiceImpl implements MatchService {
 		 return matchDao.getGameTypes();
 	}
 
-	
 }

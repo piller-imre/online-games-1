@@ -24,6 +24,7 @@ public class MatchDaoImpl implements MatchDao {
 
 	@Override
 	public GameType[] getGameTypes() {
+
 		GameType[] gameTypes = null;
 		
 		try {
@@ -31,24 +32,24 @@ public class MatchDaoImpl implements MatchDao {
 					.configure()
 					.addAnnotatedClass(GameType.class)
 					.addAnnotatedClass(GameTypeOption.class);
-			ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
+			ServiceRegistry reg = new StandardServiceRegistryBuilder()
+					.applySettings(con.getProperties())
+					.build();			
 			SessionFactory sf = con.buildSessionFactory(reg);
+
 			Session session = sf.openSession();
 			Transaction tx = session.beginTransaction();
-			
-			Query q = session.createQuery("from GameType");
-			
-			List<GameType> gameTypeList = q.list();
-			gameTypes = new GameType[gameTypeList.size()];
-			gameTypeList.toArray(gameTypes);
+						
+				Query q = session.createQuery("from GameType");
+				
+				List<Object> objects = q.list();			
+				gameTypes = new GameType[objects.size()];
+				objects.toArray(gameTypes);
 			
 			tx.commit();
 			session.close();
 			
-			for(GameType g : gameTypes) {
-				System.out.println(g.toString());
-			}
-			
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

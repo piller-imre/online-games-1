@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "game_type")
 public class GameType {
@@ -45,9 +47,9 @@ public class GameType {
 			opString += gameTypeOption.toString() + "  ";
 		}
 		return "GameType [gameTypeId=" + gameTypeId 
-				+ ", gameTypeName=" 
-				+ gameTypeName + ", options= "
-				+ opString + "]";
+				+ ", gameTypeName=" + gameTypeName 
+				+ ", options= " + opString
+				+ "]";
 	}
 
 	public int getGameTypeId() {

@@ -2,12 +2,13 @@ package hu.lev.onlinegames.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "game_type_option")
 @Entity
@@ -15,7 +16,7 @@ public class GameTypeOption {
 
 	@Id
 	@GeneratedValue(generator="increment")
-	@Column(name = "option_id")
+	@Column(name = "id")
 	private int id;
 
 	@Column(name = "name")
@@ -25,6 +26,8 @@ public class GameTypeOption {
 	private String description;
 	
 	@ManyToOne
+	@JoinColumn(name="game_type_fk")
+    @JsonIgnore
 	private GameType gameType;
 
 	
@@ -43,10 +46,9 @@ public class GameTypeOption {
 
 	@Override
 	public String toString() {
-		return "GameTypeOption [id=" + id 
-				+ ", name=" + name 
-				+ ", description=" + description
-				+ ", gameType=" + gameType
+		return "GameTypeOption [id=" + this.id 
+				+ ", name=" + this.name 
+				+ ", description=" + this.description
 				+ "]";
 	}
 
