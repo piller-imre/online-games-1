@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.model.GameType;
+import hu.lev.onlinegames.model.GameTypeOption;
 
 @Repository
 public class MatchDaoImpl implements MatchDao {
@@ -28,7 +29,8 @@ public class MatchDaoImpl implements MatchDao {
 		try {
 			Configuration con = new Configuration()
 					.configure()
-					.addAnnotatedClass(GameType.class);
+					.addAnnotatedClass(GameType.class)
+					.addAnnotatedClass(GameTypeOption.class);
 			ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
 			SessionFactory sf = con.buildSessionFactory(reg);
 			Session session = sf.openSession();
@@ -42,6 +44,10 @@ public class MatchDaoImpl implements MatchDao {
 			
 			tx.commit();
 			session.close();
+			
+			for(GameType g : gameTypes) {
+				System.out.println(g.toString());
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

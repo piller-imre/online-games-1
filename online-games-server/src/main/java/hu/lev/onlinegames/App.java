@@ -1,12 +1,61 @@
 package hu.lev.onlinegames;
 
+import hu.lev.onlinegames.model.GameType;
+import hu.lev.onlinegames.model.GameTypeOption;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+
 public class App {
-
 	public static void main(String[] args) {
-		int v = 10;
-		System.out.println(v + "");
-	}
+		
+		GameType[] gameTypes = null;
+		try {
+			Configuration con = new Configuration()
+					.configure()
+					.addAnnotatedClass(GameType.class)
+					.addAnnotatedClass(GameTypeOption.class);
+			ServiceRegistry reg = new StandardServiceRegistryBuilder()
+					.applySettings(con.getProperties())
+					.build();
 
+			System.out.println("alma1");
+			
+			SessionFactory sf = con.buildSessionFactory(reg);
+			
+			System.out.println("alma2");
+
+			Session session = sf.openSession();
+			Transaction tx = session.beginTransaction();
+						
+				System.out.println("alma3");
+				Query q = session.createQuery("from GameType");
+				System.out.println("eper");
+				
+				List<Object> objects = q.list();			
+				gameTypes = new GameType[objects.size()];
+				objects.toArray(gameTypes);
+			
+			tx.commit();
+			session.close();
+			
+			System.out.println("dinnye");
+			for(GameType g : gameTypes) {
+				System.out.println(g.toString());
+			}
+			System.out.println(gameTypes[0].getOptions().size());
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
 
 // user insert test

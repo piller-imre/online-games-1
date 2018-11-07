@@ -29,8 +29,7 @@ CREATE TABLE `online_games_db`.`user` (
   `token` VARCHAR(400) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name_UNIQUE` (`user_name`),
-  UNIQUE KEY `email_UNIQUE` (`email`),
-  UNIQUE KEY `token_UNIQUE` (`token`)
+  UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB;
 
 
@@ -39,6 +38,20 @@ CREATE TABLE `online_games_db`.`game_type` (
   `name` VARCHAR(20) NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE);
+ 
+ 
+CREATE TABLE `online_games_db`.`game_type_option` (
+  `id` INT NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `description` VARCHAR(500) NULL,
+  `game_type_fk` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `game_type_options_game_type_fk_idx` (`game_type_fk` ASC) VISIBLE,
+  CONSTRAINT `game_type_options_game_type_fk`
+    FOREIGN KEY (`game_type_fk`)
+    REFERENCES `online_games_db`.`game_type` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
 
 
 CREATE TABLE `online_games_db`.`match_waiting` (
