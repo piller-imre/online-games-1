@@ -18,6 +18,7 @@ DROP SCHEMA `online_games_db`;
 
 DROP DATABASE online_games_db;
 
+
 CREATE DATABASE online_games_db;
 USE online_games_db;
 
@@ -28,7 +29,7 @@ CREATE TABLE `online_games_db`.`user` (
   `email` VARCHAR(100) NOT NULL,
   `token` VARCHAR(400) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_name_UNIQUE` (`user_name`),
+  UNIQUE KEY `user_name_UNIQUE` (`id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB;
 
