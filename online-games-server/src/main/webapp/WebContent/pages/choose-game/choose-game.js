@@ -2,35 +2,31 @@ controllers.controller('ChooseGameController', [
 	'$scope',
 	'$rootScope',
 	'$http',
-	function($scope, $rootScope, $http) {
+	'$localStorage',
+	function($scope, $rootScope, $http, $localStorage) {
 		var vm = $scope;
         var baseUrl = $rootScope.baseUrl;
-		vm.newMatch = {};
-		vm.gameOptions = [
-			{
-				id: 1,
-				name: "Aknák véletlen szerû elhelyezése a pályán",
-				description: "Bla-bla-bla..."
-			},
-			{
-				id: 2,
-				name: "Falak véletlen szerû elhelyezése a pályán",
-				description: "Bla-bla-bla..."
-			},
-			{
-				id: 3,
-				name: "Karakterek véletlenszerû törlése",
-				description: "Bla-bla-bla..."
-			}
-		];
         
 		initController();
 
-        function initController() {
-            // get gameTypes
+        
+
+		// vm.$watch(vm.newMatch.options, function(newValue, oldValue){
+		// 	console.log('options: ' + newValue);
+		// });
+		
+		function initController() {
+            // get gameTypes, init new match object
 			$http.get(baseUrl + '/gametypes')
 			.then(function(result){
-                vm.gameTypes = result.data;
+				vm.gameTypes = result.data;
+				vm.newMatch = {
+					userid: $localStorage.currentUser.userid,
+					username: $localStorage.currentUser.username,
+					gameTypeId: vm.gameTypes[0].gameTypeId,
+					options: []
+				};
+				vm.setOptions();
 			});
 		};
 		
@@ -41,5 +37,18 @@ controllers.controller('ChooseGameController', [
 
 			vm.loading = false;
 		};
-	
-}]);
+
+		vm.setOptions = function() {
+			vm.newMatch.options = [];
+			for(var i = 0; i < vm.gameTypes.length; i++){
+				if(vm.gameTypes[i].gameTypeId == vm.newMatch.gameTypeId){
+					vm.options = vm.gameTypes[i].options;
+					break;
+				}
+			}
+			angular.forEach(vm.options, function(op){
+				vm.newMatch.options[op.name] = false;
+			});
+		}
+	}
+]);

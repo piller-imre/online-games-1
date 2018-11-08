@@ -13,20 +13,55 @@
                 <legend>Játék:</legend>
                 <div ng-repeat="type in gameTypes">
                     <label>
-                        <input type="radio" ng-model="newMatch.gameType" value="type.gameTypeId" required>
+                    <input 
+                        type="radio" 
+                        name="gametype" 
+                        ng-model="$parent.newMatch.gameTypeId" 
+                        ng-value="type.gameTypeId" 
+                        ng-click="setOptions()" 
+                        />
+                    {{ type.gameTypeName }} 
+                    </label>
+                    <br/>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }"></div>
+                <legend>Szabályok:</legend>
+                <div ng-repeat="option in options">
+                    <label>
+                    <input 
+                        type="checkbox" 
+                        name="optionid" 
+                        ng-model="$parent.newMatch.options[id]"
+                        id="option.name"
+                        />
+                    {{ option.name }}
+                    <br/> modell: {{$parent.newMatch.options}}
+                    <br/> {{$parent.newMatch.options.name}}
+                    </label>
+                    <br/>
+                </div>
+            </div>
+
+
+            <!-- <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }">
+                <legend>Játék:</legend>
+                <div ng-repeat="type in gameTypes">
+                    <label>
+                        <input type="radio" name="gameType" ng-model="vm.newMatch.gameType" value="type.gameTypeId" required>
                         {{ type.gameTypeName }}
                     </label><br/>
                 </div>
             </div>
             <div>
                 <legend>Szabályok:</legend>
-                <div ng-repeat="option in gameOptions">
-                    <label>
+                <div>
+                    <label ng-repeat="option in gameTypes[newMatch.gameType].options">
                         <input type="checkbox" ng-model="newMatch.options" value="option.id">
                         {{ option.name }}
                     </label><br/>
                 </div>
-            </div>
+            </div> -->
             
             <div class="empty-space-20"></div>
             <div class="form-group">
