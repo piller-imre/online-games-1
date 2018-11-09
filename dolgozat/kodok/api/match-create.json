@@ -10,15 +10,5 @@ REQ = {
 	}
 }
 RES = {
-	'success': <boolean>,
-	'match': {
-		'matchid': <int>,
-		'userid': <int>,
-		'username': <str>,
-		'gameType' : <str>,
-		'setup': [
-			<int>,
-			...
-		]
-	}
+	'success': <boolean>
 }
