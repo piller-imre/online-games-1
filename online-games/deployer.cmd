@@ -1,6 +1,6 @@
-set server_dict="C:\online-games\online-games-server"
+set server_dict="C:\online-games\online-games"
 set tomcat_dict="C:\online-games\apache-tomcat-9.0.4\webapps"
-set war_file="C:\online-games\online-games-server\target\online-games.war"
+set war_file="C:\online-games\online-games\target\online-games.war"
 set tomcat_file="C:\online-games\apache-tomcat-9.0.4\webapps\online-games.war"
 
 cd /d %server_dict%
