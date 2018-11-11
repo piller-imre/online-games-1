@@ -180,8 +180,7 @@ Sikertelen művelet esetén hibaüzenet küld a felhasználónak. (\ref{lst:user
 
 \lstinputlisting[caption={\textit{/match/list kérés és válasz minta}}, label={lst:match-list}]{kodok/api/match-list.json}
 
-\texttt{POST}: Inicializál egy új kihívást és elmenti az adatbázisba. (Emellett gondoskodni kell róla, hogy a többi felhasználó számára is megjelenjen az új kihívás).
-Siker esetén egy azonosítóval gyarapítva visszaküldi a meccs objektumot, és hogy a létrehozás sikeres.
+\texttt{POST}: Inicializál egy új kihívást és elmenti az adatbázisba. (Emellett gondoskodni kell róla, hogy a többi felhasználó számára is megjelenjen az új kihívás). A művelet végén visszaküldi a mentés sikerességét.
 Sikertelen művelet esetén hibaüzenet küld a felhasználónak. (\ref{lst:match-create} ábra).
 
 \lstinputlisting[caption={\textit{/match/create kérés és válasz minta}}, label={lst:match-create}]{kodok/api/match-create.json}
