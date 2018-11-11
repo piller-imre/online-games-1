@@ -1,7 +1,7 @@
 package hu.lev.onlinegames.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "game_type")
@@ -26,14 +26,19 @@ public class GameType {
 	private String gameTypeName;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="gameType")
-	private List<GameTypeOption> gameTypeOptions;
+    @JsonIgnore
+	private Set<GameTypeOption> gameTypeOptions;
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="gameType")
+    @JsonIgnore
+	private Set<MatchWaiting> newMatch;
 	
 	
 	public GameType() {
 		super();
 	}
 	
-	public GameType(int gameTypeId, String gameTypeName, List<GameTypeOption> gameTypeOptions) {
+	public GameType(int gameTypeId, String gameTypeName, Set<GameTypeOption> gameTypeOptions) {
 		super();
 		this.gameTypeId = gameTypeId;
 		this.gameTypeName = gameTypeName;
@@ -64,15 +69,32 @@ public class GameType {
 	public void setGameTypeName(String gameTypeName) {
 		this.gameTypeName = gameTypeName;
 	}
-	public List<GameTypeOption> getOptions() {
+	public Set<GameTypeOption> getOptions() {
 		return gameTypeOptions;
 	}
-	public void setOptions(List<Object> list) {
-		List<GameTypeOption> options = new ArrayList<>();
+	public void setOptions(Set<Object> list) {
+		Set<GameTypeOption> options = new HashSet<>();
 		for (Object l : list) {
 			options.add((GameTypeOption) l);
 		}
 		
 		this.gameTypeOptions = options;
 	}
+
+	public Set<GameTypeOption> getGameTypeOptions() {
+		return gameTypeOptions;
+	}
+
+	public void setGameTypeOptions(Set<GameTypeOption> gameTypeOptions) {
+		this.gameTypeOptions = gameTypeOptions;
+	}
+
+	public Set<MatchWaiting> getNewMatch() {
+		return newMatch;
+	}
+
+	public void setNewMatch(Set<MatchWaiting> newMatch) {
+		this.newMatch = newMatch;
+	}
+
 }

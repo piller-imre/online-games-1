@@ -13,6 +13,9 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.service.ServiceRegistry;
 import org.springframework.stereotype.Repository;
 
+import hu.lev.onlinegames.model.GameType;
+import hu.lev.onlinegames.model.GameTypeOption;
+import hu.lev.onlinegames.model.MatchWaiting;
 import hu.lev.onlinegames.model.User;
 
 @Repository
@@ -52,7 +55,10 @@ public class UserDaoImpl implements UserDao {
 		try {
 			Configuration con = new Configuration()
 					.configure()
-					.addAnnotatedClass(User.class);
+					.addAnnotatedClass(GameType.class)
+					.addAnnotatedClass(GameTypeOption.class)
+					.addAnnotatedClass(User.class)
+					.addAnnotatedClass(MatchWaiting.class);
 			ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
 			SessionFactory sf = con.buildSessionFactory(reg);
 			Session session = sf.openSession();
@@ -85,7 +91,10 @@ public class UserDaoImpl implements UserDao {
 		try {
 			Configuration con = new Configuration()
 					.configure()
-					.addAnnotatedClass(User.class);
+					.addAnnotatedClass(GameType.class)
+					.addAnnotatedClass(GameTypeOption.class)
+					.addAnnotatedClass(User.class)
+					.addAnnotatedClass(MatchWaiting.class);
 			ServiceRegistry reg = new StandardServiceRegistryBuilder().applySettings(con.getProperties()).build();
 			SessionFactory sf = con.buildSessionFactory(reg);
 			Session session = sf.openSession();

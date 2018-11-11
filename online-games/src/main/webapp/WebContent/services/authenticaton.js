@@ -1,6 +1,6 @@
 
-app.service('AuthenticationService', ['$http', '$localStorage', '$rootScope',
-	function ($http, $localStorage, $rootScope) {
+app.service('AuthenticationService', ['$http', '$location', '$localStorage', '$rootScope',
+	function ($http, $location, $localStorage, $rootScope) {
 		var vm = this;
 		var baseUrl = $rootScope.baseUrl;
 		

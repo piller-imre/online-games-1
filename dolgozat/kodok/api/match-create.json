@@ -10,5 +10,5 @@ REQ = {
 	}
 }
 RES = {
-	'success': <boolean>
+	'success': <int>
 }

@@ -1,9 +1,15 @@
 package hu.lev.onlinegames.model;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "user")
@@ -16,8 +22,11 @@ public class User {
 	private String password;
 	private String email;
 	private String token;
-	
-	
+
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
+//    @JsonIgnore
+	private Set<MatchWaiting> newMatch;
+
 	// constructors
 	public User() {}
 	
@@ -30,6 +39,16 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.email = email;
+	}
+	
+
+	@Override
+	public String toString() {
+		return "User [id=" + id 
+				+ ", username=" + username 
+				+ ", password=" + password 
+				+ ", email=" + email 
+				+ ", token=" + token + "]";
 	}
 
 	// getters, setters
@@ -63,6 +82,13 @@ public class User {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
+
+	public Set<MatchWaiting> getNewMatch() {
+		return newMatch;
+	}
+
+	public void setNewMatch(Set<MatchWaiting> newMatch) {
+		this.newMatch = newMatch;
+	}
 	
 }

@@ -1,75 +1,85 @@
 <div id="choose-game" class="center">
 
+    <!-- WAITING MATCH LIST -->
     <div id="waiting-match-list">
         <h2>Válassz egy kihívást innen:</h2>
+        <div class="empty-space-20"></div>
+
+        <div ng-if="!isMatchesWaiting">Jelenleg nincs kihívás.</div>
+
+        <div ng-if="isMatchesWaiting">
+            <table class="table table-hover center">
+                <tr>
+                    <th>Felhasználó</th>
+                    <th>Játék</th>
+                    <th>Beállítások</th>
+                </tr>
+                <tr ng-repeat="match in matchesWaiting">
+                    <td>{{ match.username }}</td>
+                    <td>{{ match.gameType.gameTypeName }}</td>
+                    <td>
+                        <table ng-repeat="op in match.gameType.options">
+                            <tr>
+                                <td>{{ op.name }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 
+    <!-- CREATE-MATCH -->
     <div id="create-match">
         <h2>Vagy hozz létre egy újat itt:</h2>
         <div class="empty-space-20"></div>
-        <form name="form" ng-submit="form.$valid && createChallange()" novalidate>
-            
-            <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }">
-                <legend>Játék:</legend>
-                <div ng-repeat="type in gameTypes">
-                    <label>
-                    <input 
-                        type="radio" 
-                        name="gametype" 
-                        ng-model="$parent.newMatch.gameTypeId" 
-                        ng-value="type.gameTypeId" 
-                        ng-click="setOptions()" 
+
+        <div class="container">
+            <form name="form" novalidate>
+                
+                <div class="form-group">
+                    <legend>Játék:</legend>
+                    <div ng-repeat="type in gameTypes">
+                        <label>
+                        <input 
+                            type="radio" 
+                            name="gametype" 
+                            ng-model="$parent.newMatch.gameTypeId" 
+                            ng-value="type.gameTypeId" 
+                            ng-click="setOptions()" 
                         />
-                    {{ type.gameTypeName }} 
-                    </label>
-                    <br/>
+                        {{ type.gameTypeName }} 
+                        </label>
+                        <br/>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }"></div>
-                <legend>Szabályok:</legend>
-                <div ng-repeat="option in options">
-                    <label>
-                    <input 
-                        type="checkbox" 
-                        name="optionid" 
-                        ng-model="$parent.newMatch.options[id]"
-                        id="option.name"
-                        />
-                    {{ option.name }}
-                    <br/> modell: {{$parent.newMatch.options}}
-                    <br/> {{$parent.newMatch.options.name}}
-                    </label>
-                    <br/>
+                <div class="form-group"></div>
+                    <legend>Szabályok:</legend>
+                    <div ng-repeat="option in options">
+                        <label>
+                            <input 
+                                type="checkbox" 
+                                name="optionid" 
+                                ng-model="option.marked"
+                                id="option.marked"
+                            />
+                            {{ option.name }}
+                            <br/>
+                        </label>
+                        <br/>
+                    </div>
                 </div>
-            </div>
+                <br/> 
 
+                <div class="empty-space-20"></div>
 
-            <!-- <div class="form-group" ng-class="{ 'has-error': form.$submitted && form.username.$invalid }">
-                <legend>Játék:</legend>
-                <div ng-repeat="type in gameTypes">
-                    <label>
-                        <input type="radio" name="gameType" ng-model="vm.newMatch.gameType" value="type.gameTypeId" required>
-                        {{ type.gameTypeName }}
-                    </label><br/>
+                <div class="form-group">
+                    <button type="submit" ng-click="createChallange()" ng-disabled="loading" class="btn btn-primary">Létrehozás</button>
+                    <img ng-if="loading" src="img/loading.png" />
+            		<div ng-if="newMatchAlertVisible" ng-class="error == 1 ? 'alert alert-success' : 'alert alert-danger'">{{errorMsg}}</div>
                 </div>
-            </div>
-            <div>
-                <legend>Szabályok:</legend>
-                <div>
-                    <label ng-repeat="option in gameTypes[newMatch.gameType].options">
-                        <input type="checkbox" ng-model="newMatch.options" value="option.id">
-                        {{ option.name }}
-                    </label><br/>
-                </div>
-            </div> -->
-            
-            <div class="empty-space-20"></div>
-            <div class="form-group">
-                <button ng-disabled="loading" class="btn btn-primary">Létrehozás</button>
-                <img ng-if="loading" src="img/loading.png" />
-            </div>
-            <div ng-if="error" class="alert alert-danger">{{error}}
 
-        </form>
+            </form>
+        </div>
     </div>
 </div>
