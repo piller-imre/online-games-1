@@ -32,3 +32,8 @@
 #create-match label {
     margin-left: 30px;
 }
+
+.selected {
+    background-color:black;
+    color: darkcyan;
+}

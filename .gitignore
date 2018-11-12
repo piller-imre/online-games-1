@@ -9,6 +9,7 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+target/
 
 # Eclipse Core
 .project
@@ -64,5 +65,7 @@ local.properties
 *.toc
 *.thm
 *.log
-
 *.gz
+
+#tomcat
+apache-tomcat-9.0.4/

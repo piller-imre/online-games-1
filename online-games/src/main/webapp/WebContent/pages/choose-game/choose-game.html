@@ -9,13 +9,15 @@
 
         <div ng-if="isMatchesWaiting">
             <div>
-                <table class="table table-hover center">
+                <table class="table table-hover center ng-model="matchesWaiting">
                     <tr>
                         <th>Felhasználó</th>
                         <th>Játék</th>
                         <th>Beállítások</th>
                     </tr>
-                    <tr ng-repeat="match in matchesWaiting">
+                    <tr ng-repeat="match in matchesWaiting" 
+                        ng-click="setSelected(match.id, $index)"
+                        ng-class="{'selected': selectedRow == $index }">
                         <td>{{ match.username }}</td>
                         <td>{{ match.gameType.gameTypeName }}</td>
                         <td>
@@ -28,11 +30,14 @@
                     </tr>
                 </table>
             </div>
+            <div>
                 <button ng-click="deleteChallange()" ng-disabled="loading" class="btn btn-primary">Saját törlése</button>
                 <button ng-click="acceptChallange()" ng-disabled="loading" class="btn btn-primary">Kihívás elfogadása</button>
-            <div>
-
             </div>
+			<div class="empty-space-20"></div>
+			<div>
+				<button ng-click="getMatchesWaiting()" ng-disabled="loading" class="btn btn-primary">Frissítés</button>
+			</div>
         </div>
     </div>
 

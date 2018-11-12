@@ -129,15 +129,20 @@ controllers.controller('ChooseGameController', [
 				return match.userid == $localStorage.currentUser.userid;
 			});
 
-			$http.delete(baseUrl + '/match', JSON.stringify(match.id))
+			$http.delete(baseUrl + '/match/' + match.id)
 			.then(function(result){
-				
+				console.log(result);
 			});
 		}
 
 		vm.acceptChallange = function() {
 
 		}
+		
+		vm.setSelected = function(match, index) {
+			vm.selectedMatchId = match.id;
+			vm.selectedRow = index;
+		};
 	}
 ]);
 
