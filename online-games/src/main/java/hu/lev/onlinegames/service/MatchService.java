@@ -8,4 +8,5 @@ public interface MatchService {
 	public GameType[] getGameTypes();
 	public int createNewMatch(MatchWaitingRq req);
 	public MatchWaitingResp[] getMatchesWaiting();
+	public boolean deleteMatchWaiting(int id);
 }

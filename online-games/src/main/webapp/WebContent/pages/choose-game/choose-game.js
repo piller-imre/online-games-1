@@ -122,8 +122,22 @@ controllers.controller('ChooseGameController', [
 				}
 			});
 		}
-
 		vm.getMatchesWaiting = getMatchesWaiting;
+
+		vm.deleteChallange = function() {
+			var match = vm.matchesWaiting.find(function(match){
+				return match.userid == $localStorage.currentUser.userid;
+			});
+
+			$http.delete(baseUrl + '/match', JSON.stringify(match.id))
+			.then(function(result){
+				
+			});
+		}
+
+		vm.acceptChallange = function() {
+
+		}
 	}
 ]);
 

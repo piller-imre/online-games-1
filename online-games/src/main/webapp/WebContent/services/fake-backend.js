@@ -20,4 +20,6 @@ app.run(function ($httpBackend) {
 
     // pass through any urls not handled above so static files are served correctly
     $httpBackend.whenGET(/^\w+.*/).passThrough();
+
+    $httpBackend.whenDELETE(/^\w+.*/).passThrough();
 });

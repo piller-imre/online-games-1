@@ -19,16 +19,32 @@ import hu.lev.onlinegames.persist.MatchDaoImpl;
 public class App {
 	public static void main(String[] args) {
 		
-		MatchDaoImpl dao = new MatchDaoImpl();
+		int id = 1;
 		
-		GameType[] gameTypes = dao.getGameTypes();
-		for (GameType type : gameTypes) {
-			System.out.println(type.toString());
-		}
+		try {
+			Configuration con = new Configuration()
+					.configure()
+					.addAnnotatedClass(GameType.class)
+					.addAnnotatedClass(GameTypeOption.class)
+					.addAnnotatedClass(User.class)
+					.addAnnotatedClass(MatchWaiting.class);
+			ServiceRegistry reg = new StandardServiceRegistryBuilder()
+					.applySettings(con.getProperties())
+					.build();			
+			SessionFactory sf = con.buildSessionFactory(reg);
 		
-		MatchWaiting[] newMatchs = dao.getMatchesWaiting();
-		for (MatchWaiting newMatch : newMatchs) {
-			System.out.println(newMatch.toString());
+			Session session = sf.openSession();
+			Transaction tx = session.beginTransaction();
+				
+			MatchWaiting match = new MatchWaiting();
+			match.setId(id);
+			session.remove(match);
+			
+			tx.commit();
+			session.close();
+						
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

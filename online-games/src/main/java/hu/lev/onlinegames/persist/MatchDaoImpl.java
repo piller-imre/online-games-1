@@ -132,4 +132,37 @@ public class MatchDaoImpl implements MatchDao {
 		return matchesWaiting;
 	}
 
+	@Override
+	public boolean deleteMatchWaiting(int id) {
+		boolean success = false;
+		
+		try {
+			Configuration con = new Configuration()
+					.configure()
+					.addAnnotatedClass(GameType.class)
+					.addAnnotatedClass(GameTypeOption.class)
+					.addAnnotatedClass(User.class)
+					.addAnnotatedClass(MatchWaiting.class);
+			ServiceRegistry reg = new StandardServiceRegistryBuilder()
+					.applySettings(con.getProperties())
+					.build();			
+			SessionFactory sf = con.buildSessionFactory(reg);
+		
+			Session session = sf.openSession();
+			Transaction tx = session.beginTransaction();
+				
+			MatchWaiting match = new MatchWaiting();
+			match.setId(id);
+			session.remove(match);
+			
+			tx.commit();
+			session.close();
+			
+			success = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+	}
+
 }

@@ -8,4 +8,5 @@ public interface MatchDao {
 	public GameType[] getGameTypes();
 	public int insertNewMatch(MatchWaitingRq req);
 	public MatchWaiting[] getMatchesWaiting();
+	public boolean deleteMatchWaiting(int id);
 }

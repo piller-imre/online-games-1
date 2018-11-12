@@ -63,8 +63,14 @@ public class MatchController {
     // DELETE MATCH
     @RequestMapping(value = "/match", method = RequestMethod.DELETE)
 	@ResponseBody
-	public ResponseEntity<String> delete() {
-    	return null;
+	public boolean delete(@RequestBody int id) {
+    	boolean success = false;
+    	
+    	if(id > 0) {
+        	matchService.deleteMatchWaiting(id);
+    	}
+    	
+    	return success;
 	}
 
     // ACCEPT AND START NEW MATCH

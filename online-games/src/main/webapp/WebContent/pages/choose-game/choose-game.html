@@ -1,4 +1,4 @@
-<div id="choose-game" class="center">
+<div id="choose-game" class="center container">
 
     <!-- WAITING MATCH LIST -->
     <div id="waiting-match-list">
@@ -8,24 +8,31 @@
         <div ng-if="!isMatchesWaiting">Jelenleg nincs kihívás.</div>
 
         <div ng-if="isMatchesWaiting">
-            <table class="table table-hover center">
-                <tr>
-                    <th>Felhasználó</th>
-                    <th>Játék</th>
-                    <th>Beállítások</th>
-                </tr>
-                <tr ng-repeat="match in matchesWaiting">
-                    <td>{{ match.username }}</td>
-                    <td>{{ match.gameType.gameTypeName }}</td>
-                    <td>
-                        <table ng-repeat="op in match.gameType.options">
-                            <tr>
-                                <td>{{ op.name }}</td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
+            <div>
+                <table class="table table-hover center">
+                    <tr>
+                        <th>Felhasználó</th>
+                        <th>Játék</th>
+                        <th>Beállítások</th>
+                    </tr>
+                    <tr ng-repeat="match in matchesWaiting">
+                        <td>{{ match.username }}</td>
+                        <td>{{ match.gameType.gameTypeName }}</td>
+                        <td>
+                            <table ng-repeat="op in match.gameType.options">
+                                <tr>
+                                    <td>{{ op.name }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+                <button ng-click="deleteChallange()" ng-disabled="loading" class="btn btn-primary">Saját törlése</button>
+                <button ng-click="acceptChallange()" ng-disabled="loading" class="btn btn-primary">Kihívás elfogadása</button>
+            <div>
+
+            </div>
         </div>
     </div>
 

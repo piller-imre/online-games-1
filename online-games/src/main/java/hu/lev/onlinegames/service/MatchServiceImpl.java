@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.MatchWaiting;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
-import hu.lev.onlinegames.persist.MatchDao;
 import hu.lev.onlinegames.model.response.MatchWaitingResp;
+import hu.lev.onlinegames.persist.MatchDao;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -40,6 +40,11 @@ public class MatchServiceImpl implements MatchService {
 		}
 		
 		return matches;
+	}
+
+	@Override
+	public boolean deleteMatchWaiting(int id) {
+		return matchDao.deleteMatchWaiting(id);
 	}
 
 	
