@@ -6,14 +6,15 @@ RES = {
 	'match': {
 		'matchid': <int>,
 		'players': {
-			'active_player': <int>,
 			'player1': <int>,
-			'player2': <int>
+			'player2': <int>,
+			'active_player': <int>
 		},
 		'turn': <int>,
 		'winner': <int>,
-		'gameType' : <str>,
-		'setup': [
+		'gameTypeId': <int>
+		'gameTypeName': <str>,
+		'options': [
 			<int>,
 			...
 		]

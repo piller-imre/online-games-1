@@ -14,6 +14,7 @@ controllers.controller('ChooseGameController', [
 		vm.loading = false;
 		vm.errorMsg = "";
 		vm.error = null;
+		vm.selectedMatchId = null;
 
         
 		initController();
@@ -125,8 +126,9 @@ controllers.controller('ChooseGameController', [
 		vm.getMatchesWaiting = getMatchesWaiting;
 
 		vm.deleteChallange = function() {
+			var userid = $localStorage.currentUser.userid;
 			var match = vm.matchesWaiting.find(function(match){
-				return match.userid == $localStorage.currentUser.userid;
+				return match.userid == userid;
 			});
 
 			$http.delete(baseUrl + '/match/' + match.id)
@@ -135,52 +137,20 @@ controllers.controller('ChooseGameController', [
 			});
 		}
 
-		vm.acceptChallange = function() {
-
+		function acceptChallange(matchId) {
+			console.log(vm.selectedMatchId);
+			console.log('matchId: ' + vm.selectedMatchId);
+			var userid = $localStorage.currentUser.userid;
+			
 		}
+
+		vm.acceptChallange = acceptChallange;
 		
-		vm.setSelected = function(match, index) {
+		function setSelected(match, index) {
 			vm.selectedMatchId = match.id;
 			vm.selectedRow = index;
 		};
+
+		vm.setSelected = setSelected;
 	}
 ]);
-
-/*
-
-{
-"id": 1,
-"userid": 1,
-"username": "test",
-"gameTypeId": 2,
-"optionIds": "[6, 7]"
-}
-
-
-{
-	"gameTypeId": 1,
-	"gameTypeName": "Amőba",
-	"options": [
-	  {
-		"id": 1,
-		"name": "Véletlenszerű csapdák",
-		"description": "A pályán véletleszerűen elhelyez 50 csapdát. Ha valaki rá akar tenni egy karaktert, a csapda aktiválódik, a karaktert nem helyezi el, és a következő játékos jön."
-	  },
-	  {
-		"id": 3,
-		"name": "Kirakható csapdák",
-		"description": "A játék kezdetekor mindkét játékos kap 10-10 csapdát, amelyet játék közben a saját körében kitehet a karaktere helyett. A karaktert utána egyik játékos sem látja."
-	  },
-	  {
-		"id": 4,
-		"name": "Eltűnő karakterek",
-		"description": "A játék minden körben véletlenszerűen üresre állít egy mezőt, akár csapda, akár fal, akár karakter van rajta."
-	  },
-	  {
-		"id": 2,
-		"name": "Tiltott mezők",
-		"description": "A pályán véletlenszerűen elhelyez 50 tiltott mezőt, amelyre nem lehet karaktert tenni."
-	  }
-	]
-}
-*/
