@@ -2,11 +2,11 @@ package hu.lev.onlinegames.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.lev.onlinegames.model.GameType;
@@ -78,9 +78,9 @@ public class MatchController {
     // ACCEPT AND START NEW MATCH
     @RequestMapping(value = "/match/start", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> start() {
-    	
-    	return null;
+	public int start(@RequestBody MatchStartRq req) {
+    	int matchId = matchService.startMatch(req);
+    	return matchId;
 	}
 
     // CHECK ACTION HAPPENING

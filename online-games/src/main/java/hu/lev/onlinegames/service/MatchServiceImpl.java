@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.MatchWaiting;
+import hu.lev.onlinegames.model.request.MatchStartRq;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
 import hu.lev.onlinegames.model.response.MatchWaitingResp;
 import hu.lev.onlinegames.persist.MatchDao;
@@ -45,6 +46,19 @@ public class MatchServiceImpl implements MatchService {
 	@Override
 	public boolean deleteMatchWaiting(int id) {
 		return matchDao.deleteMatchWaiting(id);
+	}
+
+	@Override
+	public int startMatch(MatchStartRq req) {
+		int id = 0;
+		boolean isMatch = matchDao.isMatchWaiting(req);
+		
+		if (isMatch) {
+			id = matchDao.createMatchActive();
+			matchDao.deleteMatchWaiting(req.getMatchId());			
+		}
+		
+		return id;
 	}
 
 	

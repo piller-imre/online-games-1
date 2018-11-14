@@ -1,40 +1,32 @@
 package hu.lev.onlinegames;
 
-import java.util.List;
-
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 
 import hu.lev.onlinegames.manager.SessionManager;
-import hu.lev.onlinegames.model.GameType;
-import hu.lev.onlinegames.model.GameTypeOption;
 import hu.lev.onlinegames.model.MatchWaiting;
-import hu.lev.onlinegames.model.User;
-import hu.lev.onlinegames.persist.MatchDaoImpl;
+import hu.lev.onlinegames.model.request.MatchStartRq;
 
 public class App {
 	public static void main(String[] args) {
+		boolean isMatch = false;
 		
-		int id = 3;
 		SessionManager sm = new SessionManager();
-		
+		MatchStartRq req = new MatchStartRq(2, 1);
+
 		try {
 			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
-				
-			MatchWaiting match = new MatchWaiting();
-			match.setId(id);
-			session.remove(match);
-			
+			System.out.println("alma");
+			MatchWaiting match = session.get(MatchWaiting.class, req.getMatchId());
+			System.out.println("körte");
+			System.out.println(match == null);
+			System.out.println(match.toString());
 			tx.commit();
 			session.close();
-						
+			
 		} catch (Exception e) {
+			isMatch = false;
 			e.printStackTrace();
 		}
 	}

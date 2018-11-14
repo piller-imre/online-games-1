@@ -19,6 +19,7 @@ import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.GameTypeOption;
 import hu.lev.onlinegames.model.MatchWaiting;
 import hu.lev.onlinegames.model.User;
+import hu.lev.onlinegames.model.request.MatchStartRq;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
 
 @Repository
@@ -124,6 +125,35 @@ public class MatchDaoImpl implements MatchDao {
 			e.printStackTrace();
 		}
 		return success;
+	}
+
+	
+	@Override
+	public boolean isMatchWaiting(MatchStartRq req) {
+		
+		MatchWaiting match = null;
+		
+		try {
+			Session session = sm.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			match = session.get(MatchWaiting.class, req.getMatchId());
+			
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+		return match != null;
+	}
+	
+
+	@Override
+	public int createMatchActive() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
