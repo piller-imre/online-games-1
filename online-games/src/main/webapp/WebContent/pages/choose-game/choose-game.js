@@ -137,9 +137,8 @@ controllers.controller('ChooseGameController', [
 			});
 		}
 
-		function acceptChallange(matchId) {
-			console.log(vm.selectedMatchId);
-			console.log('matchId: ' + vm.selectedMatchId);
+		function acceptChallange() {
+			console.log('vm.selectedMatchId: ' + vm.selectedMatchId);
 			var userid = $localStorage.currentUser.userid;
 			
 		}

@@ -14,6 +14,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.springframework.stereotype.Repository;
 
+import hu.lev.onlinegames.manager.SessionManager;
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.GameTypeOption;
 import hu.lev.onlinegames.model.MatchWaiting;
@@ -23,8 +24,11 @@ import hu.lev.onlinegames.model.request.MatchWaitingRq;
 @Repository
 public class MatchDaoImpl implements MatchDao {
 
+	SessionManager sm;
+	
 	public MatchDaoImpl() {
 		super();
+		this.sm = new SessionManager();
 	}
 
 	@Override
@@ -33,18 +37,7 @@ public class MatchDaoImpl implements MatchDao {
 		GameType[] gameTypes = null;
 		
 		try {
-			Configuration con = new Configuration()
-					.configure()
-					.addAnnotatedClass(GameType.class)
-					.addAnnotatedClass(GameTypeOption.class)
-					.addAnnotatedClass(User.class)
-					.addAnnotatedClass(MatchWaiting.class);
-			ServiceRegistry reg = new StandardServiceRegistryBuilder()
-					.applySettings(con.getProperties())
-					.build();			
-			SessionFactory sf = con.buildSessionFactory(reg);
-
-			Session session = sf.openSession();
+			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 						
 				Query q = session.createQuery("from GameType");
@@ -66,17 +59,7 @@ public class MatchDaoImpl implements MatchDao {
 		int id = 0;
 
 		try {
-			Configuration con = new Configuration()
-					.configure()
-					.addAnnotatedClass(GameType.class)
-					.addAnnotatedClass(GameTypeOption.class)
-					.addAnnotatedClass(User.class)
-					.addAnnotatedClass(MatchWaiting.class);
-			ServiceRegistry reg = new StandardServiceRegistryBuilder()
-					.applySettings(con.getProperties())
-					.build();
-			SessionFactory sf = con.buildSessionFactory(reg);	
-			Session session = sf.openSession();
+			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();	
 				
 				GameType gameType = session.load(GameType.class, req.getGameTypeId());
@@ -103,18 +86,7 @@ public class MatchDaoImpl implements MatchDao {
 		MatchWaiting[] matchesWaiting = null;
 		
 		try {
-			Configuration con = new Configuration()
-					.configure()
-					.addAnnotatedClass(GameType.class)
-					.addAnnotatedClass(GameTypeOption.class)
-					.addAnnotatedClass(User.class)
-					.addAnnotatedClass(MatchWaiting.class);
-			ServiceRegistry reg = new StandardServiceRegistryBuilder()
-					.applySettings(con.getProperties())
-					.build();			
-			SessionFactory sf = con.buildSessionFactory(reg);
-
-			Session session = sf.openSession();
+			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 						
 				Query q = session.createQuery("from MatchWaiting");
@@ -137,18 +109,7 @@ public class MatchDaoImpl implements MatchDao {
 		boolean success = false;
 		
 		try {
-			Configuration con = new Configuration()
-					.configure()
-					.addAnnotatedClass(GameType.class)
-					.addAnnotatedClass(GameTypeOption.class)
-					.addAnnotatedClass(User.class)
-					.addAnnotatedClass(MatchWaiting.class);
-			ServiceRegistry reg = new StandardServiceRegistryBuilder()
-					.applySettings(con.getProperties())
-					.build();			
-			SessionFactory sf = con.buildSessionFactory(reg);
-		
-			Session session = sf.openSession();
+			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 				
 			MatchWaiting match = new MatchWaiting();

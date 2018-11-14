@@ -10,6 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+import hu.lev.onlinegames.manager.SessionManager;
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.GameTypeOption;
 import hu.lev.onlinegames.model.MatchWaiting;
@@ -19,21 +20,11 @@ import hu.lev.onlinegames.persist.MatchDaoImpl;
 public class App {
 	public static void main(String[] args) {
 		
-		int id = 1;
+		int id = 3;
+		SessionManager sm = new SessionManager();
 		
 		try {
-			Configuration con = new Configuration()
-					.configure()
-					.addAnnotatedClass(GameType.class)
-					.addAnnotatedClass(GameTypeOption.class)
-					.addAnnotatedClass(User.class)
-					.addAnnotatedClass(MatchWaiting.class);
-			ServiceRegistry reg = new StandardServiceRegistryBuilder()
-					.applySettings(con.getProperties())
-					.build();			
-			SessionFactory sf = con.buildSessionFactory(reg);
-		
-			Session session = sf.openSession();
+			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 				
 			MatchWaiting match = new MatchWaiting();
