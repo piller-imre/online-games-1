@@ -8,7 +8,9 @@ import org.hibernate.service.ServiceRegistry;
 
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.GameTypeOption;
+import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.MatchWaiting;
+import hu.lev.onlinegames.model.Players;
 import hu.lev.onlinegames.model.User;
 
 public class SessionManager {
@@ -23,7 +25,9 @@ public class SessionManager {
 					.addAnnotatedClass(GameType.class)
 					.addAnnotatedClass(GameTypeOption.class)
 					.addAnnotatedClass(User.class)
-					.addAnnotatedClass(MatchWaiting.class);
+					.addAnnotatedClass(MatchWaiting.class)
+					.addAnnotatedClass(MatchActive.class)
+					.addAnnotatedClass(Players.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

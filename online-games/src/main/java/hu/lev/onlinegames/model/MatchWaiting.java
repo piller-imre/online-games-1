@@ -85,11 +85,11 @@ public class MatchWaiting {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public User getUserid() {
+	public User getUser() {
 		return user;
 	}
-	public void setUserid(User userid) {
-		this.user = userid;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	public GameType getGameTypeId() {
 		return gameType;

@@ -33,6 +33,9 @@ public class GameType {
     @JsonIgnore
 	private Set<MatchWaiting> newMatch;
 	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="gameType")
+    @JsonIgnore
+	private Set<MatchActive> matchActive;
 	
 	public GameType() {
 		super();
@@ -95,6 +98,14 @@ public class GameType {
 
 	public void setNewMatch(Set<MatchWaiting> newMatch) {
 		this.newMatch = newMatch;
+	}
+
+	public Set<MatchActive> getMatchActive() {
+		return matchActive;
+	}
+
+	public void setMatchActive(Set<MatchActive> matchActive) {
+		this.matchActive = matchActive;
 	}
 
 }

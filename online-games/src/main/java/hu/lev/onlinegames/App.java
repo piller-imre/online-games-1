@@ -1,34 +1,45 @@
 package hu.lev.onlinegames;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import hu.lev.onlinegames.manager.SessionManager;
-import hu.lev.onlinegames.model.MatchWaiting;
-import hu.lev.onlinegames.model.request.MatchStartRq;
+import hu.lev.onlinegames.model.MatchActive;
+import hu.lev.onlinegames.model.Players;
 
 public class App {
 	public static void main(String[] args) {
-		boolean isMatch = false;
-		
-		SessionManager sm = new SessionManager();
-		MatchStartRq req = new MatchStartRq(2, 1);
 
+		int matchId = 1;
+		
+		MatchActive match = null;
+		SessionManager sm = new SessionManager();
+		
 		try {
 			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 			System.out.println("alma");
-			MatchWaiting match = session.get(MatchWaiting.class, req.getMatchId());
-			System.out.println("körte");
-			System.out.println(match == null);
-			System.out.println(match.toString());
+			
+			Query q = session.createQuery("select match from Players where player1 = :a or player2 = :a");
+			q.setParameter("a", matchId);
+			Object result = q.uniqueResult();
+			
+//			if(result != null) {
+//				match = (MatchActive) result;
+//			}
+			
+			System.out.println(result);
+			
 			tx.commit();
+			System.out.println("dinnye");
 			session.close();
 			
 		} catch (Exception e) {
-			isMatch = false;
+			match = null;
 			e.printStackTrace();
 		}
+
 	}
 }
 
@@ -210,6 +221,55 @@ public class App {
 
 
 
+//public int createMatchActive(int acceptingUserId, MatchWaiting match);
+//MatchDao dao = new MatchDaoImpl();
+//
+//int matchId = 0;
+//int acceptingUserId = 1;
+//MatchWaiting matchWaiting = dao.getMatchWaiting(1);
+//
+//Random rand = new Random();
+//int mixer = rand.nextInt(2) + 1;
+//SessionManager sm = new SessionManager();
+//
+//try {
+//	Session session = sm.getSession();
+//	Transaction tx = session.beginTransaction();
+//	System.out.println("alma");
+//
+//	MatchActive match = new MatchActive();
+//	match.setGameType(matchWaiting.getGameTypeId());
+//	match.setOptions(matchWaiting.getOptions());
+//	match.setTurn(1);
+//	
+//	matchId = (int) session.save(match);
+//
+//	System.out.println("körte");
+//	
+//	Players players = new Players();
+//
+//	User acceptingUser = session.load(User.class, acceptingUserId);
+//	User challengingUser = session.load(User.class, matchWaiting.getUser().getId());
+//	
+//	if(mixer == 1) {
+//		players.setPlayer1(acceptingUser);
+//		players.setPlayer2(challengingUser);
+//	} else {
+//		players.setPlayer1(challengingUser);
+//		players.setPlayer2(acceptingUser);
+//	}
+//	players.setActivePlayer(1);
+//	players.setMatchId(session.get(MatchActive.class, matchId));
+//	
+//	session.save(players);
+//	tx.commit();
+//	System.out.println("dinnye");
+//	session.close();
+//	
+//} catch (Exception e) {
+//	matchId = 0;
+//	e.printStackTrace();
+//}
 
 
 

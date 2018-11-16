@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hu.lev.onlinegames.model.GameType;
+import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.request.MatchStartRq;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
 import hu.lev.onlinegames.model.response.MatchWaitingResp;
@@ -86,9 +87,9 @@ public class MatchController {
     // CHECK ACTION HAPPENING
 	@RequestMapping(value = "/match/start", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<String> checkStart(@RequestBody MatchStartRq req) {
-		
-		return null;
+	public MatchActive checkStart(@RequestBody int userId) {
+		MatchActive match = matchService.checkStart(userId);
+		return match;
 	}
 
 	// GET GAMETYPE LIST

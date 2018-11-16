@@ -78,6 +78,7 @@ CREATE TABLE `online_games_db`.`match_active` (
   `game_type_fk` INT NOT NULL,
   `board_state` VARCHAR(1000) NOT NULL,
   `turn` INT NOT NULL,
+  `options` VARCHAR(200) NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `match_active_game_type_fk`
     FOREIGN KEY (`game_type_fk`)
@@ -90,7 +91,7 @@ ENGINE = InnoDB;
 CREATE TABLE `online_games_db`.`match_players` (
   `player1_fk` INT NOT NULL,
   `player2_fk` INT NOT NULL,
-  `active_player_fk` INT NOT NULL,
+  `active_player` INT NOT NULL,
   `match_fk` INT NOT NULL,
   UNIQUE INDEX `player1_fk_UNIQUE` (`player1_fk` ASC) VISIBLE,
   UNIQUE INDEX `player2_fk_UNIQUE` (`player2_fk` ASC) VISIBLE,
@@ -105,17 +106,7 @@ CREATE TABLE `online_games_db`.`match_players` (
     FOREIGN KEY (`player2_fk`)
     REFERENCES `online_games_db`.`user` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `match_players_active_player_fk`
-    FOREIGN KEY (`active_player_fk`)
-    REFERENCES `online_games_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `match_players_match_fk`
-    FOREIGN KEY (`match_fk`)
-    REFERENCES `online_games_db`.`match_active` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION;
 
 
 CREATE TABLE `online_games_db`.`match_done` (

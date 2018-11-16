@@ -2,24 +2,21 @@ package hu.lev.onlinegames.persist;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.PersistenceException;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
 import org.springframework.stereotype.Repository;
 
 import hu.lev.onlinegames.manager.SessionManager;
 import hu.lev.onlinegames.model.GameType;
-import hu.lev.onlinegames.model.GameTypeOption;
+import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.MatchWaiting;
+import hu.lev.onlinegames.model.Players;
 import hu.lev.onlinegames.model.User;
-import hu.lev.onlinegames.model.request.MatchStartRq;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
 
 @Repository
@@ -129,7 +126,7 @@ public class MatchDaoImpl implements MatchDao {
 
 	
 	@Override
-	public boolean isMatchWaiting(MatchStartRq req) {
+	public MatchWaiting getMatchWaiting(int matchId) {
 		
 		MatchWaiting match = null;
 		
@@ -137,7 +134,7 @@ public class MatchDaoImpl implements MatchDao {
 			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 			
-			match = session.get(MatchWaiting.class, req.getMatchId());
+			match = session.get(MatchWaiting.class, matchId);
 			
 			tx.commit();
 			session.close();
@@ -146,14 +143,62 @@ public class MatchDaoImpl implements MatchDao {
 			e.printStackTrace();
 		}
     	
-		return match != null;
+		return match;
 	}
 	
 
 	@Override
-	public int createMatchActive() {
+	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting) {
+
+		int matchId = 0;
+		Random rand = new Random();
+		int mixer = rand.nextInt(2) + 1;
+		SessionManager sm = new SessionManager();
+
+		try {
+			Session session = sm.getSession();
+			Transaction tx = session.beginTransaction();
+
+			MatchActive match = new MatchActive();
+			match.setGameType(matchWaiting.getGameTypeId());
+			match.setOptions(matchWaiting.getOptions());
+			match.setTurn(1);
+			
+			matchId = (int) session.save(match);
+			
+			Players players = new Players();
+
+			User acceptingUser = session.load(User.class, acceptingUserId);
+			User challengingUser = session.load(User.class, matchWaiting.getUser().getId());
+			
+			if(mixer == 1) {
+				players.setPlayer1(acceptingUser);
+				players.setPlayer2(challengingUser);
+			} else {
+				players.setPlayer1(challengingUser);
+				players.setPlayer2(acceptingUser);
+			}
+			players.setActivePlayer(1);
+			players.setMatchId(session.get(MatchActive.class, matchId));
+			
+			session.save(players);
+			
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			matchId = 0;
+			e.printStackTrace();
+		}
+		
+		return matchId;
+	}
+
+	
+	@Override
+	public MatchActive checkStart(int userId) {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 }
