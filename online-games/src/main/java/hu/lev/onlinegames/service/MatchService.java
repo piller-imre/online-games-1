@@ -12,5 +12,5 @@ public interface MatchService {
 	public MatchWaitingResp[] getMatchesWaiting();
 	public boolean deleteMatchWaiting(int id);
 	public int startMatch(MatchStartRq req);
-	public MatchActive checkStart(int userId);
+	public boolean checkStart(int userId);
 }

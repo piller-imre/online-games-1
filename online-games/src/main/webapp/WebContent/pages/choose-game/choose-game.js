@@ -4,7 +4,8 @@ controllers.controller('ChooseGameController', [
 	'$http',
 	'$localStorage',
 	'$state',
-	function($scope, $rootScope, $http, $localStorage, $state) {
+	'$interval',
+	function($scope, $rootScope, $http, $localStorage, $state, $interval) {
 		var vm = $scope;
 		var baseUrl = $rootScope.baseUrl;
 		vm.gameTypes = [];
@@ -19,10 +20,7 @@ controllers.controller('ChooseGameController', [
 
         
 		initController();
-
-		// vm.$watch(vm.newMatch.options, function(newValue, oldValue){
-		// 	console.log('options: ' + newValue);
-		// });
+		$interval(checkStart(), 5000, false);
 		
 		function initController() {
             // get gameTypes
@@ -43,7 +41,7 @@ controllers.controller('ChooseGameController', [
 				getMatchesWaiting();
 			});
 
-		};
+		}
 		
 		vm.createChallange = function() {
 			vm.loading = true;
@@ -62,11 +60,11 @@ controllers.controller('ChooseGameController', [
 				vm.error = result.data;
 				
 				if(vm.error == 1){
-					vm.errorMsg = "A kihÃ­vÃ¡st szÃ©tkÃ¼ldtÃ¼k.";
+					vm.errorMsg = "A kihívást szétküldtük.";
 				} else if (vm.error == -1){
-					vm.errorMsg = "Ne lÃ©gy mohÃ³, mÃ¡r van egy vÃ¡rakozÃ³ kihÃ­vÃ¡sod!";
+					vm.errorMsg = "Ne légy mohó, már van egy várakozó kihívásod!";
 				} else {
-					vm.errorMsg = "Nem sikerÃ¼lt, prÃ³bÃ¡ld Ãºjra!";
+					vm.errorMsg = "Nem sikerült, próbáld újra!";
 				}
 				vm.newMatchAlertVisible = true;
 			});
@@ -74,6 +72,17 @@ controllers.controller('ChooseGameController', [
 			vm.loading = false;
 		}
 
+		function checkStart(){
+			console.log(baseUrl + '/match/start/' + $localStorage.currentUser.userid);
+			$http.get(baseUrl + '/match/start/' + $localStorage.currentUser.userid)
+			.then(function(result){
+				console.log("is in game: " + result.data);
+				if(result.data){
+					$state.go('game-play');
+				}
+			});
+		};
+		
 		vm.setOptions = function() {
 			vm.newMatch.options = [];
 			for(var i = 0; i < vm.gameTypes.length; i++){
@@ -136,8 +145,7 @@ controllers.controller('ChooseGameController', [
 			});
 		}
 
-		function acceptChallange() {
-			console.log('vm.selectedMatchId: ' + vm.selectedMatchId);
+		vm.acceptChallange = function() {
 			var data = {
 				userid: $localStorage.currentUser.userid,
 				matchId: vm.selectedMatchId
@@ -149,19 +157,24 @@ controllers.controller('ChooseGameController', [
 				if(matchId > 0){
 					$state.go('game-play');
 				} else {
-					vm.startErrorMsg = "Erorr, erorr, erorr";
+					switch(matchId) {
+					    case -1:
+					    	vm.startErrorMsg = "Nincs is ilyen meccs!";
+					        break;
+					    case -2:
+					    	vm.startErrorMsg = "Hm, elvileg te már játszol!";
+					        break;
+					    default:
+					    	vm.startErrorMsg = "Nem sikerült, próbálkozz újra!";
+					}
 					vm.startError = true;
 				}
 			});
 		}
-
-		vm.acceptChallange = acceptChallange;
 		
-		function setSelected(matchId, index) {
+		vm.setSelected = function(matchId, index) {
 			vm.selectedMatchId = matchId;
 			vm.selectedRow = index;
-		};
-
-		vm.setSelected = setSelected;
+		}
 	}
 ]);

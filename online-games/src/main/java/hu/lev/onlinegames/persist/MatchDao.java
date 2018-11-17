@@ -3,14 +3,18 @@ package hu.lev.onlinegames.persist;
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.MatchWaiting;
+import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
 
 public interface MatchDao {
 	public GameType[] getGameTypes();
-	public int insertNewMatch(MatchWaitingRq req);
+	
+	public int insertMatchWaiting(MatchWaitingRq req);
 	public MatchWaiting[] getMatchesWaiting();
 	public boolean deleteMatchWaiting(int id);
 	public MatchWaiting getMatchWaiting(int id);
+	
+	public boolean isUserPlaying(int userId);
 	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting);
 	public MatchActive getMatchActive(int id);
 	public MatchActive checkStart(int userId);

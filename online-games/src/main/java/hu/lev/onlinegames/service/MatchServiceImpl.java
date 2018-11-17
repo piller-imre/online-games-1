@@ -28,7 +28,7 @@ public class MatchServiceImpl implements MatchService {
 
 	@Override
 	public int createNewMatch(MatchWaitingRq req) {
-		return matchDao.insertNewMatch(req);
+		return matchDao.insertMatchWaiting(req);
 	}
 
 	
@@ -55,17 +55,23 @@ public class MatchServiceImpl implements MatchService {
 		
 		MatchWaiting match = matchDao.getMatchWaiting(req.getMatchId());
 		
-		if (match != null) {
+		if(match == null) {
+			id = -1;
+		} else if (matchDao.isUserPlaying(req.getUserid())) {
+			id = -2;
+		} else {
 			id = matchDao.createMatchActive(req.getUserid(), match);
-			matchDao.deleteMatchWaiting(req.getMatchId());			
+			if(id > 0) {
+				matchDao.deleteMatchWaiting(req.getMatchId());
+			}
 		}
-		
+				
 		return id;
 	}
 
 	@Override
-	public MatchActive checkStart(int userId) {
-		MatchActive match = matchDao.checkStart(userId);
+	public boolean checkStart(int userId) {
+		boolean match = matchDao.isUserPlaying(userId);
 		return match;
 	}
 

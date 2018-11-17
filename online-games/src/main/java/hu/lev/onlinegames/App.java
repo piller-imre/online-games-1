@@ -6,41 +6,18 @@ import org.hibernate.Transaction;
 
 import hu.lev.onlinegames.manager.SessionManager;
 import hu.lev.onlinegames.model.MatchActive;
+import hu.lev.onlinegames.model.MatchWaiting;
 import hu.lev.onlinegames.model.Players;
+import hu.lev.onlinegames.model.request.MatchStartRq;
+import hu.lev.onlinegames.persist.MatchDaoImpl;
 
 public class App {
 	public static void main(String[] args) {
 
-		int userId = 4;
-		MatchActive match = null;
-		SessionManager sm = new SessionManager();
+		MatchStartRq req = new MatchStartRq(4, 1);
+		MatchDaoImpl matchDao = new MatchDaoImpl();
 		
-		try {
-			Session session = sm.getSession();
-			Transaction tx = session.beginTransaction();
-			System.out.println("alma");
-			
-			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
-			q.setParameter("a", userId);
-			Object[] result = (Object[]) q.uniqueResult();
-			
-//			if(result != null) {
-//				match = (MatchActive) result;
-//			}
-			
-			for (Object o : result) {
-				System.out.println(o);
-			}
-			
-			tx.commit();
-			System.out.println("dinnye");
-			System.out.println("matchId: " + result[3]);
-			session.close();
-			
-		} catch (Exception e) {
-			match = null;
-			e.printStackTrace();
-		}
+		System.out.println(matchDao.isUserPlaying(1));
 	}
 }
 

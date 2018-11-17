@@ -53,7 +53,7 @@ public class MatchDaoImpl implements MatchDao {
 	}
 
 	@Override
-	public int insertNewMatch(MatchWaitingRq req) {
+	public int insertMatchWaiting(MatchWaitingRq req) {
 		int id = 0;
 
 		try {
@@ -194,7 +194,6 @@ public class MatchDaoImpl implements MatchDao {
 		return matchId;
 	}
 
-	
 	@Override
 	public MatchActive checkStart(int userId) {
 
@@ -205,17 +204,13 @@ public class MatchDaoImpl implements MatchDao {
 			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 			System.out.println("alma");
-			
+
 			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
 			q.setParameter("a", userId);
 			Object[] result = (Object[]) q.uniqueResult();
 			
-//			if(result != null) {
-//				match = (MatchActive) result;
-//			}
-			
-			for (Object o : result) {
-				System.out.println(o);
+			if(result != null) {
+				match = getMatchActive((int)result[3]);
 			}
 			
 			tx.commit();
@@ -227,13 +222,57 @@ public class MatchDaoImpl implements MatchDao {
 			e.printStackTrace();
 		}
 
-		return null;
+		return match;
 	}
 
 	@Override
-	public MatchActive getMatchActive(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public MatchActive getMatchActive(int matchId) {
+
+		MatchActive match = null;
+		SessionManager sm = new SessionManager();
+		
+		try {
+			Session session = sm.getSession();
+			Transaction tx = session.beginTransaction();
+			
+			match = session.get(MatchActive.class, matchId);
+			
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			match = null;
+			e.printStackTrace();
+		}
+		return match;
+	}
+
+	
+	@Override
+	public boolean isUserPlaying(int userId) {
+		
+		boolean isPlaying = false;
+		SessionManager sm = new SessionManager();
+		
+		try {
+			Session session = sm.getSession();
+			Transaction tx = session.beginTransaction();
+
+			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
+			q.setParameter("a", userId);
+			Object[] result = (Object[]) q.uniqueResult();
+			
+			if(result != null) {
+				isPlaying = true;
+			}
+			
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return isPlaying;
 	}
 
 }

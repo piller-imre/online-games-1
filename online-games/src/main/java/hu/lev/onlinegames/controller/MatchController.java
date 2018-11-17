@@ -85,11 +85,12 @@ public class MatchController {
 	}
 
     // CHECK ACTION HAPPENING
-	@RequestMapping(value = "/match/start", method = RequestMethod.GET)
+	@RequestMapping(value = "/match/start/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public MatchActive checkStart(@RequestBody int userId) {
-		MatchActive match = matchService.checkStart(userId);
-		return match;
+	public boolean checkStart(@PathVariable int userId) {
+		System.out.println("userId" + userId);
+		boolean start = matchService.checkStart(userId);
+		return start;
 	}
 
 	// GET GAMETYPE LIST
