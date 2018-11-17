@@ -52,6 +52,7 @@ public class MatchServiceImpl implements MatchService {
 	@Override
 	public int startMatch(MatchStartRq req) {
 		int id = 0;
+		
 		MatchWaiting match = matchDao.getMatchWaiting(req.getMatchId());
 		
 		if (match != null) {

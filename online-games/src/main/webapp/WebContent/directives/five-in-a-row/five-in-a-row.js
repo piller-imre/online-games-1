@@ -23,16 +23,21 @@ rule values:
 directives.directive('fiveInARow', [
 	'CanvasService', 
 	'$timeout', 
+	'$stateParams',
 	'FiveInARowManager', 
 	function(
 		CanvasService, 
 		$timeout,
+		$stateParams,
 		FiveInARowManager){
 	return {
 		templateUrl : "directives/five-in-a-row/five-in-a-row.html",
         link: function(){
 			var man = FiveInARowManager;
 			var vm = this;
+			
+			var matchId = $stateParams.matchId
+			
 			var elem = document.getElementById("fiveInARowCanvas");	// get canvas element and context
         	var ctx = CanvasService.getCanvas(elem);
 

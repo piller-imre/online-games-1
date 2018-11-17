@@ -20,7 +20,8 @@ var controllers = angular.module('app.controllers', []);
 app.config([ '$urlRouterProvider', '$stateProvider',
 		function($urlRouterProvider, $stateProvider) {
 
-			$stateProvider.state('login', {
+			$stateProvider
+			.state('login', {
 				url : '/login',
 				templateUrl : 'pages/login/login.html',
 				controller: 'LoginController'

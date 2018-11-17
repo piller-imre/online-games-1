@@ -34,11 +34,12 @@
                 <button ng-click="deleteChallange()" ng-disabled="loading" class="btn btn-primary">Saját törlése</button>
                 <button ng-click="acceptChallange()" ng-disabled="loading" class="btn btn-primary">Kihívás elfogadása</button>
             </div>
-			<div class="empty-space-20"></div>
-			<div>
-				<button ng-click="getMatchesWaiting()" ng-disabled="loading" class="btn btn-primary">Frissítés</button>
-			</div>
         </div>
+		<div class="empty-space-20"></div>
+		<div>
+			<button ng-click="getMatchesWaiting()" ng-disabled="loading" class="btn btn-primary">Frissítés</button>
+		</div>
+		<div ng-if="startError" class="alert alert-danger">{{startErrorMsg}}</div>
     </div>
 
     <!-- CREATE-MATCH -->

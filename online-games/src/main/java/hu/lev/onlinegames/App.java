@@ -11,8 +11,7 @@ import hu.lev.onlinegames.model.Players;
 public class App {
 	public static void main(String[] args) {
 
-		int matchId = 1;
-		
+		int userId = 4;
 		MatchActive match = null;
 		SessionManager sm = new SessionManager();
 		
@@ -21,25 +20,27 @@ public class App {
 			Transaction tx = session.beginTransaction();
 			System.out.println("alma");
 			
-			Query q = session.createQuery("select match from Players where player1 = :a or player2 = :a");
-			q.setParameter("a", matchId);
-			Object result = q.uniqueResult();
+			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
+			q.setParameter("a", userId);
+			Object[] result = (Object[]) q.uniqueResult();
 			
 //			if(result != null) {
 //				match = (MatchActive) result;
 //			}
 			
-			System.out.println(result);
+			for (Object o : result) {
+				System.out.println(o);
+			}
 			
 			tx.commit();
 			System.out.println("dinnye");
+			System.out.println("matchId: " + result[3]);
 			session.close();
 			
 		} catch (Exception e) {
 			match = null;
 			e.printStackTrace();
 		}
-
 	}
 }
 

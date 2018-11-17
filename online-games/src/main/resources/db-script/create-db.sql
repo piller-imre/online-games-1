@@ -28,7 +28,7 @@ CREATE TABLE `online_games_db`.`user` (
   `email` VARCHAR(100) NOT NULL,
   `token` VARCHAR(400) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_name_UNIQUE` (`user_name`),
+  UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB;
 
@@ -96,7 +96,6 @@ CREATE TABLE `online_games_db`.`match_players` (
   UNIQUE INDEX `player1_fk_UNIQUE` (`player1_fk` ASC) VISIBLE,
   UNIQUE INDEX `player2_fk_UNIQUE` (`player2_fk` ASC) VISIBLE,
   UNIQUE INDEX `match_fk_UNIQUE` (`match_fk` ASC) VISIBLE,
-  INDEX `match_players_active_player_fk_idx` (`active_player_fk` ASC) VISIBLE,
   CONSTRAINT `match_players_player1_fk`
     FOREIGN KEY (`player1_fk`)
     REFERENCES `online_games_db`.`user` (`id`)
@@ -106,7 +105,7 @@ CREATE TABLE `online_games_db`.`match_players` (
     FOREIGN KEY (`player2_fk`)
     REFERENCES `online_games_db`.`user` (`id`)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION;
+    ON UPDATE NO ACTION);
 
 
 CREATE TABLE `online_games_db`.`match_done` (

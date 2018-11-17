@@ -3,7 +3,8 @@ controllers.controller('ChooseGameController', [
 	'$rootScope',
 	'$http',
 	'$localStorage',
-	function($scope, $rootScope, $http, $localStorage) {
+	'$state',
+	function($scope, $rootScope, $http, $localStorage, $state) {
 		var vm = $scope;
 		var baseUrl = $rootScope.baseUrl;
 		vm.gameTypes = [];
@@ -18,8 +19,6 @@ controllers.controller('ChooseGameController', [
 
         
 		initController();
-
-        
 
 		// vm.$watch(vm.newMatch.options, function(newValue, oldValue){
 		// 	console.log('options: ' + newValue);
@@ -93,7 +92,7 @@ controllers.controller('ChooseGameController', [
 			.then(function(result){
 				vm.matchesWaiting = result.data;
 
-				if (vm.matchesWaiting == null) {
+				if (vm.matchesWaiting == null || vm.matchesWaiting.length == 0) {
 					vm.isMatchesWaiting = false;
 				} else {
 					vm.isMatchesWaiting = true;
@@ -112,9 +111,9 @@ controllers.controller('ChooseGameController', [
 					
 					// get details
 					vm.matchesWaiting.forEach(function(match){
-						match.gameType = vm.gameTypes.find(function(type){
-							return type.gameTypeId == match.gameTypeId;
-						});
+						match.gameType = angular.copy(vm.gameTypes.find(function(type){
+									return type.gameTypeId == match.gameTypeId;
+								}));
 						match.gameType.options = match.gameType.options.filter(function(op){
 							return match.options.includes(op.id);
 						});
@@ -139,14 +138,27 @@ controllers.controller('ChooseGameController', [
 
 		function acceptChallange() {
 			console.log('vm.selectedMatchId: ' + vm.selectedMatchId);
-			var userid = $localStorage.currentUser.userid;
-			
+			var data = {
+				userid: $localStorage.currentUser.userid,
+				matchId: vm.selectedMatchId
+			};
+
+			$http.post(baseUrl + '/match/start', data)
+			.then(function(result){
+				var matchId = result.data;
+				if(matchId > 0){
+					$state.go('game-play');
+				} else {
+					vm.startErrorMsg = "Erorr, erorr, erorr";
+					vm.startError = true;
+				}
+			});
 		}
 
 		vm.acceptChallange = acceptChallange;
 		
-		function setSelected(match, index) {
-			vm.selectedMatchId = match.id;
+		function setSelected(matchId, index) {
+			vm.selectedMatchId = matchId;
 			vm.selectedRow = index;
 		};
 
