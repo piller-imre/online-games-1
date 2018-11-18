@@ -50,28 +50,24 @@ public class MatchServiceImpl implements MatchService {
 	}
 
 	@Override
-	public int startMatch(MatchStartRq req) {
-		int id = 0;
+	public MatchActive startMatch(MatchStartRq req) {		
+		MatchActive matchActive = null;
+		MatchWaiting matchWainting = matchDao.getMatchWaiting(req.getMatchId());
 		
-		MatchWaiting match = matchDao.getMatchWaiting(req.getMatchId());
-		
-		if(match == null) {
-			id = -1;
-		} else if (matchDao.isUserPlaying(req.getUserid())) {
-			id = -2;
-		} else {
-			id = matchDao.createMatchActive(req.getUserid(), match);
+		if(matchWainting != null) {
+			int id = matchDao.createMatchActive(req.getUserid(), matchWainting);
 			if(id > 0) {
+				matchActive = matchDao.getMatchActive(id);
 				matchDao.deleteMatchWaiting(req.getMatchId());
 			}
-		}
-				
-		return id;
+		}		
+		return matchActive;
 	}
 
 	@Override
-	public boolean checkStart(int userId) {
-		boolean match = matchDao.isUserPlaying(userId);
+	public MatchActive checkStart(int userId) {
+		int matchId = matchDao.getMatchActiveId(userId);
+		MatchActive match = matchDao.getMatchActive(matchId);
 		return match;
 	}
 

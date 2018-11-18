@@ -9,6 +9,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "match_players")
 public class Players implements Serializable {
@@ -18,6 +21,7 @@ public class Players implements Serializable {
 	@Id
 	@OneToOne
 	@JoinColumn(name="match_fk")
+//	@JsonIgnore
 	private MatchActive match;
 	
 	@OneToOne
@@ -53,6 +57,7 @@ public class Players implements Serializable {
 	}
 	
 	// getters and setters	
+	@JsonIgnore
 	public MatchActive getMatchId() {
 		return match;
 	}

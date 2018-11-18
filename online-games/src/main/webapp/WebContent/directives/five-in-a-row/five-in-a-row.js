@@ -20,24 +20,69 @@ rule values:
 	2 - custom bombs
 */
 
+
+/*
+
+{
+  "id": 3,
+  "players": {
+    "player1": {
+      "id": 6,
+      "username": "elõd",
+      "newMatch": []
+    },
+    "player2": {
+      "id": 1,
+      "username": "test",
+      "newMatch": []
+    },
+    "activePlayer": 1
+  },
+  "gameType": {
+    "gameTypeId": 2,
+    "gameTypeName": "Dáma",
+    "options": [
+      {
+        "id": 5,
+        "name": "Szabály1",
+        "description": "Leírás1"
+      },
+      {
+        "id": 7,
+        "name": "Szabály3",
+        "description": "Leírás3"
+      },
+      {
+        "id": 6,
+        "name": "Szabály2",
+        "description": "Leírás2"
+      }
+    ]
+  },
+  "turn": 1,
+  "boardstate": "",
+  "options": "[6,7]"
+}
+
+*/
+
 directives.directive('fiveInARow', [
 	'CanvasService', 
 	'$timeout', 
-	'$stateParams',
 	'FiveInARowManager', 
 	function(
 		CanvasService, 
 		$timeout,
-		$stateParams,
 		FiveInARowManager){
 	return {
 		templateUrl : "directives/five-in-a-row/five-in-a-row.html",
-        link: function(){
+		scope: {
+			initMatch: '='
+		},
+        link: function(scope){
 			var man = FiveInARowManager;
-			var vm = this;
-			
-			var matchId = $stateParams.matchId
-			
+			var vm = scope;
+						
 			var elem = document.getElementById("fiveInARowCanvas");	// get canvas element and context
         	var ctx = CanvasService.getCanvas(elem);
 
@@ -59,26 +104,23 @@ directives.directive('fiveInARow', [
 				backgroundColor: "#f9f9f9"
 			}
 
-			// TODO create GameManager to pass real data! initInfo is dummy now.
-			// TODO make sure this gets refreshed regularly
-			// TODO check winning status every time
-			var initInfo = {
-				matchId : 33,		// match id
-				player1 : 11,		// user id
-				player2 : 12,		// user id
-				activePlayer : 1,	// player 1
-				fields : null,		// board state, first status null
-				options : [1]
-			}
+			vm.initMatch.fields = vm.initMatch.boardstate == "" ? null : JSON.parse(vm.initMatch.boardstate);
 			
 			var match = {
-				matchId : initInfo.matchId,
-				player1 : initInfo.player1,
-				player2 : initInfo.player2,
-				activePlayer : initInfo.activePlayer,
-				fields : initInfo.fields ? initInfo.fields : man.initFields(vm.board, 0),
-				options : initInfo.options
+				matchId : vm.initMatch.id,
+				player1 : vm.initMatch.players.player1,
+				player2 : vm.initMatch.players.player2,
+				activePlayer : vm.initMatch.players.activePlayer,
+				turn: vm.initMatch.turn,
+				fields : vm.initMatch.fields ? vm.initMatch.fields : man.initFields(vm.board, 0),
+				options : vm.initMatch.options
 			};
+
+			// if (match.activePlayer == 1) {
+			// 	vm.disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
+			// } else {
+			// 	vm.disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
+			// }
         	        	
 			man.drawBoard(vm.board, ctx);
 			if (angular.isDefined(match.options) && match.options != null){
@@ -95,25 +137,25 @@ directives.directive('fiveInARow', [
 
 				if (man.isClickInBoard(vm.board, x, y)){									// if click happened on board
 					var field = man.getClickedField(vm.board, x, y);						// get clicked field by index
-					field.value = match.fields[field.x][field.y].value;				// get value of field
+					field.value = match.fields[field.x][field.y].value;						// get value of field
 					console.log(field.x + "," + field.y + ' - ' + field.value);
-					if(field.value == 0){											// if field is empty
-						match.fields[field.x][field.y].value = match.activePlayer;					// record value
+					if(field.value == 0){													// if field is empty
+						match.fields[field.x][field.y].value = match.activePlayer;			// record value
 						man.drawCharacter(match.fields[field.x][field.y], vm.board, match.activePlayer, ctx);		// draw character
 						$timeout(function(){
-							if (man.checkWin(field, match.activePlayer, match.fields)){						// check win
+							if (man.checkWin(field, match.activePlayer, match.fields)){		// check win
 								alert("Player " + match.activePlayer + "wins!");
 								match.fields = man.initFields(vm.board, 0);
 								match.activePlayer = 1;
 								man.drawBoard(vm.board, ctx);
 							} else {
-								match.activePlayer = match.activePlayer == 1 ? 2 : 1;	// switch player								
+								match.activePlayer = match.activePlayer == 1 ? 2 : 1;		// switch player								
 							}
 						}, 200);
 					}
 					else if (field.value == 4) {
 						man.activateTrap(match.fields[field.x][field.y], vm.board, ctx);
-						match.activePlayer = match.activePlayer == 1 ? 2 : 1;	// switch player
+						match.activePlayer = match.activePlayer == 1 ? 2 : 1;				// switch player
 					}
 				}
 			}, false);

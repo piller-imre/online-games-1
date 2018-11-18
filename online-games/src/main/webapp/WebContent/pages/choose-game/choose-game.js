@@ -17,11 +17,20 @@ controllers.controller('ChooseGameController', [
 		vm.errorMsg = "";
 		vm.error = null;
 		vm.selectedMatchId = null;
+		var isInGame = false;
+		var thisUrl = baseUrl + '/WebContent/index.html#!/choose-game';
 
         
 		initController();
-		$interval(checkStart(), 5000, false);
-		
+		checkStart();
+
+		$rootScope.$on('$locationChangeStart', function(event, toState, toParams, fromState, fromParams){ 
+			console.log("alma");
+			if(isInGame && toState != thisUrl){
+				$interval.cancel(checkStart);
+			}
+		})
+			
 		function initController() {
             // get gameTypes
 			$http.get(baseUrl + '/gametypes')
@@ -42,6 +51,20 @@ controllers.controller('ChooseGameController', [
 			});
 
 		}
+
+		function checkStart(){
+			$interval(function(){
+				console.log(baseUrl + '/match/start/' + $localStorage.currentUser.userid);
+				$http.get(baseUrl + '/match/start/' + $localStorage.currentUser.userid)
+				.then(function(result){
+					console.log("is in game: " + result.data);
+					if(result.data){
+						isInGame = true;
+						$state.go('game-play', {match: result.data});
+					}
+				});
+			}, 5000, false);
+		};
 		
 		vm.createChallange = function() {
 			vm.loading = true;
@@ -71,17 +94,6 @@ controllers.controller('ChooseGameController', [
 
 			vm.loading = false;
 		}
-
-		function checkStart(){
-			console.log(baseUrl + '/match/start/' + $localStorage.currentUser.userid);
-			$http.get(baseUrl + '/match/start/' + $localStorage.currentUser.userid)
-			.then(function(result){
-				console.log("is in game: " + result.data);
-				if(result.data){
-					$state.go('game-play');
-				}
-			});
-		};
 		
 		vm.setOptions = function() {
 			vm.newMatch.options = [];
@@ -153,21 +165,12 @@ controllers.controller('ChooseGameController', [
 
 			$http.post(baseUrl + '/match/start', data)
 			.then(function(result){
-				var matchId = result.data;
-				if(matchId > 0){
-					$state.go('game-play');
-				} else {
-					switch(matchId) {
-					    case -1:
-					    	vm.startErrorMsg = "Nincs is ilyen meccs!";
-					        break;
-					    case -2:
-					    	vm.startErrorMsg = "Hm, elvileg te már játszol!";
-					        break;
-					    default:
-					    	vm.startErrorMsg = "Nem sikerült, próbálkozz újra!";
-					}
+				var match = result.data;
+				if(match == null){
+					vm.startErrorMsg = "Nem sikerült, próbálkozz újra!";
 					vm.startError = true;
+				} else {
+					$state.go('game-play', {match: result.data});
 				}
 			});
 		}

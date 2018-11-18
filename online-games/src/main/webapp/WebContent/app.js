@@ -46,7 +46,11 @@ app.config([ '$urlRouterProvider', '$stateProvider',
 
 			.state('game-play', {
 				url : '/game-play',
-				templateUrl : 'pages/game-play/game-play.html'
+				templateUrl : 'pages/game-play/game-play.html',
+				controller : 'GamePlayController',
+				params : {
+					match: null
+				}
 			})
 
 			.state('ranks', {

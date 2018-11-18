@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "match_active")
@@ -22,21 +23,19 @@ public class MatchActive {
 	@Column(name = "id")
 	private int id;
 	
-	@OneToOne(mappedBy="match")
-//	@OneToOne(fetch = FetchType.EAGER, mappedBy="match", cascade=CascadeType.ALL)
-	@JsonIgnore
+	@OneToOne(fetch = FetchType.EAGER, mappedBy="match", cascade=CascadeType.ALL)
+//	@JsonManagedReference
 	private Players players;
 
 	@ManyToOne
 	@JoinColumn(name="game_type_fk")
-	@JsonIgnore
+//	@JsonIgnore
 	private GameType gameType;
 
 	@Column(name="turn")
 	private int turn;
 		
 	@Column(name="board_state")
-	@JsonIgnore
 	private String boardstate;
 
 	@Column(name="options")

@@ -20,12 +20,18 @@ public class User {
 	@GeneratedValue(generator="increment")
 	private int id;
 	private String username;
+	
+	@JsonIgnore
 	private String password;
+	
+	@JsonIgnore
 	private String email;
+	
+	@JsonIgnore
 	private String token;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy="user")
-//    @JsonIgnore
+    @JsonIgnore
 	private Set<MatchWaiting> newMatch;
 	
 	@OneToOne(fetch = FetchType.EAGER, mappedBy="player1")

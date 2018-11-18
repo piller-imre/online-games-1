@@ -1,6 +1,8 @@
-directives.directive('chess', [function(){
+directives.directive('checkers', [
+	'CanvasService', 
+	function(CanvasService){
 	return {
-		templateUrl : "directives/chess/chess.html",
+		templateUrl : "directives/checkers/checkers.html",
         link: function(){
 			
 			var elem = document.getElementById("chessCanvas");

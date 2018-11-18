@@ -14,10 +14,7 @@ import hu.lev.onlinegames.persist.MatchDaoImpl;
 public class App {
 	public static void main(String[] args) {
 
-		MatchStartRq req = new MatchStartRq(4, 1);
-		MatchDaoImpl matchDao = new MatchDaoImpl();
 		
-		System.out.println(matchDao.isUserPlaying(1));
 	}
 }
 

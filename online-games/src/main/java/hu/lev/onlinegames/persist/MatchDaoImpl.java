@@ -249,9 +249,9 @@ public class MatchDaoImpl implements MatchDao {
 
 	
 	@Override
-	public boolean isUserPlaying(int userId) {
+	public int getMatchActiveId(int userId) {
 		
-		boolean isPlaying = false;
+		int matchId = 0;
 		SessionManager sm = new SessionManager();
 		
 		try {
@@ -263,7 +263,7 @@ public class MatchDaoImpl implements MatchDao {
 			Object[] result = (Object[]) q.uniqueResult();
 			
 			if(result != null) {
-				isPlaying = true;
+				matchId = (int) result[3];
 			}
 			
 			tx.commit();
@@ -272,7 +272,7 @@ public class MatchDaoImpl implements MatchDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return isPlaying;
+		return matchId;
 	}
 
 }

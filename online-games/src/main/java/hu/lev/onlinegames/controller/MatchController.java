@@ -59,7 +59,6 @@ public class MatchController {
     			success = 1;
     		}
     	}
-    	
     	return success;
 	}
 
@@ -72,25 +71,23 @@ public class MatchController {
     	if(id > 0) {
         	success = matchService.deleteMatchWaiting(id);
     	}
-    	
     	return success;
 	}
 
     // ACCEPT AND START NEW MATCH
     @RequestMapping(value = "/match/start", method = RequestMethod.POST)
 	@ResponseBody
-	public int start(@RequestBody MatchStartRq req) {
-    	int matchId = matchService.startMatch(req);
-    	return matchId;
+	public MatchActive start(@RequestBody MatchStartRq req) {
+    	MatchActive match = matchService.startMatch(req);
+    	return match;
 	}
 
     // CHECK ACTION HAPPENING
 	@RequestMapping(value = "/match/start/{userId}", method = RequestMethod.GET)
 	@ResponseBody
-	public boolean checkStart(@PathVariable int userId) {
-		System.out.println("userId" + userId);
-		boolean start = matchService.checkStart(userId);
-		return start;
+	public MatchActive checkStart(@PathVariable int userId) {
+		MatchActive match = matchService.checkStart(userId);
+		return match;
 	}
 
 	// GET GAMETYPE LIST
