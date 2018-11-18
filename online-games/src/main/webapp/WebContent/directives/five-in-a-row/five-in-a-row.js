@@ -127,6 +127,9 @@ directives.directive('fiveInARow', [
 				if (match.options.indexOf(1) != -1){
 					man.initTraps(match.fields);
 				}
+				if (match.options.indexOf(2) != -1){
+					man.initWalls(match.fields, vm.board, ctx);
+				}
 			}
 			
 			// Add event listener for 'click' events.
@@ -197,8 +200,8 @@ directives.directive('fiveInARow', [
 			for(var j=0; j < board.cols; j++){
 				fields[i].push([]);						// create cols
 				fields[i][j] = {						// initialize
-					x : tempX,
-					y : tempY,
+					xCoord : tempX,
+					yCoord : tempY,
 					value : defaultValue
 				}
 				tempY += board.squareSize;
@@ -226,14 +229,14 @@ directives.directive('fiveInARow', [
 
 	function drawCharacter(field, board, player, ctx){
 		var char = player == 1 ? 'X' : 'O';
-		var x = field.x;						// coord
-		var y = field.y + board.squareSize;		// coord
+		var x = field.xCoord;						// coord
+		var y = field.yCoord + board.squareSize;	// coord
 		ctx.fillStyle = player == 1 ? "blue" : "red";
 		ctx.font="30px Comic Sans MS";
 		ctx.fillText(char, x, y);
 	}
 
-	function checkWin(field, player, fields){	// TODO if parameters get deleted, change fields to match.fields!!!
+	function checkWin(field, player, fields){
 		var startX = field.x - 4;			// init min and max indexes, so we check fields in board
 		var startY = field.y - 4;
 		var endX = field.x + 4;
@@ -298,6 +301,28 @@ directives.directive('fiveInARow', [
 		return false;
 	}
 
+	function initWalls(fields, board, ctx){
+		var numOfWalls = 50;
+		var x = 0;
+		var y = 0;
+		var i = 0;
+		while (i<numOfWalls){
+			var x = Math.floor(Math.random() * fields.length);
+			var y = Math.floor(Math.random() * fields[0].length);
+			if(fields[x][y].value != 3){
+				fields[x][y].value = 3;
+
+				ctx.fillStyle = "#009999";
+				ctx.strokeStyle = board.lineColor;
+				ctx.fillRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
+				ctx.strokeRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
+
+				i++;
+				console.log(x + "," + y + " - " + fields[x][y].value);
+			}
+		}
+	}
+
 	function initTraps(fields){
 		var numOfTraps = 50;
 		var x = 0;
@@ -321,14 +346,14 @@ directives.directive('fiveInARow', [
 		// change field color to red
 		ctx.fillStyle = "#FF0000";
 		ctx.strokeStyle = board.lineColor;
-		ctx.fillRect(field.x, field.y, board.squareSize, board.squareSize);
-		ctx.strokeRect(field.x, field.y, board.squareSize, board.squareSize);
+		ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+		ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
 		
 		// change field color to board color
 		$timeout(function(){
 			ctx.fillStyle = board.backgroundColor;
-			ctx.fillRect(field.x, field.y, board.squareSize, board.squareSize);
-			ctx.strokeRect(field.x, field.y, board.squareSize, board.squareSize);
+			ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+			ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
 			field.value = 0;
 		}, 3000);
 	}
@@ -340,6 +365,7 @@ directives.directive('fiveInARow', [
 		getClickedField: getClickedField,
 		drawCharacter: drawCharacter,
 		checkWin: checkWin,
+		initWalls: initWalls,
 		initTraps: initTraps,
 		activateTrap: activateTrap
 	}
