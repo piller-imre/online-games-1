@@ -10,9 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "match_active")
@@ -41,19 +39,28 @@ public class MatchActive {
 	@Column(name="options")
 	private String options;
 	
+	@Transient
+	private int win;
+	
+	@Transient
+	private Object action;
+	
 	// constructors
 	public MatchActive() {
 		super();
 		this.players = new Players();
 		this.boardstate = "";
+		this.win = 0;
 	}
-	public MatchActive(int id, Players players, GameType gameType, int turn, String boardstate) {
+	public MatchActive(int id, Players players, GameType gameType, int turn, String boardstate, int win, Object action) {
 		super();
 		this.id = id;
 		this.players = players;
 		this.gameType = gameType;
 		this.turn = turn;
 		this.boardstate = boardstate;
+		this.win = win;
+		this.action = action;
 	}
 	
 	// toString
@@ -63,7 +70,10 @@ public class MatchActive {
 				+ ", players=" + players.toString() 
 				+ ", gameType=" + gameType.getGameTypeName() 
 				+ ", turn=" + turn
-				+ ", boardstate=" + boardstate + "]";
+				+ ", boardstate=" + boardstate 
+				+ ", win= " + win 
+				+ ", action= " + action.toString()
+				+ "]";
 	}
 	
 	// getters and setters
@@ -102,6 +112,18 @@ public class MatchActive {
 	}
 	public void setOptions(String options) {
 		this.options = options;
+	}
+	public int getWin() {
+		return win;
+	}
+	public void setWin(int win) {
+		this.win = win;
+	}
+	public Object getAction() {
+		return action;
+	}
+	public void setAction(Object action) {
+		this.action = action;
 	}
 	
 	

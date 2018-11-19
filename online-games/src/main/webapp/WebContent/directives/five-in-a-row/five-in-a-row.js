@@ -70,10 +70,14 @@ directives.directive('fiveInARow', [
 	'CanvasService', 
 	'$timeout', 
 	'FiveInARowManager', 
+	'$rootScope',
+	'$http',
 	function(
 		CanvasService, 
 		$timeout,
-		FiveInARowManager){
+		FiveInARowManager,
+		$rootScope,
+		$http){
 	return {
 		templateUrl : "directives/five-in-a-row/five-in-a-row.html",
 		scope: {
@@ -82,6 +86,7 @@ directives.directive('fiveInARow', [
         link: function(scope){
 			var man = FiveInARowManager;
 			var vm = scope;
+			var baseUrl = $rootScope.baseUrl;
 						
 			var elem = document.getElementById("fiveInARowCanvas");	// get canvas element and context
         	var ctx = CanvasService.getCanvas(elem);
@@ -140,8 +145,15 @@ directives.directive('fiveInARow', [
 
 					if([0,4].includes(field.value)){
 						match.action = field;
+						match.options = JSON.stringify(match.options);
+						match.boardstate = '{"fields": ' + JSON.stringify(match.fields) +'}';
 						console.log("send nudes");
 						console.log(match.action);
+
+						$http.post(baseUrl + '/fiveinarow/action', match)
+						.then(function(result){
+							console.log(result.data);
+						});
 					}
 					
 					/*

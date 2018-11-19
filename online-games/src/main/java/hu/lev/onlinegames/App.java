@@ -14,7 +14,18 @@ import hu.lev.onlinegames.persist.MatchDaoImpl;
 public class App {
 	public static void main(String[] args) {
 
-		
+		String test = "[12 41 21 19 15 10]"; 
+		test = test.substring(1, test.length()-1);
+		// The string you want to be an integer array.
+		String[] integerStrings = test.split(" "); 
+		// Splits each spaced integer into a String array.
+		int[] integers = new int[integerStrings.length]; 
+		// Creates the integer array.
+		for (int i = 0; i < integers.length; i++){
+		    integers[i] = Integer.parseInt(integerStrings[i]); 
+		    System.out.println(i + ". " + integers[i]);
+		//Parses the integer for each string.
+		}
 	}
 }
 

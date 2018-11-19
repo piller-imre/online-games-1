@@ -1,17 +1,17 @@
 package hu.lev.onlinegames.model;
 
-public class Field {
+public class FiveInARowField {
 	
 	private int xCoord;
 	private int yCoord;
 	private int value;
 	
 	// constructors
-	public Field() {
+	public FiveInARowField() {
 		super();
 	}
 
-	public Field(int xCoord, int yCoord, int value) {
+	public FiveInARowField(int xCoord, int yCoord, int value) {
 		super();
 		this.xCoord = xCoord;
 		this.yCoord = yCoord;
