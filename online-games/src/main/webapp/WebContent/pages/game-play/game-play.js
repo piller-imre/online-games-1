@@ -15,6 +15,7 @@ controllers.controller('GamePlayController', [
         function init(){
             if($stateParams.match){
                 vm.match = $stateParams.match;
+                vm.gameType = vm.match.gameType.gameTypeId;
             } else {
                 $http.get(baseUrl + '/match/start/' + $localStorage.currentUser.userid)
                 .then(function(result){

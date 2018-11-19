@@ -123,14 +123,7 @@ directives.directive('fiveInARow', [
 			// }
         	        	
 			man.drawBoard(vm.board, ctx);
-			if (angular.isDefined(match.options) && match.options != null){
-				if (match.options.indexOf(1) != -1){
-					man.initTraps(match.fields);
-				}
-				if (match.options.indexOf(2) != -1){
-					man.initWalls(match.fields, vm.board, ctx);
-				}
-			}
+			man.initOptions(match, vm.board, ctx);
 			
 			// Add event listener for 'click' events.
 			elem.addEventListener('click', function(event) {
@@ -138,10 +131,20 @@ directives.directive('fiveInARow', [
 				var y = event.pageY - elem.offsetTop;	// get canvas y		elem.offsetTop - canvas origo y
 				console.log(x, y);
 
-				if (man.isClickInBoard(vm.board, x, y)){									// if click happened on board
-					var field = man.getClickedField(vm.board, x, y);						// get clicked field by index
+				// if (man.isClickInBoard(vm.board, x, y)){									// if click happened on board
+				var field = man.getClickedField(vm.board, x, y);						// get clicked field by index
+
+				if(field != null){
 					field.value = match.fields[field.x][field.y].value;						// get value of field
 					console.log(field.x + "," + field.y + ' - ' + field.value);
+
+					if([0,4].includes(field.value)){
+						match.action = field;
+						console.log("send nudes");
+						console.log(match.action);
+					}
+					
+					/*
 					if(field.value == 0){													// if field is empty
 						match.fields[field.x][field.y].value = match.activePlayer;			// record value
 						man.drawCharacter(match.fields[field.x][field.y], vm.board, match.activePlayer, ctx);		// draw character
@@ -160,6 +163,7 @@ directives.directive('fiveInARow', [
 						man.activateTrap(match.fields[field.x][field.y], vm.board, ctx);
 						match.activePlayer = match.activePlayer == 1 ? 2 : 1;				// switch player
 					}
+					*/
 				}
 			}, false);
         }
@@ -188,6 +192,17 @@ directives.directive('fiveInARow', [
 			y += board.squareSize;
 		};
 	};
+
+	function initOptions(match, board, ctx){
+		if (angular.isDefined(match.options) && match.options != null){
+			if (match.options.indexOf(1) != -1){
+				initTraps(match.fields);
+			}
+			if (match.options.indexOf(2) != -1){
+				initWalls(match.fields, board, ctx);
+			}
+		}
+	}
 	
 	function initFields( board, defaultValue){
 		var fields = [];
@@ -220,11 +235,14 @@ directives.directive('fiveInARow', [
 				: false;
 	}
 
-	function getClickedField(board, x, y){				
-		return {
-			x : Math.floor( (x - board.left) / board.squareSize),
-			y : Math.floor( (y - board.top) / board.squareSize)
+	function getClickedField(board, x, y){	
+		if(isClickInBoard(board, x, y)){
+			return {
+				x : Math.floor( (x - board.left) / board.squareSize),
+				y : Math.floor( (y - board.top) / board.squareSize)
+			}
 		}
+		return null;
 	}
 
 	function drawCharacter(field, board, player, ctx){
@@ -312,7 +330,7 @@ directives.directive('fiveInARow', [
 			if(fields[x][y].value != 3){
 				fields[x][y].value = 3;
 
-				ctx.fillStyle = "#009999";
+				ctx.fillStyle = "#a2c4c4";
 				ctx.strokeStyle = board.lineColor;
 				ctx.fillRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
 				ctx.strokeRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
@@ -360,6 +378,7 @@ directives.directive('fiveInARow', [
 
 	return {
 		drawBoard: drawBoard,
+		initOptions: initOptions,
 		initFields: initFields,
 		isClickInBoard: isClickInBoard,
 		getClickedField: getClickedField,

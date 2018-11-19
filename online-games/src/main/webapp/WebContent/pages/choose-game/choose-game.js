@@ -19,6 +19,7 @@ controllers.controller('ChooseGameController', [
 		vm.selectedMatchId = null;
 		var isInGame = false;
 		var thisUrl = baseUrl + '/WebContent/index.html#!/choose-game';
+		var waitMatch = null;
 
         
 		initController();
@@ -27,7 +28,7 @@ controllers.controller('ChooseGameController', [
 		$rootScope.$on('$locationChangeStart', function(event, toState, toParams, fromState, fromParams){ 
 			console.log("alma");
 			if(isInGame && toState != thisUrl){
-				$interval.cancel(checkStart);
+				$interval.cancel(waitMatch);
 			}
 		})
 			
@@ -53,7 +54,8 @@ controllers.controller('ChooseGameController', [
 		}
 
 		function checkStart(){
-			$interval(function(){
+			console.log("iInterval ....");
+			waitMatch = $interval(function(){
 				console.log(baseUrl + '/match/start/' + $localStorage.currentUser.userid);
 				$http.get(baseUrl + '/match/start/' + $localStorage.currentUser.userid)
 				.then(function(result){
@@ -64,6 +66,7 @@ controllers.controller('ChooseGameController', [
 					}
 				});
 			}, 5000, false);
+
 		};
 		
 		vm.createChallange = function() {
