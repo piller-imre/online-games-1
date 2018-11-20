@@ -8,10 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.lev.onlinegames.model.MatchActive;
-import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
-import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
+import hu.lev.onlinegames.model.request.MatchActiveRq;
 import hu.lev.onlinegames.service.FiveInARowService;
 
 @RestController
@@ -23,16 +21,15 @@ public class FiveInARowController {
     // USER ACTION
     @RequestMapping(value = "/fiveinarow/action", method = RequestMethod.POST)
 	@ResponseBody
-	public boolean action(@RequestBody MatchActive match) {
+	public boolean action(@RequestBody MatchActiveRq matchRq) {
+    	System.out.println("RQ: " + matchRq.toString());
     	
-    	FiveInARowFields fields = fiveInARowService.convertBoardstate(match.getBoardstate());
-    	int[] options = fiveInARowService.convertOptions(match.getOptions());
-    	System.out.println(match.getAction());
-    	
-    	if(fiveInARowService.validateAction(match.getAction(), fields, options)) {
-    		boolean win = fiveInARowService.checkWin(fields, match.getPlayers().getActivePlayer(), match.getAction());
-        	match.setWin(win);
-//        	match = fiveInARowService.applyAction(match);
+    	if(fiveInARowService.validateAction(matchRq.getAction(), matchRq.getFields(), matchRq.getOptions())) {
+    		boolean win = fiveInARowService.checkWin(matchRq.getFields(), matchRq.getActivePlayer(), matchRq.getAction());
+        	matchRq.setCheckedWin(win);
+        	System.out.println("WIN: " + win);
+        	// TODO CONVERT MATCHRQ TO MATCH!
+//        	match = fiveInARowService.applyAction(match, fields, match.getAction());
 //        	fiveInARowService.updateMatch(match);
         	return true;
     	}

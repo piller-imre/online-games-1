@@ -71,5 +71,11 @@ public class MatchServiceImpl implements MatchService {
 		return match;
 	}
 
+	@Override
+	public void updateMatchActive(MatchActive match) {
+		matchDao.updateMatchActive(match);
+		
+	}
+
 	
 }

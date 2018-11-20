@@ -58,7 +58,7 @@ public class MatchActive {
 		super();
 		this.id = id;
 		this.players = players;
-		this.gameType = gameType;
+//		this.gameType = gameType;
 		this.turn = turn;
 		this.boardstate = boardstate;
 		this.win = win;
@@ -118,12 +118,8 @@ public class MatchActive {
 	public int getWin() {
 		return win;
 	}
-	public void setWin(Boolean win) {
-		if(win) {
-			this.win = players.getActivePlayer();
-		} else {
-			this.win = 0;
-		}
+	public void setWin(int win) {
+		this.win = win;
 	}
 	public FiveInARowAction getAction() {
 		return action;

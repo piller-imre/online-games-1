@@ -275,4 +275,24 @@ public class MatchDaoImpl implements MatchDao {
 		return matchId;
 	}
 
+	@Override
+	public void updateMatchActive(MatchActive match) {
+		
+		SessionManager sm = new SessionManager();
+		
+		try {
+			Session session = sm.getSession();
+			Transaction tx = session.beginTransaction();
+
+			System.out.println(match.toString());
+			session.update(match);
+			
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

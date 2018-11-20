@@ -18,4 +18,6 @@ public interface MatchDao {
 	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting);
 	public MatchActive getMatchActive(int id);
 	public MatchActive checkStart(int userId);
+
+	public void updateMatchActive(MatchActive match);
 }

@@ -145,9 +145,9 @@ directives.directive('fiveInARow', [
 
 					if([0,4].includes(field.value)){
 						match.action = field;
-						match.options = JSON.stringify(match.options);
+						// match.options = JSON.stringify(match.options);
 						// match.boardstate = '{"fields": ' + JSON.stringify(match.fields) +'}';
-						match.boardstate = JSON.stringify(match.fields);
+						// match.boardstate = JSON.stringify(match.fields);
 						console.log("send nudes");
 						console.log(match.action);
 

@@ -1,8 +1,10 @@
 package hu.lev.onlinegames.service;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hu.lev.onlinegames.model.MatchActive;
@@ -12,10 +14,13 @@ import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
 
 @Service
 public class FiveInARowServiceImpl implements FiveInARowService {
+	
+	@Autowired
+	private MatchService matchService;
 
 	@Override
-	public boolean validateAction(FiveInARowAction action, FiveInARowFields fieldsObj, int[] options) {
-		FiveInARowField[][] fields = fieldsObj.getFields();
+	public boolean validateAction(FiveInARowAction action, FiveInARowField[][] fields, int[] options) {
+//		FiveInARowField[][] fields = fieldsObj.getFields();
 		if(fields[action.getX()][action.getY()].getValue() == 0) {
 			return true;
 		}
@@ -28,14 +33,24 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 	}
 
 	@Override
-	public MatchActive applyAction(MatchActive match) {
-		// TODO Auto-generated method stub
-		return null;
+	public MatchActive applyAction(MatchActive match, FiveInARowFields fieldsObj, FiveInARowAction action) {
+		FiveInARowField[][] fields = fieldsObj.getFields();
+		fields[action.getX()][action.getY()].setValue(action.getValue());
+		
+		String boardstate = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			boardstate = mapper.writeValueAsString(fields);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		};
+		match.setBoardstate(boardstate);
+		return match;
 	}
 
 	@Override
-	public boolean checkWin(FiveInARowFields fieldsObj, int player, FiveInARowAction action) {
-		FiveInARowField[][] fields = fieldsObj.getFields();
+	public boolean checkWin(FiveInARowField[][] fields, int player, FiveInARowAction action) {
+//		FiveInARowField[][] fields = fieldsObj.getFields();
 		
 		int startX = action.getX() - 4;			// init min and max indexes, so we check fields in board
 		int startY = action.getY() - 4;
@@ -103,8 +118,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 
 	@Override
 	public void updateMatch(MatchActive match) {
-		// TODO Auto-generated method stub
-		
+		matchService.updateMatchActive(match);
 	}
 
 	@Override
