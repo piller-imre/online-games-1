@@ -4,15 +4,17 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hu.lev.onlinegames.model.FiveInARowFields;
 import hu.lev.onlinegames.model.MatchActive;
+import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
+import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
+import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
 
 @Service
 public class FiveInARowServiceImpl implements FiveInARowService {
 
 	@Override
-	public boolean validateAction(MatchActive match) {
-		// TODO Auto-generated method stub
+	public boolean validateAction(FiveInARowAction action, FiveInARowFields fields, int[] options) {
+		
 		
 		return false;
 	}
@@ -41,6 +43,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		FiveInARowFields fields = null;
 		ObjectMapper mapper = new ObjectMapper();
 		try {
+			boardstate = "{\"fields\": " + boardstate + '}';
 			fields = mapper.readValue(boardstate, FiveInARowFields.class);
 		} catch (Exception e) {
 			e.printStackTrace();

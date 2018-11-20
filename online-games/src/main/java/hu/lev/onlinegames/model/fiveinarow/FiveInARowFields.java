@@ -1,4 +1,4 @@
-package hu.lev.onlinegames.model;
+package hu.lev.onlinegames.model.fiveinarow;
 
 import java.util.Arrays;
 

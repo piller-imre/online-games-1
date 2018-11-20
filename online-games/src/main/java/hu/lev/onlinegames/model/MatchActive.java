@@ -12,6 +12,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
+
 @Entity
 @Table(name = "match_active")
 public class MatchActive {
@@ -43,7 +45,7 @@ public class MatchActive {
 	private int win;
 	
 	@Transient
-	private Object action;
+	private FiveInARowAction action;
 	
 	// constructors
 	public MatchActive() {
@@ -52,7 +54,7 @@ public class MatchActive {
 		this.boardstate = "";
 		this.win = 0;
 	}
-	public MatchActive(int id, Players players, GameType gameType, int turn, String boardstate, int win, Object action) {
+	public MatchActive(int id, Players players, GameType gameType, int turn, String boardstate, int win, FiveInARowAction action) {
 		super();
 		this.id = id;
 		this.players = players;
@@ -119,10 +121,10 @@ public class MatchActive {
 	public void setWin(int win) {
 		this.win = win;
 	}
-	public Object getAction() {
+	public FiveInARowAction getAction() {
 		return action;
 	}
-	public void setAction(Object action) {
+	public void setAction(FiveInARowAction action) {
 		this.action = action;
 	}
 	

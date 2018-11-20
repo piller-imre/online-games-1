@@ -1,4 +1,4 @@
-package hu.lev.onlinegames.model;
+package hu.lev.onlinegames.model.fiveinarow;
 
 public class FiveInARowField {
 	

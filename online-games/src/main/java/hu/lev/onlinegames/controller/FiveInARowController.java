@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import hu.lev.onlinegames.model.FiveInARowFields;
 import hu.lev.onlinegames.model.MatchActive;
+import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
+import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
+import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
 import hu.lev.onlinegames.service.FiveInARowService;
 
 @RestController
@@ -22,12 +24,15 @@ public class FiveInARowController {
     @RequestMapping(value = "/fiveinarow/action", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean action(@RequestBody MatchActive match) {
+    	
     	FiveInARowFields fields = fiveInARowService.convertBoardstate(match.getBoardstate());
     	int[] options = fiveInARowService.convertOptions(match.getOptions());
-    	if(fiveInARowService.validateAction(match)) {
-        	match = fiveInARowService.applyAction(match);
-        	match.setWin(fiveInARowService.checkWin(match));
-        	fiveInARowService.updateMatch(match);
+    	System.out.println(match.getAction());
+    	
+    	if(fiveInARowService.validateAction(match.getAction(), fields, options)) {
+//        	match = fiveInARowService.applyAction(match);
+//        	match.setWin(fiveInARowService.checkWin(match));
+//        	fiveInARowService.updateMatch(match);
         	return true;
     	}
 		return false;
