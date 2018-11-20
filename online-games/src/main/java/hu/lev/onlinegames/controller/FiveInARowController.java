@@ -30,8 +30,9 @@ public class FiveInARowController {
     	System.out.println(match.getAction());
     	
     	if(fiveInARowService.validateAction(match.getAction(), fields, options)) {
+    		boolean win = fiveInARowService.checkWin(fields, match.getPlayers().getActivePlayer(), match.getAction());
+        	match.setWin(win);
 //        	match = fiveInARowService.applyAction(match);
-//        	match.setWin(fiveInARowService.checkWin(match));
 //        	fiveInARowService.updateMatch(match);
         	return true;
     	}

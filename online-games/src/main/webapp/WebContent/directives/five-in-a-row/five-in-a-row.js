@@ -316,7 +316,7 @@ directives.directive('fiveInARow', [
 		if (lengthSoFar >= 5){ return true; }
 
 		// horizontal
-		var lengthSoFar = 0;
+		lengthSoFar = 0;
 		for(var i=startX; i<=endX ; i++){
 			if (i >= 0 && i < fields.length){
 				if (fields[i][field.y].value == player){

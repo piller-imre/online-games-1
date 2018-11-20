@@ -118,8 +118,12 @@ public class MatchActive {
 	public int getWin() {
 		return win;
 	}
-	public void setWin(int win) {
-		this.win = win;
+	public void setWin(Boolean win) {
+		if(win) {
+			this.win = players.getActivePlayer();
+		} else {
+			this.win = 0;
+		}
 	}
 	public FiveInARowAction getAction() {
 		return action;

@@ -1,5 +1,6 @@
 package hu.lev.onlinegames.service;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,9 +14,16 @@ import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
 public class FiveInARowServiceImpl implements FiveInARowService {
 
 	@Override
-	public boolean validateAction(FiveInARowAction action, FiveInARowFields fields, int[] options) {
-		
-		
+	public boolean validateAction(FiveInARowAction action, FiveInARowFields fieldsObj, int[] options) {
+		FiveInARowField[][] fields = fieldsObj.getFields();
+		if(fields[action.getX()][action.getY()].getValue() == 0) {
+			return true;
+		}
+		if(fields[action.getX()][action.getY()].getValue() == 4
+				&& ArrayUtils.contains(options, 1)
+				&& ArrayUtils.contains(options, 3)) {
+			return true;
+		}
 		return false;
 	}
 
@@ -26,9 +34,71 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 	}
 
 	@Override
-	public int checkWin(MatchActive match) {
-		// TODO Auto-generated method stub
-		return 0;
+	public boolean checkWin(FiveInARowFields fieldsObj, int player, FiveInARowAction action) {
+		FiveInARowField[][] fields = fieldsObj.getFields();
+		
+		int startX = action.getX() - 4;			// init min and max indexes, so we check fields in board
+		int startY = action.getY() - 4;
+		int endX = action.getX() + 4;
+		int endY = action.getY() + 4;
+		
+		// diagonals first, there is a bigger chance to win this way, save some energy
+		// diagonal from top-left
+		int lengthSoFar = 0;
+		for(int i = startX, j = startY; i<=endX && j<=endY; i++){
+			if (i >= 0 && i < fields.length && j >= 0 && j < fields[0].length){
+				if (fields[i][j].getValue() == player){
+					lengthSoFar++;
+				} else if (lengthSoFar < 5){
+					lengthSoFar = 0;
+				}
+			}
+			j++;
+		}
+		if (lengthSoFar >= 5){ return true; }
+
+		// diagolal from bottom-left
+		lengthSoFar = 0;
+		for(int i = startX, j = endY; i<=endX && j>=startY; i++){
+			if (i >= 0 && i < fields.length && j >= 0 && j < fields[0].length){
+				if (fields[i][j].getValue() == player){
+					lengthSoFar++;
+				} else if (lengthSoFar < 5){
+					lengthSoFar = 0;
+				}
+			}
+			j--;
+		}
+		if (lengthSoFar >= 5){ return true; }
+
+		// vertical
+		lengthSoFar = 0;
+		for(int j=startY; j<=endY ; j++){
+			if (j >= 0 && j < fields[0].length){
+				if (fields[action.getX()][j].getValue() == player){
+					lengthSoFar++;
+				} else if (lengthSoFar < 5){
+					lengthSoFar = 0;
+				}
+			}
+		}
+		if (lengthSoFar >= 5){ return true; }
+
+		// horizontal
+		lengthSoFar = 0;
+		for(int i=startX; i<=endX ; i++){
+			if (i >= 0 && i < fields.length){
+				if (fields[i][action.getY()].getValue() == player){
+					lengthSoFar++;
+				} else if (lengthSoFar < 5){
+					lengthSoFar = 0;
+				}
+			}
+		}
+		if (lengthSoFar >= 5){ return true; }
+
+		// no winning found
+		return false;
 	}
 
 	@Override

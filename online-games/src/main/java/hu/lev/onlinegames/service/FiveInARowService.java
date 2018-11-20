@@ -8,7 +8,7 @@ public interface FiveInARowService {
 
 	boolean validateAction(FiveInARowAction action, FiveInARowFields fields, int[] options);
 	MatchActive applyAction(MatchActive match);
-	int checkWin(MatchActive match);
+	boolean checkWin(FiveInARowFields fieldsObj, int player, FiveInARowAction action);
 	void updateMatch(MatchActive match);
 	FiveInARowFields convertBoardstate(String boardstate);
 	int[] convertOptions(String options);
