@@ -11,12 +11,17 @@ import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
+import hu.lev.onlinegames.model.request.MatchActiveRq;
+import hu.lev.onlinegames.persist.MatchDao;
 
 @Service
 public class FiveInARowServiceImpl implements FiveInARowService {
 	
+//	@Autowired
+//	private MatchService matchService;
+	
 	@Autowired
-	private MatchService matchService;
+	private MatchDao matchDao;
 
 	@Override
 	public boolean validateAction(FiveInARowAction action, FiveInARowField[][] fields, int[] options) {
@@ -25,27 +30,16 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 			return true;
 		}
 		if(fields[action.getX()][action.getY()].getValue() == 4
-				&& ArrayUtils.contains(options, 1)
-				&& ArrayUtils.contains(options, 3)) {
+				&& (ArrayUtils.contains(options, 1)	|| ArrayUtils.contains(options, 3))) {
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public MatchActive applyAction(MatchActive match, FiveInARowFields fieldsObj, FiveInARowAction action) {
-		FiveInARowField[][] fields = fieldsObj.getFields();
-		fields[action.getX()][action.getY()].setValue(action.getValue());
-		
-		String boardstate = "";
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			boardstate = mapper.writeValueAsString(fields);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		};
-		match.setBoardstate(boardstate);
-		return match;
+	public MatchActiveRq applyAction(MatchActiveRq matchRq) {
+		matchRq.getFields()[matchRq.getAction().getX()][matchRq.getAction().getY()].setValue(matchRq.getAction().getValue());
+		return matchRq;
 	}
 
 	@Override
@@ -116,38 +110,58 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		return false;
 	}
 
-	@Override
-	public void updateMatch(MatchActive match) {
-		matchService.updateMatchActive(match);
-	}
+//	@Override
+//	public void updateMatch(MatchActive match) {
+//		matchService.updateMatchActive(match);
+//	}
+//
+//	@Override
+//	public FiveInARowFields convertBoardstate(String boardstate) {
+//
+//		FiveInARowFields fields = null;
+//		ObjectMapper mapper = new ObjectMapper();
+//		try {
+//			boardstate = "{\"fields\": " + boardstate + '}';
+//			fields = mapper.readValue(boardstate, FiveInARowFields.class);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		return fields;
+//	}
+//
+//	@Override
+//	public int[] convertOptions(String optionsString) {
+//		int[] options = null;
+//		optionsString = optionsString.substring(1, optionsString.length()-1);
+//		if(optionsString != null) {
+//			String[] integerStrings = optionsString.split(","); 
+//			options = new int[integerStrings.length]; 
+//			for (int i = 0; i < options.length; i++){
+//				options[i] = Integer.parseInt(integerStrings[i]); 
+//			}
+//		}
+//		return options;
+//	}
 
 	@Override
-	public FiveInARowFields convertBoardstate(String boardstate) {
+	public MatchActive convertMatchRq(MatchActiveRq matchRq) {
+		System.out.println(matchRq.getMatchId());
+		MatchActive match = matchDao.getMatchActive(matchRq.getMatchId());
+		System.out.println(match);
 
-		FiveInARowFields fields = null;
+		String boardstate = "";
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			boardstate = "{\"fields\": " + boardstate + '}';
-			fields = mapper.readValue(boardstate, FiveInARowFields.class);
-		} catch (Exception e) {
+			boardstate = mapper.writeValueAsString(matchRq.getFields());
+		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-		}
+		};
+		match.setBoardstate(boardstate);
+		match.setWin(matchRq.getWin());
+		match.setAction(matchRq.getAction().toString());
 		
-		return fields;
-	}
-
-	@Override
-	public int[] convertOptions(String optionsString) {
-		int[] options = null;
-		optionsString = optionsString.substring(1, optionsString.length()-1);
-		if(optionsString != null) {
-			String[] integerStrings = optionsString.split(","); 
-			options = new int[integerStrings.length]; 
-			for (int i = 0; i < options.length; i++){
-				options[i] = Integer.parseInt(integerStrings[i]); 
-			}
-		}
-		return options;
+		return match;
 	}
 
 }

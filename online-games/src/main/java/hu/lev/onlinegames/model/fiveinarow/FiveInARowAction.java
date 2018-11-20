@@ -21,7 +21,7 @@ public class FiveInARowAction {
 	// toString
 	@Override
 	public String toString() {
-		return "Field [x=" + x + ", y=" + y + ", value=" + value + "]";
+		return "{\"x\":" + x + ",\"y\":" + y + ",\"value\":" + value + "}";
 	}
 
 	// setters and getters

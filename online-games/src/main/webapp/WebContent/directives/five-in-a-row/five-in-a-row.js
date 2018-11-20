@@ -72,12 +72,14 @@ directives.directive('fiveInARow', [
 	'FiveInARowManager', 
 	'$rootScope',
 	'$http',
+	'$interval',
 	function(
 		CanvasService, 
 		$timeout,
 		FiveInARowManager,
 		$rootScope,
-		$http){
+		$http,
+		$interval){
 	return {
 		templateUrl : "directives/five-in-a-row/five-in-a-row.html",
 		scope: {
@@ -109,6 +111,11 @@ directives.directive('fiveInARow', [
 				backgroundColor: "#f9f9f9"
 			}
 
+			var match = null;
+
+			function init(match){
+				
+			}
 			vm.initMatch.fields = vm.initMatch.boardstate == "" ? null : JSON.parse(vm.initMatch.boardstate);
 			
 			var match = {
@@ -121,64 +128,91 @@ directives.directive('fiveInARow', [
 				options : vm.initMatch.options
 			};
 
-			// if (match.activePlayer == 1) {
-			// 	vm.disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
-			// } else {
-			// 	vm.disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
-			// }
+			if (match.activePlayer == 1) {
+				vm.disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
+			} else {
+				vm.disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
+			}
         	        	
 			man.drawBoard(vm.board, ctx);
 			man.initOptions(match, vm.board, ctx);
 			
 			// Add event listener for 'click' events.
 			elem.addEventListener('click', function(event) {
-				var x = event.pageX - elem.offsetLeft;	// get canvas x,	elem.offsetLeft - canvas origo x
-				var y = event.pageY - elem.offsetTop;	// get canvas y		elem.offsetTop - canvas origo y
-				console.log(x, y);
+				if(!vm.disable){
 
-				// if (man.isClickInBoard(vm.board, x, y)){									// if click happened on board
-				var field = man.getClickedField(vm.board, x, y);						// get clicked field by index
+					vm.disable = true;
 
-				if(field != null){
-					field.value = match.fields[field.x][field.y].value;						// get value of field
-					console.log(field.x + "," + field.y + ' - ' + field.value);
+					var x = event.pageX - elem.offsetLeft;	// get canvas x,	elem.offsetLeft - canvas origo x
+					var y = event.pageY - elem.offsetTop;	// get canvas y		elem.offsetTop - canvas origo y
+					console.log(x, y);
 
-					if([0,4].includes(field.value)){
-						match.action = field;
-						// match.options = JSON.stringify(match.options);
-						// match.boardstate = '{"fields": ' + JSON.stringify(match.fields) +'}';
-						// match.boardstate = JSON.stringify(match.fields);
-						console.log("send nudes");
-						console.log(match.action);
+					var field = man.getClickedField(vm.board, x, y);						// get clicked field by index
 
-						$http.post(baseUrl + '/fiveinarow/action', match)
-						.then(function(result){
-							console.log(result.data);
-						});
+					if(field != null){
+						field.value = match.fields[field.x][field.y].value;						// get value of field
+						console.log(field.x + "," + field.y + ' - ' + field.value);
+
+						if([0,4].includes(field.value)){
+							match.action = field;
+							console.log("send nudes");
+							console.log(match.action);
+
+							$http.post(baseUrl + '/fiveinarow/action', match)
+							.then(function(result){
+								console.log("valid action: " + result.data);
+								if(result.data){
+									// start checkAction()
+								} else {
+									vm.disable = false;
+								}
+							});
+						}
+						
+						/*
+						if(field.value == 0){													// if field is empty
+							match.fields[field.x][field.y].value = match.activePlayer;			// record value
+							man.drawCharacter(match.fields[field.x][field.y], vm.board, match.activePlayer, ctx);		// draw character
+							$timeout(function(){
+								if (man.checkWin(field, match.activePlayer, match.fields)){		// check win
+									alert("Player " + match.activePlayer + "wins!");
+									match.fields = man.initFields(vm.board, 0);
+									match.activePlayer = 1;
+									man.drawBoard(vm.board, ctx);
+								} else {
+									match.activePlayer = match.activePlayer == 1 ? 2 : 1;		// switch player								
+								}
+							}, 200);
+						}
+						else if (field.value == 4) {
+							man.activateTrap(match.fields[field.x][field.y], vm.board, ctx);
+							match.activePlayer = match.activePlayer == 1 ? 2 : 1;				// switch player
+						}
+						*/
 					}
-					
-					/*
-					if(field.value == 0){													// if field is empty
-						match.fields[field.x][field.y].value = match.activePlayer;			// record value
-						man.drawCharacter(match.fields[field.x][field.y], vm.board, match.activePlayer, ctx);		// draw character
-						$timeout(function(){
-							if (man.checkWin(field, match.activePlayer, match.fields)){		// check win
-								alert("Player " + match.activePlayer + "wins!");
-								match.fields = man.initFields(vm.board, 0);
-								match.activePlayer = 1;
-								man.drawBoard(vm.board, ctx);
-							} else {
-								match.activePlayer = match.activePlayer == 1 ? 2 : 1;		// switch player								
-							}
-						}, 200);
-					}
-					else if (field.value == 4) {
-						man.activateTrap(match.fields[field.x][field.y], vm.board, ctx);
-						match.activePlayer = match.activePlayer == 1 ? 2 : 1;				// switch player
-					}
-					*/
 				}
 			}, false);
+
+			vm.checkAction = function(){
+				vm.promise = $interval(function(){
+					$http.get(baseUrl + '/fiveinarow/checkaction', {
+						params: {
+							matchId: match.matchId,
+							turn: match.turn
+						}
+					})
+					.then(function(result){
+						if(result.data != null){
+							vm.initMatch = result.data;
+							vm.stopcheckAction();
+						}
+					});
+				}, 5000, false);
+			}
+
+			vm.stopcheckAction = function(){
+				$interval.cancel(vm.promise);
+			}
         }
     }
 }])

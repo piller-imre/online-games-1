@@ -1,13 +1,12 @@
 package hu.lev.onlinegames.model.request;
 
-import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
 
 public class MatchActiveRq {
 
-	private int id;
+	private int matchId;
 	private User player1;
 	private User player2;
 	private int activePlayer;
@@ -23,10 +22,10 @@ public class MatchActiveRq {
 		super();
 	}
 
-	public MatchActiveRq(int id, User player1, User player2, int activePlayer, int turn,
+	public MatchActiveRq(int matchId, User player1, User player2, int activePlayer, int turn,
 			String boardstate, int[] options, int win, FiveInARowAction action, FiveInARowField[][] fields) {
 		super();
-		this.id = id;
+		this.matchId = matchId;
 		this.player1 = player1;
 		this.player2 = player2;
 		this.activePlayer = activePlayer;
@@ -41,7 +40,7 @@ public class MatchActiveRq {
 	// toString
 	@Override
 	public String toString() {
-		return "MatchActive [id=" + id
+		return "MatchActive [matchId=" + matchId
 				+ ", player1=" + player1 
 				+ ", player2=" + player2 
 				+ ", activePlayer=" + activePlayer 
@@ -61,11 +60,11 @@ public class MatchActiveRq {
 			this.win = 0;
 		}
 	}
-	public int getId() {
-		return id;
+	public int getMatchId() {
+		return matchId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setMatchId(int id) {
+		this.matchId = id;
 	}
 	public User getPlayer1() {
 		return player1;

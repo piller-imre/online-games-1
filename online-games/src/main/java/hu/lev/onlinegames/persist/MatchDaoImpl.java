@@ -241,9 +241,11 @@ public class MatchDaoImpl implements MatchDao {
 			session.close();
 			
 		} catch (Exception e) {
+			System.out.println("EXCEPTION");
 			match = null;
 			e.printStackTrace();
 		}
+		System.out.println(match);
 		return match;
 	}
 

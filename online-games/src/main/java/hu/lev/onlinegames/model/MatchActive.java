@@ -44,8 +44,9 @@ public class MatchActive {
 	@Transient
 	private int win;
 	
-	@Transient
-	private FiveInARowAction action;
+	@Column(name="action")
+	private String action;
+	
 	
 	// constructors
 	public MatchActive() {
@@ -54,11 +55,11 @@ public class MatchActive {
 		this.boardstate = "";
 		this.win = 0;
 	}
-	public MatchActive(int id, Players players, GameType gameType, int turn, String boardstate, int win, FiveInARowAction action) {
+	public MatchActive(int id, Players players, GameType gameType, int turn, String boardstate, int win, String action) {
 		super();
 		this.id = id;
 		this.players = players;
-//		this.gameType = gameType;
+		this.gameType = gameType;
 		this.turn = turn;
 		this.boardstate = boardstate;
 		this.win = win;
@@ -74,7 +75,6 @@ public class MatchActive {
 				+ ", turn=" + turn
 				+ ", boardstate=" + boardstate 
 				+ ", win= " + win 
-				+ ", action= " + action.toString()
 				+ "]";
 	}
 	
@@ -121,10 +121,20 @@ public class MatchActive {
 	public void setWin(int win) {
 		this.win = win;
 	}
-	public FiveInARowAction getAction() {
+	public void incrementTurn() {
+		this.turn++;
+	}
+	public void setActivePlayer() {
+		if(this.players.getActivePlayer() == 1) {
+			this.players.setActivePlayer(2);
+		} else {
+			this.players.setActivePlayer(1);
+		}
+	}
+	public String getAction() {
 		return action;
 	}
-	public void setAction(FiveInARowAction action) {
+	public void setAction(String action) {
 		this.action = action;
 	}
 	

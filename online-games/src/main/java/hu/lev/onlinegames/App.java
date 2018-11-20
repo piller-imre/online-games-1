@@ -1,31 +1,17 @@
 package hu.lev.onlinegames;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import hu.lev.onlinegames.manager.SessionManager;
-import hu.lev.onlinegames.model.MatchActive;
-import hu.lev.onlinegames.model.MatchWaiting;
-import hu.lev.onlinegames.model.Players;
-import hu.lev.onlinegames.model.request.MatchStartRq;
-import hu.lev.onlinegames.persist.MatchDaoImpl;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class App {
 	public static void main(String[] args) {
 
-		String test = "[12 41 21 19 15 10]"; 
-		test = test.substring(1, test.length()-1);
-		// The string you want to be an integer array.
-		String[] integerStrings = test.split(" "); 
-		// Splits each spaced integer into a String array.
-		int[] integers = new int[integerStrings.length]; 
-		// Creates the integer array.
-		for (int i = 0; i < integers.length; i++){
-		    integers[i] = Integer.parseInt(integerStrings[i]); 
-		    System.out.println(i + ". " + integers[i]);
-		//Parses the integer for each string.
+		int[] options = new int[]{1,2};
+		for (int i : options) {
+			System.out.println(i);
 		}
+		System.out.println("ArrayUtils.contains(options, 1): " + ArrayUtils.contains(options, 1));
+		System.out.println("ArrayUtils.contains(options, 3): " + ArrayUtils.contains(options, 3));
+		
 	}
 }
 

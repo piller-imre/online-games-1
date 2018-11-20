@@ -4,14 +4,16 @@ import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
+import hu.lev.onlinegames.model.request.MatchActiveRq;
 
 public interface FiveInARowService {
 
 	boolean validateAction(FiveInARowAction action, FiveInARowField[][] fields, int[] options);
-	MatchActive applyAction(MatchActive match, FiveInARowFields fieldsObj, FiveInARowAction action);
+	MatchActiveRq applyAction(MatchActiveRq matchRq);
 	boolean checkWin(FiveInARowField[][] fields, int player, FiveInARowAction action);
-	void updateMatch(MatchActive match);
-	FiveInARowFields convertBoardstate(String boardstate);
-	int[] convertOptions(String options);
+//	void updateMatch(MatchActive match);
+//	FiveInARowFields convertBoardstate(String boardstate);
+//	int[] convertOptions(String options);
+	MatchActive convertMatchRq(MatchActiveRq matchRq);
 
 }
