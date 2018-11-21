@@ -146,9 +146,9 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 
 	@Override
 	public MatchActive convertMatchRq(MatchActiveRq matchRq) {
-		System.out.println(matchRq.getMatchId());
+//		System.out.println(matchRq.getMatchId());
 		MatchActive match = matchDao.getMatchActive(matchRq.getMatchId());
-		System.out.println(match);
+//		System.out.println(match);
 
 		String boardstate = "";
 		ObjectMapper mapper = new ObjectMapper();

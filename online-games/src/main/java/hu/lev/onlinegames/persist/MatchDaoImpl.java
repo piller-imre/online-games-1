@@ -214,7 +214,7 @@ public class MatchDaoImpl implements MatchDao {
 			}
 			
 			tx.commit();
-			System.out.println("dinnye");
+//			System.out.println("dinnye");
 			session.close();
 			
 		} catch (Exception e) {
@@ -245,7 +245,7 @@ public class MatchDaoImpl implements MatchDao {
 			match = null;
 			e.printStackTrace();
 		}
-		System.out.println(match);
+//		System.out.println(match);
 		return match;
 	}
 
@@ -286,7 +286,7 @@ public class MatchDaoImpl implements MatchDao {
 			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 
-			System.out.println(match.toString());
+//			System.out.println(match.toString());
 			session.update(match);
 			
 			tx.commit();

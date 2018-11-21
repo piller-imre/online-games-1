@@ -14,57 +14,13 @@ field values:
 	3 - forbidden -- put elsewhere, 3xx http status codes
 	4 - trap	-- client error, client die
 
-rule values:
-	0 - init walls
+options values:
 	1 - init bombs
-	2 - custom bombs
+	2 - init walls
+	3 - random field clear
+	4 - custom bombs
 */
 
-
-/*
-
-{
-  "id": 3,
-  "players": {
-    "player1": {
-      "id": 6,
-      "username": "elõd",
-      "newMatch": []
-    },
-    "player2": {
-      "id": 1,
-      "username": "test",
-      "newMatch": []
-    },
-    "activePlayer": 1
-  },
-  "gameType": {
-    "gameTypeId": 2,
-    "gameTypeName": "Dáma",
-    "options": [
-      {
-        "id": 5,
-        "name": "Szabály1",
-        "description": "Leírás1"
-      },
-      {
-        "id": 7,
-        "name": "Szabály3",
-        "description": "Leírás3"
-      },
-      {
-        "id": 6,
-        "name": "Szabály2",
-        "description": "Leírás2"
-      }
-    ]
-  },
-  "turn": 1,
-  "boardstate": "",
-  "options": "[6,7]"
-}
-
-*/
 
 directives.directive('fiveInARow', [
 	'CanvasService', 
@@ -113,30 +69,9 @@ directives.directive('fiveInARow', [
 
 			var match = null;
 
-			function init(match){
-				
-			}
-			vm.initMatch.fields = vm.initMatch.boardstate == "" ? null : JSON.parse(vm.initMatch.boardstate);
-			
-			var match = {
-				matchId : vm.initMatch.id,
-				player1 : vm.initMatch.players.player1,
-				player2 : vm.initMatch.players.player2,
-				activePlayer : vm.initMatch.players.activePlayer,
-				turn: vm.initMatch.turn,
-				fields : vm.initMatch.fields ? vm.initMatch.fields : man.initFields(vm.board, 0),
-				options : vm.initMatch.options
-			};
+			match = man.initiateMatch(vm.initMatch, match, vm.board, ctx);
+			console.log('matchId: ' + match.matchId);
 
-			if (match.activePlayer == 1) {
-				vm.disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
-			} else {
-				vm.disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
-			}
-        	        	
-			man.drawBoard(vm.board, ctx);
-			man.initOptions(match, vm.board, ctx);
-			
 			// Add event listener for 'click' events.
 			elem.addEventListener('click', function(event) {
 				if(!vm.disable){
@@ -162,39 +97,20 @@ directives.directive('fiveInARow', [
 							.then(function(result){
 								console.log("valid action: " + result.data);
 								if(result.data){
-									// start checkAction()
+									checkAction();
 								} else {
 									vm.disable = false;
 								}
 							});
 						}
 						
-						/*
-						if(field.value == 0){													// if field is empty
-							match.fields[field.x][field.y].value = match.activePlayer;			// record value
-							man.drawCharacter(match.fields[field.x][field.y], vm.board, match.activePlayer, ctx);		// draw character
-							$timeout(function(){
-								if (man.checkWin(field, match.activePlayer, match.fields)){		// check win
-									alert("Player " + match.activePlayer + "wins!");
-									match.fields = man.initFields(vm.board, 0);
-									match.activePlayer = 1;
-									man.drawBoard(vm.board, ctx);
-								} else {
-									match.activePlayer = match.activePlayer == 1 ? 2 : 1;		// switch player								
-								}
-							}, 200);
-						}
-						else if (field.value == 4) {
-							man.activateTrap(match.fields[field.x][field.y], vm.board, ctx);
-							match.activePlayer = match.activePlayer == 1 ? 2 : 1;				// switch player
-						}
-						*/
 					}
 				}
 			}, false);
 
-			vm.checkAction = function(){
+			function checkAction(){
 				vm.promise = $interval(function(){
+					console.log(baseUrl + '/fiveinarow/checkaction');
 					$http.get(baseUrl + '/fiveinarow/checkaction', {
 						params: {
 							matchId: match.matchId,
@@ -202,22 +118,88 @@ directives.directive('fiveInARow', [
 						}
 					})
 					.then(function(result){
-						if(result.data != null){
+						console.log(result.data);
+						if(result.data != null && result.data != ""){
 							vm.initMatch = result.data;
-							vm.stopcheckAction();
+							man.reload(vm.initMatch, match, vm.board, ctx, vm.disable);
+							stopcheckAction();
 						}
 					});
 				}, 5000, false);
 			}
 
-			vm.stopcheckAction = function(){
+			function stopcheckAction(){
 				$interval.cancel(vm.promise);
 			}
         }
     }
 }])
 
-.factory('FiveInARowManager', ['$timeout', function($timeout){
+.factory('FiveInARowManager', ['$timeout', '$localStorage', function($timeout, $localStorage){
+
+	function initiateMatch(initMatch, match, board, ctx){
+		initMatch.fields = initMatch.boardstate == "" ? null : JSON.parse(initMatch.boardstate);
+		match = {
+			matchId : initMatch.id,
+			player1 : initMatch.players.player1,
+			player2 : initMatch.players.player2,
+			activePlayer : initMatch.players.activePlayer,
+			turn: initMatch.turn,
+			fields : initMatch.fields ? initMatch.fields : resetFields(board, 0),
+			options : initMatch.options
+		};
+
+		drawBoard(board, ctx);
+		if(match.fields){
+			drawFields(match, board, ctx);
+		} else {
+			initOptions(match, board, ctx);
+		}
+
+		return match;
+	}
+
+	function reload(initMatch, match, board, ctx, disable){
+		initMatch.fields = initMatch.boardstate == "" ? null : JSON.parse(initMatch.boardstate);
+		match = {
+			matchId : initMatch.id,
+			player1 : initMatch.players.player1,
+			player2 : initMatch.players.player2,
+			activePlayer : initMatch.players.activePlayer,
+			turn: initMatch.turn,
+			fields : initMatch.fields ? initMatch.fields : resetFields(board, 0),
+			options : initMatch.options
+		};
+
+		if(initMatch.action){
+			switch (initMatch.action.value) {
+				case 1 || 2:
+					drawCharacter(match.fields[initMatch.action.x][initMatch.action.y], board, previousPlayer, ctx);		// draw character
+					break;
+				case 4:
+					activateTrap(match.fields[initMatch.action.x][initMatch.action.y], board, ctx);
+					break;
+				default:
+					break;
+			}
+		}
+
+		if(initMatch.win && initMatch.win > 0){
+			if(initMatch.win == 1){
+				$localStorage.currentUser.userid == match.player1 ? winMsg = "Gratulálok, nyertél!" : winMsg = "Sajnos vesztettél!";
+			} else {
+				$localStorage.currentUser.userid == match.player2 ? winMsg = "Gratulálok, nyertél!" : winMsg = "Sajnos vesztettél!";
+			}
+			alert(winMsg);
+			$state.go('game-play');
+		}
+
+		if (match.activePlayer == 1) {
+			disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
+		} else {
+			disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
+		}
+	}
 
 	function drawBoard(board, ctx){
 		var x = board.left;
@@ -240,6 +222,25 @@ directives.directive('fiveInARow', [
 		};
 	};
 
+	function drawFields(match, board, ctx){
+		var fields = match.fields;
+
+		for (var i = 0; i < fields.length; i++) {
+			for(var j = 0; j < fields[i].length; j++){
+				switch (fields[i][j].value) {
+					case 1 || 2:
+						drawCharacter(fields[i][j], board, player, ctx)
+						break;
+					case 3:
+						drawWall(fields[i][j], board, ctx)
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	};
+
 	function initOptions(match, board, ctx){
 		if (angular.isDefined(match.options) && match.options != null){
 			if (match.options.indexOf(1) != -1){
@@ -251,7 +252,7 @@ directives.directive('fiveInARow', [
 		}
 	}
 	
-	function initFields( board, defaultValue){
+	function resetFields( board, defaultValue){
 		var fields = [];
 		var tempX = board.left;	
 		var tempY = board.top;	
@@ -301,6 +302,88 @@ directives.directive('fiveInARow', [
 		ctx.fillText(char, x, y);
 	}
 
+	function drawWall(field, board, ctx){
+		ctx.fillStyle = "#a2c4c4";
+		ctx.strokeStyle = board.lineColor;
+		ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+		ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+
+	}
+	function initWalls(fields, board, ctx){
+		var numOfWalls = 50;
+		var x = 0;
+		var y = 0;
+		var i = 0;
+		while (i<numOfWalls){
+			var x = Math.floor(Math.random() * fields.length);
+			var y = Math.floor(Math.random() * fields[0].length);
+			if(fields[x][y].value != 3){
+				fields[x][y].value = 3;
+
+				ctx.fillStyle = "#a2c4c4";
+				ctx.strokeStyle = board.lineColor;
+				ctx.fillRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
+				ctx.strokeRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
+
+				i++;
+				console.log(x + "," + y + " - " + fields[x][y].value);
+			}
+		}
+	}
+
+	function initTraps(fields){
+		var numOfTraps = 50;
+		var x = 0;
+		var y = 0;
+		var i = 0;
+		while (i<numOfTraps){
+			var x = Math.floor(Math.random() * fields.length);
+			var y = Math.floor(Math.random() * fields[0].length);
+			if(fields[x][y].value != 4){
+				fields[x][y].value = 4;
+				i++;
+				console.log(x + "," + y + " - " + fields[x][y].value);
+			}
+		}
+	}
+
+	function activateTrap(field, board, ctx){
+		// change field value
+		field.value = 3;
+
+		// change field color to red
+		ctx.fillStyle = "#FF0000";
+		ctx.strokeStyle = board.lineColor;
+		ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+		ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+		
+		// change field color to board color
+		$timeout(function(){
+			ctx.fillStyle = board.backgroundColor;
+			ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+			ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
+			field.value = 0;
+		}, 3000);
+	}
+
+	return {
+		initiateMatch: initiateMatch,
+		reload: reload,
+		getClickedField: getClickedField,
+		// drawBoard: drawBoard,
+		// initOptions: initOptions,
+		// resetFields: resetFields,
+		// isClickInBoard: isClickInBoard,
+		// drawCharacter: drawCharacter,
+		// checkWin: checkWin,
+		// initWalls: initWalls,
+		// initTraps: initTraps,
+		// activateTrap: activateTrap
+	}
+}]);
+
+
+/*
 	function checkWin(field, player, fields){
 		var startX = field.x - 4;			// init min and max indexes, so we check fields in board
 		var startY = field.y - 4;
@@ -365,74 +448,4 @@ directives.directive('fiveInARow', [
 		// no winning found
 		return false;
 	}
-
-	function initWalls(fields, board, ctx){
-		var numOfWalls = 50;
-		var x = 0;
-		var y = 0;
-		var i = 0;
-		while (i<numOfWalls){
-			var x = Math.floor(Math.random() * fields.length);
-			var y = Math.floor(Math.random() * fields[0].length);
-			if(fields[x][y].value != 3){
-				fields[x][y].value = 3;
-
-				ctx.fillStyle = "#a2c4c4";
-				ctx.strokeStyle = board.lineColor;
-				ctx.fillRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
-				ctx.strokeRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
-
-				i++;
-				console.log(x + "," + y + " - " + fields[x][y].value);
-			}
-		}
-	}
-
-	function initTraps(fields){
-		var numOfTraps = 50;
-		var x = 0;
-		var y = 0;
-		var i = 0;
-		while (i<numOfTraps){
-			var x = Math.floor(Math.random() * fields.length);
-			var y = Math.floor(Math.random() * fields[0].length);
-			if(fields[x][y].value != 4){
-				fields[x][y].value = 4;
-				i++;
-				console.log(x + "," + y + " - " + fields[x][y].value);
-			}
-		}
-	}
-
-	function activateTrap(field, board, ctx){
-		// change field value
-		field.value = 3;
-
-		// change field color to red
-		ctx.fillStyle = "#FF0000";
-		ctx.strokeStyle = board.lineColor;
-		ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
-		ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
-		
-		// change field color to board color
-		$timeout(function(){
-			ctx.fillStyle = board.backgroundColor;
-			ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
-			ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
-			field.value = 0;
-		}, 3000);
-	}
-
-	return {
-		drawBoard: drawBoard,
-		initOptions: initOptions,
-		initFields: initFields,
-		isClickInBoard: isClickInBoard,
-		getClickedField: getClickedField,
-		drawCharacter: drawCharacter,
-		checkWin: checkWin,
-		initWalls: initWalls,
-		initTraps: initTraps,
-		activateTrap: activateTrap
-	}
-}]);
+*/
