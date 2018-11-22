@@ -33,7 +33,7 @@ public class MatchController {
     	return matches;
 	}
 
-    // CREATE MATCH
+    // CREATE MATCH WAITING
     @RequestMapping(
     		value = "/match", 
     		method = RequestMethod.POST,

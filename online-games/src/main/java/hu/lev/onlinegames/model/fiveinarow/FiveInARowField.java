@@ -9,6 +9,7 @@ public class FiveInARowField {
 	// constructors
 	public FiveInARowField() {
 		super();
+		value = 0;
 	}
 
 	public FiveInARowField(int xCoord, int yCoord, int value) {

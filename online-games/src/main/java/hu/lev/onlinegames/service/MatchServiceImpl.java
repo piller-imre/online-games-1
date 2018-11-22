@@ -17,6 +17,11 @@ public class MatchServiceImpl implements MatchService {
 	@Autowired
 	private MatchDao matchDao;
 	
+	@Autowired
+	private FiveInARowService fiveInARowService;
+	
+	private ConverterService converterService;
+	
 	public MatchServiceImpl() {
 		super();
 	}
@@ -52,10 +57,13 @@ public class MatchServiceImpl implements MatchService {
 	@Override
 	public MatchActive startMatch(MatchStartRq req) {		
 		MatchActive matchActive = null;
-		MatchWaiting matchWainting = matchDao.getMatchWaiting(req.getMatchId());
+		MatchWaiting matchWaiting = matchDao.getMatchWaiting(req.getMatchId());
+		int [] options = converterService.convertOptions(matchWaiting.getOptions());
+		String initFields = initFields(
+				matchWaiting.getGameTypeId().getGameTypeId(), options);
 		
-		if(matchWainting != null) {
-			int id = matchDao.createMatchActive(req.getUserid(), matchWainting);
+		if(matchWaiting != null) {
+			int id = matchDao.createMatchActive(req.getUserid(), matchWaiting, initFields);
 			if(id > 0) {
 				matchActive = matchDao.getMatchActive(id);
 				matchDao.deleteMatchWaiting(req.getMatchId());
@@ -77,5 +85,16 @@ public class MatchServiceImpl implements MatchService {
 		
 	}
 
-	
+	private String initFields(int gameTypeId, int[] options) {
+		String fields = "";
+		switch (gameTypeId) {
+		case 1:
+			fields = fiveInARowService.initFields(options);
+			break;
+
+		default:
+			break;
+		}
+		return fields;
+	}
 }

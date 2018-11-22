@@ -15,7 +15,7 @@ public interface MatchDao {
 	public MatchWaiting getMatchWaiting(int id);
 	
 	public int getMatchActiveId(int userId);
-	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting);
+	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting, String fields);
 	public MatchActive getMatchActive(int id);
 	public MatchActive checkStart(int userId);
 

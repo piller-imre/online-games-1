@@ -1,16 +1,16 @@
 package hu.lev.onlinegames;
 
+import java.util.Random;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 public class App {
 	public static void main(String[] args) {
 
-		int[] options = new int[]{1,2};
-		for (int i : options) {
-			System.out.println(i);
+		Random rand = new Random();
+		for (int i = 0; i < 50; i++) {
+			System.out.println(rand.nextInt(3));
 		}
-		System.out.println("ArrayUtils.contains(options, 1): " + ArrayUtils.contains(options, 1));
-		System.out.println("ArrayUtils.contains(options, 3): " + ArrayUtils.contains(options, 3));
 		
 	}
 }

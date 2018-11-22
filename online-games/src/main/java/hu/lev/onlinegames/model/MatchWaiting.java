@@ -67,7 +67,6 @@ public class MatchWaiting {
 		this.options = options;
 	}
 	
-	
 	// toString
 	@Override
 	public String toString() {

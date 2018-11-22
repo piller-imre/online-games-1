@@ -1,5 +1,7 @@
 package hu.lev.onlinegames.service;
 
+import java.util.Random;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,6 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 
 	@Override
 	public boolean validateAction(FiveInARowAction action, FiveInARowField[][] fields, int[] options) {
-//		FiveInARowField[][] fields = fieldsObj.getFields();
 		if(fields[action.getX()][action.getY()].getValue() == 0) {
 			return true;
 		}
@@ -129,20 +130,6 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 //		
 //		return fields;
 //	}
-//
-//	@Override
-//	public int[] convertOptions(String optionsString) {
-//		int[] options = null;
-//		optionsString = optionsString.substring(1, optionsString.length()-1);
-//		if(optionsString != null) {
-//			String[] integerStrings = optionsString.split(","); 
-//			options = new int[integerStrings.length]; 
-//			for (int i = 0; i < options.length; i++){
-//				options[i] = Integer.parseInt(integerStrings[i]); 
-//			}
-//		}
-//		return options;
-//	}
 
 	@Override
 	public MatchActive convertMatchRq(MatchActiveRq matchRq) {
@@ -164,6 +151,63 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		return match;
 	}
 
+	@Override
+	public String initFields(int[] options) {
+		FiveInARowField[][] fields = new FiveInARowField[25][25];
+		
+		if (ArrayUtils.contains(options, 1)){
+			fields = initTraps(fields);
+		}
+		if (ArrayUtils.contains(options, 2)){
+			fields = initWalls(fields);
+		}
+
+		String boardstate = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			boardstate = mapper.writeValueAsString(fields);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		};
+		
+		return boardstate;
+	}
+	
+	private FiveInARowField[][] initTraps(FiveInARowField[][] fields){
+		Random rand = new Random();
+		int numOfTraps = 50;
+		int i = 0;
+		int x;
+		int y;
+		
+		while (i < numOfTraps) {
+			x = rand.nextInt(26);
+			y = rand.nextInt(26);
+			if(fields[x][y].getValue() != 3 && fields[x][y].getValue() != 4) {
+				fields[x][y].setValue(4);
+				i++;
+			}
+		}		
+		return fields;
+	}
+	
+	private FiveInARowField[][] initWalls(FiveInARowField[][] fields){
+		Random rand = new Random();
+		int numOfTraps = 50;
+		int i = 0;
+		int x;
+		int y;
+		
+		while (i < numOfTraps) {
+			x = rand.nextInt(26);
+			y = rand.nextInt(26);
+			if(fields[x][y].getValue() != 3 && fields[x][y].getValue() != 4) {
+				fields[x][y].setValue(4);
+				i++;
+			}
+		}
+		return fields;
+	}
 }
 
 

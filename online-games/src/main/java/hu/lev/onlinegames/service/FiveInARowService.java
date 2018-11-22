@@ -15,5 +15,5 @@ public interface FiveInARowService {
 //	FiveInARowFields convertBoardstate(String boardstate);
 //	int[] convertOptions(String options);
 	MatchActive convertMatchRq(MatchActiveRq matchRq);
-
+	public String initFields(int[] options);
 }

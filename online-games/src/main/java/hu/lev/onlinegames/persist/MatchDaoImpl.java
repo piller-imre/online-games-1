@@ -148,7 +148,7 @@ public class MatchDaoImpl implements MatchDao {
 	
 
 	@Override
-	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting) {
+	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting, String fields) {
 
 		int matchId = 0;
 		Random rand = new Random();
@@ -162,6 +162,7 @@ public class MatchDaoImpl implements MatchDao {
 			MatchActive match = new MatchActive();
 			match.setGameType(matchWaiting.getGameTypeId());
 			match.setOptions(matchWaiting.getOptions());
+			match.setBoardstate(fields);
 			match.setTurn(1);
 			
 			matchId = (int) session.save(match);

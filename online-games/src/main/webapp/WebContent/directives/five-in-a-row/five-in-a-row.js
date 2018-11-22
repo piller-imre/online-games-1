@@ -121,7 +121,14 @@ directives.directive('fiveInARow', [
 						console.log(result.data);
 						if(result.data != null && result.data != ""){
 							vm.initMatch = result.data;
-							man.reload(vm.initMatch, match, vm.board, ctx, vm.disable);
+							man.reload(vm.initMatch, match, vm.board, ctx);
+							
+							if (match.activePlayer == 1) {
+								vm.disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
+							} else {
+								vm.disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
+							}
+
 							stopcheckAction();
 						}
 					});
@@ -129,6 +136,7 @@ directives.directive('fiveInARow', [
 			}
 
 			function stopcheckAction(){
+				console.log("checkAction OFF");
 				$interval.cancel(vm.promise);
 			}
         }
@@ -138,28 +146,33 @@ directives.directive('fiveInARow', [
 .factory('FiveInARowManager', ['$timeout', '$localStorage', function($timeout, $localStorage){
 
 	function initiateMatch(initMatch, match, board, ctx){
-		initMatch.fields = initMatch.boardstate == "" ? null : JSON.parse(initMatch.boardstate);
+		
+		var tempFields = resetFields(board, 0);
+		initMatch.fields = JSON.parse(initMatch.boardstate);
+		
+		for (var i = 0; i < array.length; i++) {
+			for (var j = 0; j < array.length; j++) {
+				tempFields[i][j].value = initMatch.fields[i][j].value;
+			}
+		}
+		
 		match = {
 			matchId : initMatch.id,
 			player1 : initMatch.players.player1,
 			player2 : initMatch.players.player2,
 			activePlayer : initMatch.players.activePlayer,
 			turn: initMatch.turn,
-			fields : initMatch.fields ? initMatch.fields : resetFields(board, 0),
+			fields : tempFields,
 			options : initMatch.options
 		};
 
 		drawBoard(board, ctx);
-		if(match.fields){
-			drawFields(match, board, ctx);
-		} else {
-			initOptions(match, board, ctx);
-		}
+		drawFields(match, board, ctx);
 
 		return match;
 	}
 
-	function reload(initMatch, match, board, ctx, disable){
+	function reload(initMatch, match, board, ctx){
 		initMatch.fields = initMatch.boardstate == "" ? null : JSON.parse(initMatch.boardstate);
 		match = {
 			matchId : initMatch.id,
@@ -167,7 +180,7 @@ directives.directive('fiveInARow', [
 			player2 : initMatch.players.player2,
 			activePlayer : initMatch.players.activePlayer,
 			turn: initMatch.turn,
-			fields : initMatch.fields ? initMatch.fields : resetFields(board, 0),
+			fields : initMatch.fields,
 			options : initMatch.options
 		};
 
@@ -186,19 +199,21 @@ directives.directive('fiveInARow', [
 
 		if(initMatch.win && initMatch.win > 0){
 			if(initMatch.win == 1){
-				$localStorage.currentUser.userid == match.player1 ? winMsg = "Gratulálok, nyertél!" : winMsg = "Sajnos vesztettél!";
+				$localStorage.currentUser.userid == match.player1 ? winMsg = "Gratulï¿½lok, nyertï¿½l!" : winMsg = "Sajnos vesztettï¿½l!";
 			} else {
-				$localStorage.currentUser.userid == match.player2 ? winMsg = "Gratulálok, nyertél!" : winMsg = "Sajnos vesztettél!";
+				$localStorage.currentUser.userid == match.player2 ? winMsg = "Gratulï¿½lok, nyertï¿½l!" : winMsg = "Sajnos vesztettï¿½l!";
 			}
 			alert(winMsg);
 			$state.go('game-play');
 		}
 
-		if (match.activePlayer == 1) {
-			disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
-		} else {
-			disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
-		}
+		var disable;
+
+		// if (match.activePlayer == 1) {
+		// 	disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
+		// } else {
+		// 	disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
+		// }
 	}
 
 	function drawBoard(board, ctx){
@@ -317,7 +332,7 @@ directives.directive('fiveInARow', [
 		while (i<numOfWalls){
 			var x = Math.floor(Math.random() * fields.length);
 			var y = Math.floor(Math.random() * fields[0].length);
-			if(fields[x][y].value != 3){
+			if(fields[x][y].value != 3 && fields[x][y].value != 4){
 				fields[x][y].value = 3;
 
 				ctx.fillStyle = "#a2c4c4";
@@ -339,7 +354,7 @@ directives.directive('fiveInARow', [
 		while (i<numOfTraps){
 			var x = Math.floor(Math.random() * fields.length);
 			var y = Math.floor(Math.random() * fields[0].length);
-			if(fields[x][y].value != 4){
+			if(fields[x][y].value != 4 && fields[x][y].value != 3){
 				fields[x][y].value = 4;
 				i++;
 				console.log(x + "," + y + " - " + fields[x][y].value);
