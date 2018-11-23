@@ -3,14 +3,52 @@ package hu.lev.onlinegames;
 import java.util.Random;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import hu.lev.onlinegames.manager.SessionManager;
+import hu.lev.onlinegames.model.MatchActive;
+import hu.lev.onlinegames.persist.MatchDaoImpl;
+import hu.lev.onlinegames.service.FiveInARowService;
+import hu.lev.onlinegames.service.FiveInARowServiceImpl;
 
 public class App {
 	public static void main(String[] args) {
+		
+		int matchId = 3;
+		int turn = 24;
+		MatchDaoImpl service = new MatchDaoImpl();
 
-		Random rand = new Random();
-		for (int i = 0; i < 50; i++) {
-			System.out.println(rand.nextInt(3));
+		MatchActive match = null;
+		SessionManager sm = new SessionManager();
+		
+		try {
+			Session session = sm.getSession();
+			Transaction tx = session.beginTransaction();
+
+			Query q = session.createSQLQuery("select * from match_active where id = :a and turn > :b");
+			q.setParameter("a", matchId);
+			q.setParameter("b", turn);
+			Object[] result = (Object[]) q.uniqueResult();
+			
+			if(result == null) {
+				System.out.println("match NULL");
+			}
+			
+			if(result != null) {
+				match = service.getMatchActive(matchId);
+				System.out.println(match.toString());
+			}
+			
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			match = null;
+			e.printStackTrace();
 		}
+		System.out.println(match.toString());
 		
 	}
 }

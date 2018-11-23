@@ -26,7 +26,6 @@ controllers.controller('ChooseGameController', [
 		checkStart();
 
 		$rootScope.$on('$locationChangeStart', function(event, toState, toParams, fromState, fromParams){ 
-			console.log("alma");
 			if(isInGame && toState != thisUrl){
 				console.log("checkStart OFF");
 				$interval.cancel(waitMatch);

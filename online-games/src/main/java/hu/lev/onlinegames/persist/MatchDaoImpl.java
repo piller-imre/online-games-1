@@ -204,7 +204,6 @@ public class MatchDaoImpl implements MatchDao {
 		try {
 			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
-			System.out.println("alma");
 
 			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
 			q.setParameter("a", userId);
@@ -288,6 +287,7 @@ public class MatchDaoImpl implements MatchDao {
 			Transaction tx = session.beginTransaction();
 
 //			System.out.println(match.toString());
+			System.out.println("NEW TURN: " + match.getTurn());
 			session.update(match);
 			
 			tx.commit();
@@ -296,6 +296,38 @@ public class MatchDaoImpl implements MatchDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	
+	@Override
+	public boolean checkAction(int matchId, int turn) {
+
+		boolean isAction = false;
+		SessionManager sm = new SessionManager();
+		
+		try {
+			Session session = sm.getSession();
+			Transaction tx = session.beginTransaction();
+
+			Query q = session.createSQLQuery("select * from match_active where id = :a and turn > :b");
+			q.setParameter("a", matchId);
+			q.setParameter("b", turn);
+			Object[] result = (Object[]) q.uniqueResult();
+						
+			if(result != null) {
+				isAction = true;
+				System.out.println("IS ACTION: " + isAction);
+			}
+			
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			isAction = false;
+			e.printStackTrace();
+		}
+
+		return isAction;
 	}
 
 }

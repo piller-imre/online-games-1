@@ -6,16 +6,16 @@ import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
 
 public class MatchActiveRq {
 
+	private FiveInARowAction action;
+	private int activePlayer;
+	private String boardstate;
+	private FiveInARowField[][] fields;
 	private int matchId;
+	private int[] options;
 	private User player1;
 	private User player2;
-	private int activePlayer;
 	private int turn;
-	private String boardstate;
-	private int[] options;
 	private int win;
-	private FiveInARowAction action;
-	private FiveInARowField[][] fields;
 	
 	// constructors
 	public MatchActiveRq() {

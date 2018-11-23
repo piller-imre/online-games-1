@@ -5,18 +5,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConverterServiceImpl implements ConverterService {
 
+	// (used for options)
 	@Override
-	public int[] convertOptions(String optionsString) {
-		int[] options = null;
-		optionsString = optionsString.substring(1, optionsString.length()-1);
-		if(optionsString != null) {
-			String[] integerStrings = optionsString.split(","); 
-			options = new int[integerStrings.length]; 
-			for (int i = 0; i < options.length; i++){
-				options[i] = Integer.parseInt(integerStrings[i]); 
+	public int[] stringToIntArray(String arrayString) {
+		int[] array = null;
+		arrayString = arrayString.substring(1, arrayString.length()-1);
+		if(arrayString != null) {
+			String[] integerStrings = arrayString.split(","); 
+			array = new int[integerStrings.length]; 
+			for (int i = 0; i < array.length; i++){
+				array[i] = Integer.parseInt(integerStrings[i]); 
 			}
 		}
-		return options;
+		return array;
 	}
 
 }

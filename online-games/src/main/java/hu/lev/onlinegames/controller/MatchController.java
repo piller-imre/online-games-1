@@ -87,6 +87,9 @@ public class MatchController {
 	@ResponseBody
 	public MatchActive checkStart(@PathVariable int userId) {
 		MatchActive match = matchService.checkStart(userId);
+		System.out.println("CHECK START:");
+		System.out.println(match.toString());
+		System.out.println(match.getPlayers().toString());
 		return match;
 	}
 

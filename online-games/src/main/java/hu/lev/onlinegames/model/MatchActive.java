@@ -73,7 +73,6 @@ public class MatchActive {
 				+ ", players=" + players.toString() 
 				+ ", gameType=" + gameType.getGameTypeName() 
 				+ ", turn=" + turn
-				+ ", boardstate=" + boardstate 
 				+ ", win= " + win 
 				+ "]";
 	}

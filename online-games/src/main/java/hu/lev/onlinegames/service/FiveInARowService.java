@@ -4,6 +4,7 @@ import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
+import hu.lev.onlinegames.model.request.FiveInARowCheckActionRq;
 import hu.lev.onlinegames.model.request.MatchActiveRq;
 
 public interface FiveInARowService {
@@ -16,4 +17,5 @@ public interface FiveInARowService {
 //	int[] convertOptions(String options);
 	MatchActive convertMatchRq(MatchActiveRq matchRq);
 	public String initFields(int[] options);
+	MatchActive checkAction(int matchId, int turn);
 }

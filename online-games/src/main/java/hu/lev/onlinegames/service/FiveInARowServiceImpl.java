@@ -13,6 +13,7 @@ import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
+import hu.lev.onlinegames.model.request.FiveInARowCheckActionRq;
 import hu.lev.onlinegames.model.request.MatchActiveRq;
 import hu.lev.onlinegames.persist.MatchDao;
 
@@ -111,26 +112,6 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		return false;
 	}
 
-//	@Override
-//	public void updateMatch(MatchActive match) {
-//		matchService.updateMatchActive(match);
-//	}
-//
-//	@Override
-//	public FiveInARowFields convertBoardstate(String boardstate) {
-//
-//		FiveInARowFields fields = null;
-//		ObjectMapper mapper = new ObjectMapper();
-//		try {
-//			boardstate = "{\"fields\": " + boardstate + '}';
-//			fields = mapper.readValue(boardstate, FiveInARowFields.class);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return fields;
-//	}
-
 	@Override
 	public MatchActive convertMatchRq(MatchActiveRq matchRq) {
 //		System.out.println(matchRq.getMatchId());
@@ -207,6 +188,15 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 			}
 		}
 		return fields;
+	}
+
+	@Override
+	public MatchActive checkAction(int matchId, int turn) {
+		MatchActive match = null;
+		if(matchDao.checkAction(matchId, turn)) {
+			match =  matchDao.getMatchActive(matchId);
+		}
+		return match;
 	}
 }
 

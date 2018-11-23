@@ -58,7 +58,7 @@ public class MatchServiceImpl implements MatchService {
 	public MatchActive startMatch(MatchStartRq req) {		
 		MatchActive matchActive = null;
 		MatchWaiting matchWaiting = matchDao.getMatchWaiting(req.getMatchId());
-		int [] options = converterService.convertOptions(matchWaiting.getOptions());
+		int [] options = converterService.stringToIntArray(matchWaiting.getOptions());
 		String initFields = initFields(
 				matchWaiting.getGameTypeId().getGameTypeId(), options);
 		

@@ -29,13 +29,15 @@ directives.directive('fiveInARow', [
 	'$rootScope',
 	'$http',
 	'$interval',
+	'$localStorage',
 	function(
 		CanvasService, 
 		$timeout,
 		FiveInARowManager,
 		$rootScope,
 		$http,
-		$interval){
+		$interval,
+		$localStorage){
 	return {
 		templateUrl : "directives/five-in-a-row/five-in-a-row.html",
 		scope: {
@@ -71,6 +73,18 @@ directives.directive('fiveInARow', [
 
 			match = man.initiateMatch(vm.initMatch, match, vm.board, ctx);
 			console.log('matchId: ' + match.matchId);
+			
+			if (match.players.activePlayer == 1) {
+				vm.disable = $localStorage.currentUser.userid == match.players.player1.id ? false : true;
+			} else {
+				vm.disable = $localStorage.currentUser.userid == match.players.player2.id ? false : true;
+			}
+
+			console.log("disabled: " + vm.disable);
+			if (vm.disable){
+				match.turn --;
+				checkAction();
+			}
 
 			// Add event listener for 'click' events.
 			elem.addEventListener('click', function(event) {
@@ -92,8 +106,9 @@ directives.directive('fiveInARow', [
 							match.action = field;
 							console.log("send nudes");
 							console.log(match.action);
+							var data = man.getMatchReadyToSend(match);
 
-							$http.post(baseUrl + '/fiveinarow/action', match)
+							$http.post(baseUrl + '/fiveinarow/action', data)
 							.then(function(result){
 								console.log("valid action: " + result.data);
 								if(result.data){
@@ -111,22 +126,24 @@ directives.directive('fiveInARow', [
 			function checkAction(){
 				vm.promise = $interval(function(){
 					console.log(baseUrl + '/fiveinarow/checkaction');
+					console.log("current turn: " + match.turn);
 					$http.get(baseUrl + '/fiveinarow/checkaction', {
 						params: {
-							matchId: match.matchId,
-							turn: match.turn
+							matchId: match.id,
+							turn: match.turn + 1
 						}
 					})
 					.then(function(result){
 						console.log(result.data);
 						if(result.data != null && result.data != ""){
 							vm.initMatch = result.data;
-							man.reload(vm.initMatch, match, vm.board, ctx);
+							console.log("new turn: " + vm.initMatch.turn);
+							match = man.reload(vm.initMatch, match, vm.board, ctx);
 							
-							if (match.activePlayer == 1) {
-								vm.disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
+							if (match.players.activePlayer == 1) {
+								vm.disable = $localStorage.currentUser.userid == match.players.player1.id ? false : true;
 							} else {
-								vm.disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
+								vm.disable = $localStorage.currentUser.userid == match.players.player2.id ? false : true;
 							}
 
 							stopcheckAction();
@@ -150,21 +167,24 @@ directives.directive('fiveInARow', [
 		var tempFields = resetFields(board, 0);
 		initMatch.fields = JSON.parse(initMatch.boardstate);
 		
-		for (var i = 0; i < array.length; i++) {
-			for (var j = 0; j < array.length; j++) {
+		for (var i = 0; i < initMatch.fields.length; i++) {
+			for (var j = 0; j < initMatch.fields[i].length; j++) {
 				tempFields[i][j].value = initMatch.fields[i][j].value;
 			}
 		}
+
+		initMatch.fields = tempFields;
+		match = initMatch;
 		
-		match = {
-			matchId : initMatch.id,
-			player1 : initMatch.players.player1,
-			player2 : initMatch.players.player2,
-			activePlayer : initMatch.players.activePlayer,
-			turn: initMatch.turn,
-			fields : tempFields,
-			options : initMatch.options
-		};
+		// match = {
+		// 	matchId : initMatch.id,
+		// 	player1 : initMatch.players.player1,
+		// 	player2 : initMatch.players.player2,
+		// 	activePlayer : initMatch.players.activePlayer,
+		// 	turn: initMatch.turn,
+		// 	fields : tempFields,
+		// 	options : initMatch.options
+		// };
 
 		drawBoard(board, ctx);
 		drawFields(match, board, ctx);
@@ -174,31 +194,33 @@ directives.directive('fiveInARow', [
 
 	function reload(initMatch, match, board, ctx){
 		initMatch.fields = initMatch.boardstate == "" ? null : JSON.parse(initMatch.boardstate);
-		match = {
-			matchId : initMatch.id,
-			player1 : initMatch.players.player1,
-			player2 : initMatch.players.player2,
-			activePlayer : initMatch.players.activePlayer,
-			turn: initMatch.turn,
-			fields : initMatch.fields,
-			options : initMatch.options
-		};
+		match = initMatch;
 
-		if(initMatch.action){
-			switch (initMatch.action.value) {
+		// convert string to int array
+		if(match.options != null){
+			var op = match.options;
+			op = op.substring(1, op.length-1);
+			op = op.split(',').map(function(item) {
+				return parseInt(item, 10);
+			});
+			match.options = op;
+		}
+
+		if(match.action){
+			switch (match.action.value) {
 				case 1 || 2:
-					drawCharacter(match.fields[initMatch.action.x][initMatch.action.y], board, previousPlayer, ctx);		// draw character
+					drawCharacter(match.fields[match.action.x][match.action.y], board, previousPlayer, ctx);		// draw character
 					break;
 				case 4:
-					activateTrap(match.fields[initMatch.action.x][initMatch.action.y], board, ctx);
+					activateTrap(match.fields[match.action.x][match.action.y], board, ctx);
 					break;
 				default:
 					break;
 			}
 		}
 
-		if(initMatch.win && initMatch.win > 0){
-			if(initMatch.win == 1){
+		if(match.win && match.win > 0){
+			if(match.win == 1){
 				$localStorage.currentUser.userid == match.player1 ? winMsg = "Gratul�lok, nyert�l!" : winMsg = "Sajnos vesztett�l!";
 			} else {
 				$localStorage.currentUser.userid == match.player2 ? winMsg = "Gratul�lok, nyert�l!" : winMsg = "Sajnos vesztett�l!";
@@ -207,13 +229,27 @@ directives.directive('fiveInARow', [
 			$state.go('game-play');
 		}
 
-		var disable;
+		return match;
 
 		// if (match.activePlayer == 1) {
 		// 	disable = $localStorage.currentUser.userid == match.player1.id ? false : true;
 		// } else {
 		// 	disable = $localStorage.currentUser.userid == match.player2.id ? false : true;
 		// }
+	}
+
+	function getMatchReadyToSend(match){
+		var tempMatch = angular.copy(match);
+		tempMatch.matchId = match.id;
+		tempMatch.player1 = match.players.player1;
+		tempMatch.player2 = match.players.player2;
+		tempMatch.activePlayer = match.players.activePlayer;
+
+		delete tempMatch.id;
+		delete tempMatch.gameType;
+		delete tempMatch.players;
+
+		return tempMatch;
 	}
 
 	function drawBoard(board, ctx){
@@ -244,7 +280,7 @@ directives.directive('fiveInARow', [
 			for(var j = 0; j < fields[i].length; j++){
 				switch (fields[i][j].value) {
 					case 1 || 2:
-						drawCharacter(fields[i][j], board, player, ctx)
+						drawCharacter(fields[i][j], board, match.players.activePlayer, ctx)
 						break;
 					case 3:
 						drawWall(fields[i][j], board, ctx)
@@ -385,6 +421,7 @@ directives.directive('fiveInARow', [
 		initiateMatch: initiateMatch,
 		reload: reload,
 		getClickedField: getClickedField,
+		getMatchReadyToSend: getMatchReadyToSend
 		// drawBoard: drawBoard,
 		// initOptions: initOptions,
 		// resetFields: resetFields,
