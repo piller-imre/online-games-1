@@ -19,10 +19,7 @@ import hu.lev.onlinegames.persist.MatchDao;
 
 @Service
 public class FiveInARowServiceImpl implements FiveInARowService {
-	
-//	@Autowired
-//	private MatchService matchService;
-	
+		
 	@Autowired
 	private MatchDao matchDao;
 
@@ -37,21 +34,50 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public MatchActiveRq applyAction(MatchActiveRq matchRq) {
-		matchRq.getFields()[matchRq.getAction().getX()][matchRq.getAction().getY()].setValue(matchRq.getAction().getValue());
+		System.out.println(
+				"INDEXEK: " + matchRq.getAction().getX() + ", " + matchRq.getAction().getY()
+				+ " ÉRTÉK: " + matchRq.getAction().getValue()
+				);
+		int x = matchRq.getAction().getX();
+		int y = matchRq.getAction().getY();
+		int originalValue = matchRq.getAction().getValue();
+		int newValue = 0;
+		
+		switch (originalValue) {
+		case 0:
+			newValue = matchRq.getActivePlayer();
+			break;
+		case 4:
+			newValue = 0;
+			break;
+		default:
+			break;
+		}
+		
+		matchRq.getFields()[x][y].setValue(newValue);
+		System.out.println("ÚJ ÉRTÉK: " + matchRq.getFields()[matchRq.getAction().getX()][matchRq.getAction().getY()].getValue());
+		
 		return matchRq;
 	}
+	
 
 	@Override
 	public boolean checkWin(FiveInARowField[][] fields, int player, FiveInARowAction action) {
 //		FiveInARowField[][] fields = fieldsObj.getFields();
+		boolean win = false;
 		
 		int startX = action.getX() - 4;			// init min and max indexes, so we check fields in board
 		int startY = action.getY() - 4;
 		int endX = action.getX() + 4;
 		int endY = action.getY() + 4;
+		
+		System.out.println("startX: " + startX);
+		System.out.println("startY: " + startY);
+		System.out.println("endX: " + endX);
+		System.out.println("endY: " + endY);
 		
 		// diagonals first, there is a bigger chance to win this way, save some energy
 		// diagonal from top-left
@@ -66,7 +92,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 			}
 			j++;
 		}
-		if (lengthSoFar >= 5){ return true; }
+		if (lengthSoFar >= 5){ win = true; }
 
 		// diagolal from bottom-left
 		lengthSoFar = 0;
@@ -80,7 +106,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 			}
 			j--;
 		}
-		if (lengthSoFar >= 5){ return true; }
+		if (lengthSoFar >= 5){ win = true; }
 
 		// vertical
 		lengthSoFar = 0;
@@ -93,7 +119,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 				}
 			}
 		}
-		if (lengthSoFar >= 5){ return true; }
+		if (lengthSoFar >= 5){ win = true; }
 
 		// horizontal
 		lengthSoFar = 0;
@@ -106,11 +132,12 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 				}
 			}
 		}
-		if (lengthSoFar >= 5){ return true; }
+		if (lengthSoFar >= 5){ win = true; }
 
 		// no winning found
-		return false;
+		return win;
 	}
+	
 
 	@Override
 	public MatchActive convertMatchRq(MatchActiveRq matchRq) {
@@ -132,9 +159,17 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		return match;
 	}
 
+	
 	@Override
 	public String initFields(int[] options) {
 		FiveInARowField[][] fields = new FiveInARowField[25][25];
+		
+		for (int i = 0; i < fields.length; i++) {
+			fields[i] = new FiveInARowField[25];
+			for (int j = 0; j < fields[i].length; j++) {
+				fields[i][j] = new FiveInARowField();
+			}
+		}
 		
 		if (ArrayUtils.contains(options, 1)){
 			fields = initTraps(fields);
@@ -154,16 +189,17 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		return boardstate;
 	}
 	
+	
 	private FiveInARowField[][] initTraps(FiveInARowField[][] fields){
 		Random rand = new Random();
 		int numOfTraps = 50;
 		int i = 0;
 		int x;
 		int y;
-		
+
 		while (i < numOfTraps) {
-			x = rand.nextInt(26);
-			y = rand.nextInt(26);
+			x = rand.nextInt(25);
+			y = rand.nextInt(25);
 			if(fields[x][y].getValue() != 3 && fields[x][y].getValue() != 4) {
 				fields[x][y].setValue(4);
 				i++;
@@ -171,6 +207,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		}		
 		return fields;
 	}
+	
 	
 	private FiveInARowField[][] initWalls(FiveInARowField[][] fields){
 		Random rand = new Random();
@@ -180,8 +217,8 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		int y;
 		
 		while (i < numOfTraps) {
-			x = rand.nextInt(26);
-			y = rand.nextInt(26);
+			x = rand.nextInt(25);
+			y = rand.nextInt(25);
 			if(fields[x][y].getValue() != 3 && fields[x][y].getValue() != 4) {
 				fields[x][y].setValue(4);
 				i++;
@@ -189,6 +226,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		}
 		return fields;
 	}
+	
 
 	@Override
 	public MatchActive checkAction(int matchId, int turn) {

@@ -78,6 +78,23 @@ public class MatchController {
     @RequestMapping(value = "/match/start", method = RequestMethod.POST)
 	@ResponseBody
 	public MatchActive start(@RequestBody MatchStartRq req) {
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println("BEJUTOTTAM!!!!");
+    	System.out.println(req.toString());
     	MatchActive match = matchService.startMatch(req);
     	return match;
 	}
@@ -87,9 +104,6 @@ public class MatchController {
 	@ResponseBody
 	public MatchActive checkStart(@PathVariable int userId) {
 		MatchActive match = matchService.checkStart(userId);
-		System.out.println("CHECK START:");
-		System.out.println(match.toString());
-		System.out.println(match.getPlayers().toString());
 		return match;
 	}
 

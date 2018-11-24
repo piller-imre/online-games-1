@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.stereotype.Service;
 
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.GameTypeOption;
@@ -13,6 +14,7 @@ import hu.lev.onlinegames.model.MatchWaiting;
 import hu.lev.onlinegames.model.Players;
 import hu.lev.onlinegames.model.User;
 
+@Service
 public class SessionManager {
 
 	private Configuration config;
@@ -33,6 +35,14 @@ public class SessionManager {
 		}
 	}
 	
+	public Configuration getConfig() {
+		return config;
+	}
+
+	public void setConfig(Configuration config) {
+		this.config = config;
+	}
+
 	// functions	
 	public Session getSession() {
 		Session session = null;

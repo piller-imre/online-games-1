@@ -10,6 +10,7 @@ public class ConverterServiceImpl implements ConverterService {
 	public int[] stringToIntArray(String arrayString) {
 		int[] array = null;
 		arrayString = arrayString.substring(1, arrayString.length()-1);
+		arrayString = arrayString.replaceAll("\\s+","");
 		if(arrayString != null) {
 			String[] integerStrings = arrayString.split(","); 
 			array = new int[integerStrings.length]; 

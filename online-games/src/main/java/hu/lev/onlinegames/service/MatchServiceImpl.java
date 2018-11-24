@@ -10,6 +10,7 @@ import hu.lev.onlinegames.model.request.MatchStartRq;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
 import hu.lev.onlinegames.model.response.MatchWaitingResp;
 import hu.lev.onlinegames.persist.MatchDao;
+import hu.lev.onlinegames.persist.MatchDaoImpl;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -20,6 +21,7 @@ public class MatchServiceImpl implements MatchService {
 	@Autowired
 	private FiveInARowService fiveInARowService;
 	
+	@Autowired
 	private ConverterService converterService;
 	
 	public MatchServiceImpl() {
@@ -57,7 +59,11 @@ public class MatchServiceImpl implements MatchService {
 	@Override
 	public MatchActive startMatch(MatchStartRq req) {		
 		MatchActive matchActive = null;
+		
+		System.out.println(matchDao.toString());
+		
 		MatchWaiting matchWaiting = matchDao.getMatchWaiting(req.getMatchId());
+		System.out.println(matchWaiting.toString());
 		int [] options = converterService.stringToIntArray(matchWaiting.getOptions());
 		String initFields = initFields(
 				matchWaiting.getGameTypeId().getGameTypeId(), options);

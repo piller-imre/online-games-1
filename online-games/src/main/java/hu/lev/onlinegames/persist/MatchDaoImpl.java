@@ -166,7 +166,9 @@ public class MatchDaoImpl implements MatchDao {
 			match.setTurn(1);
 			
 			matchId = (int) session.save(match);
-			
+
+			tx.commit();
+			tx = session.beginTransaction();
 			Players players = new Players();
 
 			User acceptingUser = session.load(User.class, acceptingUserId);
@@ -214,7 +216,6 @@ public class MatchDaoImpl implements MatchDao {
 			}
 			
 			tx.commit();
-//			System.out.println("dinnye");
 			session.close();
 			
 		} catch (Exception e) {
@@ -241,11 +242,9 @@ public class MatchDaoImpl implements MatchDao {
 			session.close();
 			
 		} catch (Exception e) {
-			System.out.println("EXCEPTION");
 			match = null;
 			e.printStackTrace();
 		}
-//		System.out.println(match);
 		return match;
 	}
 
@@ -286,8 +285,6 @@ public class MatchDaoImpl implements MatchDao {
 			Session session = sm.getSession();
 			Transaction tx = session.beginTransaction();
 
-//			System.out.println(match.toString());
-			System.out.println("NEW TURN: " + match.getTurn());
 			session.update(match);
 			
 			tx.commit();
@@ -316,7 +313,6 @@ public class MatchDaoImpl implements MatchDao {
 						
 			if(result != null) {
 				isAction = true;
-				System.out.println("IS ACTION: " + isAction);
 			}
 			
 			tx.commit();

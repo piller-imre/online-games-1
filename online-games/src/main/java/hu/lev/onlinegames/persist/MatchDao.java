@@ -21,4 +21,5 @@ public interface MatchDao {
 
 	public void updateMatchActive(MatchActive match);
 	public boolean checkAction(int matchId, int turn);
+	public String toString();
 }

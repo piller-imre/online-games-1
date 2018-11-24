@@ -27,18 +27,21 @@ public class FiveInARowController {
     @RequestMapping(value = "/fiveinarow/action", method = RequestMethod.POST)
 	@ResponseBody
 	public boolean action(@RequestBody MatchActiveRq matchRq) {
+    	
     	if(fiveInARowService.validateAction(matchRq.getAction(), matchRq.getFields(), matchRq.getOptions())) {
+
+    		matchRq = fiveInARowService.applyAction(matchRq);
     		boolean win = fiveInARowService.checkWin(matchRq.getFields(), matchRq.getActivePlayer(), matchRq.getAction());
-        	matchRq.setCheckedWin(win);
+        	
+        	System.out.println("");
         	System.out.println("WIN: " + win);
-        	matchRq = fiveInARowService.applyAction(matchRq);
+        	System.out.println("");
+        	
+        	matchRq.setCheckedWin(win);
         	MatchActive matchActive = fiveInARowService.convertMatchRq(matchRq);
         	matchActive.incrementTurn();
-//        	System.out.println("NEW TURN: " + matchActive.getTurn());
-//        	System.out.println("ACTIVE PLAYER before: " + matchActive.getPlayers().getActivePlayer());
         	matchActive.setActivePlayer();
 
-//        	System.out.println("ACTIVE PLAYER after: " + matchActive.getPlayers().getActivePlayer());
         	matchService.updateMatchActive(matchActive);
         	return true;
     	}
@@ -46,16 +49,12 @@ public class FiveInARowController {
 	}
 
     // CHECK ACTION
-    @RequestMapping(
-    		value = "/fiveinarow/checkaction", 
-    		method = RequestMethod.GET)
+    @RequestMapping(value = "/fiveinarow/checkaction", method = RequestMethod.GET)
 	@ResponseBody
 	public MatchActive checkAction(
         @RequestParam(value = "matchId") int matchId,
         @RequestParam(value = "turn") int turn
 			) {
-        System.out.println("MATCH ID: " + matchId);
-        System.out.println("TURN: " + turn);
     	
     	MatchActive match =  fiveInARowService.checkAction(matchId, turn);
     	

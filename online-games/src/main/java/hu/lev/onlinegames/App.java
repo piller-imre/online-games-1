@@ -1,55 +1,111 @@
 package hu.lev.onlinegames;
 
-import java.util.Random;
-
-import org.apache.commons.lang3.ArrayUtils;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import hu.lev.onlinegames.manager.SessionManager;
 import hu.lev.onlinegames.model.MatchActive;
-import hu.lev.onlinegames.persist.MatchDaoImpl;
-import hu.lev.onlinegames.service.FiveInARowService;
-import hu.lev.onlinegames.service.FiveInARowServiceImpl;
+import hu.lev.onlinegames.model.request.MatchStartRq;
+import hu.lev.onlinegames.service.MatchService;
+import hu.lev.onlinegames.service.MatchServiceImpl;
 
 public class App {
 	public static void main(String[] args) {
-		
-		int matchId = 3;
-		int turn = 24;
-		MatchDaoImpl service = new MatchDaoImpl();
 
-		MatchActive match = null;
-		SessionManager sm = new SessionManager();
-		
-		try {
-			Session session = sm.getSession();
-			Transaction tx = session.beginTransaction();
+		MatchStartRq req = new MatchStartRq(6, 2);
+		MatchServiceImpl serv = new MatchServiceImpl();
+//		MatchDao d = new MatchDaoImpl();
+//		MatchWaiting ma = d.getMatchWaiting(req.getMatchId());
 
-			Query q = session.createSQLQuery("select * from match_active where id = :a and turn > :b");
-			q.setParameter("a", matchId);
-			q.setParameter("b", turn);
-			Object[] result = (Object[]) q.uniqueResult();
-			
-			if(result == null) {
-				System.out.println("match NULL");
-			}
-			
-			if(result != null) {
-				match = service.getMatchActive(matchId);
-				System.out.println(match.toString());
-			}
-			
-			tx.commit();
-			session.close();
-			
-		} catch (Exception e) {
-			match = null;
-			e.printStackTrace();
-		}
-		System.out.println(match.toString());
-		
+		MatchActive ma = serv.startMatch(req);
+
+//		System.out.println(ma.toString());
+
+//		boolean win = false;
+//		int player = 2; 
+//		FiveInARowAction action = new FiveInARowAction(4,4,2);
+//		FiveInARowField[][] fields = new FiveInARowField[25][25];
+//		
+//		for (int i = 0; i < fields.length; i++) {
+//			fields[i] = new FiveInARowField[25];
+//			for (int j = 0; j < fields[i].length; j++) {
+//				fields[i][j] = new FiveInARowField();
+//			}
+//		}
+//		
+//		fields[4][2].setValue(2);
+//		fields[4][3].setValue(2);
+//		fields[4][4].setValue(2);
+//		fields[4][5].setValue(2);
+//		fields[4][6].setValue(2);
+//		
+//
+//		int startX = action.getX() - 4;			// init min and max indexes, so we check fields in board
+//		int startY = action.getY() - 4;
+//		int endX = action.getX() + 4;
+//		int endY = action.getY() + 4;
+//		
+//		System.out.println("startX: " + startX);
+//		System.out.println("startY: " + startY);
+//		System.out.println("endX: " + endX);
+//		System.out.println("endY: " + endY);
+//		
+//		// diagonals first, there is a bigger chance to win this way, save some energy
+//		// diagonal from top-left
+//		int lengthSoFar = 0;
+//		for(int i = startX, j = startY; i<=endX && j<=endY; i++){
+//			if (i >= 0 && i < fields.length && j >= 0 && j < fields[0].length){
+//				if (fields[i][j].getValue() == player){
+//					lengthSoFar++;
+//				} else if (lengthSoFar < 5){
+//					lengthSoFar = 0;
+//				}
+//			}
+//			j++;
+//		}
+//		if (lengthSoFar >= 5){ win = true; }
+//
+//		// diagolal from bottom-left
+//		lengthSoFar = 0;
+//		for(int i = startX, j = endY; i<=endX && j>=startY; i++){
+//			if (i >= 0 && i < fields.length && j >= 0 && j < fields[0].length){
+//				if (fields[i][j].getValue() == player){
+//					lengthSoFar++;
+//				} else if (lengthSoFar < 5){
+//					lengthSoFar = 0;
+//				}
+//			}
+//			j--;
+//		}
+//		if (lengthSoFar >= 5){ win = true; }
+//
+//		// vertical
+//		lengthSoFar = 0;
+//		for(int j=startY; j<=endY ; j++){
+//			if (j >= 0 && j < fields[0].length){
+//				System.out.println(fields[action.getX()][j].getValue());
+//				if (fields[action.getX()][j].getValue() == player){
+//					lengthSoFar++;
+//				} else if (lengthSoFar < 5){
+//					lengthSoFar = 0;
+//				}
+//			}
+//		}
+//		if (lengthSoFar >= 5){ win = true; }
+//
+//		// horizontal
+//		lengthSoFar = 0;
+//		for(int i=startX; i<=endX ; i++){
+//			if (i >= 0 && i < fields.length){
+//				if (fields[i][action.getY()].getValue() == player){
+//					lengthSoFar++;
+//				} else if (lengthSoFar < 5){
+//					lengthSoFar = 0;
+//				}
+//			}
+//		}
+//		if (lengthSoFar >= 5){ win = true; }
+//
+//		System.out.println(win);
+//		// no winning found
+//		win = false;
+
 	}
 }
 
@@ -69,8 +125,6 @@ public class App {
 //
 //tx.commit();
 //session.close();
-
-
 
 //Trying to save user to DB, not worked in app mode
 //AuthService authService = new AuthServiceImpl();
@@ -101,7 +155,6 @@ public class App {
 //		success = true;
 //	}
 //}
-
 
 //save new match
 //GameType[] gameTypes = null;
@@ -143,7 +196,6 @@ public class App {
 //} catch (Exception e) {
 //	e.printStackTrace();
 //}
-
 
 //insert new match waiting
 //int[] o = {1,2,3};
@@ -189,7 +241,6 @@ public class App {
 //	e.printStackTrace();
 //}
 
-
 //get waiting matches
 // DONT FORGET TO SET TYPES AND NAMES as newMatch became matchWaiting
 //NewMatch[] newMatches = null;
@@ -226,10 +277,6 @@ public class App {
 //} catch (Exception e) {
 //	e.printStackTrace();
 //}
-
-
-
-
 
 //public int createMatchActive(int acceptingUserId, MatchWaiting match);
 //MatchDao dao = new MatchDaoImpl();
@@ -280,17 +327,3 @@ public class App {
 //	matchId = 0;
 //	e.printStackTrace();
 //}
-
-
-
-
-
-
-
-
-
-
-
-
-
-

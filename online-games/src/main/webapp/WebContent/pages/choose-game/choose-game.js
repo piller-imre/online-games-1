@@ -59,7 +59,6 @@ controllers.controller('ChooseGameController', [
 				console.log(baseUrl + '/match/start/' + $localStorage.currentUser.userid);
 				$http.get(baseUrl + '/match/start/' + $localStorage.currentUser.userid)
 				.then(function(result){
-					console.log("is in game: " + result.data);
 					if(result.data){
 						isInGame = true;
 						$state.go('game-play', {match: result.data});
@@ -77,7 +76,6 @@ controllers.controller('ChooseGameController', [
 					vm.newMatch.options.push(op.id);
 				}
 			});
-			// console.log(vm.newMatch);
 
 			$http.post(baseUrl + "/match", vm.newMatch)
 			.then(function(result){
@@ -161,15 +159,20 @@ controllers.controller('ChooseGameController', [
 		}
 
 		vm.acceptChallange = function() {
-			var data = {
-				userid: $localStorage.currentUser.userid,
-				matchId: vm.selectedMatchId
-			};
+			// var data = {
+			// 		userid: $localStorage.currentUser.userid,
+			// 		matchId: vm.selectedMatchId
+			// };
 
-			$http.post(baseUrl + '/match/start', data)
+			$http.post(baseUrl + '/match/start', {
+				params : {
+					userid: $localStorage.currentUser.userid,
+					matchId: vm.selectedMatchId
+				}
+			})
 			.then(function(result){
 				var match = result.data;
-				if(match == null){
+				if(match == null || match == ""){
 					vm.startErrorMsg = "Nem sikerült, próbálkozz újra!";
 					vm.startError = true;
 				} else {
