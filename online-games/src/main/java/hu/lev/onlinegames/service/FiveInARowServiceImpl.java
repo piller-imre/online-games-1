@@ -74,6 +74,8 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		int endX = action.getX() + 4;
 		int endY = action.getY() + 4;
 		
+		System.out.println("FIELD LENGTH:" + fields.length);
+		System.out.println("FIELD LENGTH[0]:" + fields[0].length);
 		System.out.println("startX: " + startX);
 		System.out.println("startY: " + startY);
 		System.out.println("endX: " + endX);

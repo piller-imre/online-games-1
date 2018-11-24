@@ -11,6 +11,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Expression;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import hu.lev.onlinegames.manager.SessionManager;
@@ -21,12 +22,17 @@ import hu.lev.onlinegames.model.User;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-	
+
+	@Autowired
 	SessionManager sm;
 	
 	public UserDaoImpl() {
 		super();
-		this.sm = new SessionManager();
+//		this.sm = new SessionManager();
+
+		System.out.println("");
+		System.out.println("NEW USER DAO");
+		System.out.println("");
 	}
 
 //	@Override
@@ -44,7 +50,7 @@ public class UserDaoImpl implements UserDao {
 			id = (int) q.uniqueResult();
 			
 			tx.commit();
-			session.close();
+			// session.close();
 			
 		} catch (NullPointerException e) {
 			id = 0;
@@ -68,7 +74,7 @@ public class UserDaoImpl implements UserDao {
 			id = (int) session.save(user);
 			
 			tx.commit();
-			session.close();
+			// session.close();
 		} catch (PersistenceException e) {
 			id = 0;
 //			e.printStackTrace();

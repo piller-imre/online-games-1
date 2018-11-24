@@ -147,7 +147,7 @@ directives.directive('fiveInARow', [
 							stopcheckAction();
 						}
 					});
-				}, 5000, false);
+				}, 1000, false);
 			}
 
 			function stopcheckAction(){
@@ -158,7 +158,7 @@ directives.directive('fiveInARow', [
     }
 }])
 
-.factory('FiveInARowManager', ['$timeout', '$localStorage', function($timeout, $localStorage){
+.factory('FiveInARowManager', ['$timeout', '$localStorage', '$state', function($timeout, $localStorage, $state){
 
 	function initiateMatch(initMatch, match, board, ctx){
 		
@@ -229,7 +229,7 @@ directives.directive('fiveInARow', [
 				$localStorage.currentUser.userid == match.player2 ? winMsg = "Gratul�lok, nyert�l!" : winMsg = "Sajnos vesztett�l!";
 			}
 			alert(winMsg);
-			$state.go('game-play');
+			$state.go('welcome');
 		}
 
 		return match;

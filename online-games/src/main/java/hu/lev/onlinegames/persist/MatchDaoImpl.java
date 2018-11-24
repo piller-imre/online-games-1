@@ -9,6 +9,7 @@ import javax.persistence.PersistenceException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import hu.lev.onlinegames.manager.SessionManager;
@@ -22,11 +23,12 @@ import hu.lev.onlinegames.model.request.MatchWaitingRq;
 @Repository
 public class MatchDaoImpl implements MatchDao {
 
+	@Autowired
 	SessionManager sm;
+	
 	
 	public MatchDaoImpl() {
 		super();
-		this.sm = new SessionManager();
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class MatchDaoImpl implements MatchDao {
 		GameType[] gameTypes = null;
 		
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 						
 				Query q = session.createQuery("from GameType");
@@ -45,7 +47,7 @@ public class MatchDaoImpl implements MatchDao {
 				objects.toArray(gameTypes);
 			
 			tx.commit();
-			session.close();
+			// session.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,7 +59,7 @@ public class MatchDaoImpl implements MatchDao {
 		int id = 0;
 
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();	
 				
 				GameType gameType = session.load(GameType.class, req.getGameTypeId());
@@ -68,7 +70,7 @@ public class MatchDaoImpl implements MatchDao {
 				
 				id = (int) session.save(match);
 			tx.commit();
-			session.close();
+			 session.close();
 		} catch (PersistenceException e) {
 			id = -1;
 			e.printStackTrace();
@@ -84,7 +86,7 @@ public class MatchDaoImpl implements MatchDao {
 		MatchWaiting[] matchesWaiting = null;
 		
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 						
 				Query q = session.createQuery("from MatchWaiting");
@@ -94,7 +96,7 @@ public class MatchDaoImpl implements MatchDao {
 				objects.toArray(matchesWaiting);
 			
 			tx.commit();
-			session.close();
+			 session.close();
 									
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,7 +109,7 @@ public class MatchDaoImpl implements MatchDao {
 		boolean success = false;
 		
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 				
 			MatchWaiting match = new MatchWaiting();
@@ -115,7 +117,7 @@ public class MatchDaoImpl implements MatchDao {
 			session.remove(match);
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 			success = true;
 		} catch (Exception e) {
@@ -131,13 +133,13 @@ public class MatchDaoImpl implements MatchDao {
 		MatchWaiting match = null;
 		
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 			
 			match = session.get(MatchWaiting.class, matchId);
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,10 +155,9 @@ public class MatchDaoImpl implements MatchDao {
 		int matchId = 0;
 		Random rand = new Random();
 		int mixer = rand.nextInt(2) + 1;
-		SessionManager sm = new SessionManager();
 
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 
 			MatchActive match = new MatchActive();
@@ -187,7 +188,7 @@ public class MatchDaoImpl implements MatchDao {
 			session.save(players);
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 		} catch (Exception e) {
 			matchId = 0;
@@ -201,10 +202,9 @@ public class MatchDaoImpl implements MatchDao {
 	public MatchActive checkStart(int userId) {
 
 		MatchActive match = null;
-		SessionManager sm = new SessionManager();
 		
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 
 			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
@@ -216,7 +216,7 @@ public class MatchDaoImpl implements MatchDao {
 			}
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 		} catch (Exception e) {
 			match = null;
@@ -230,20 +230,27 @@ public class MatchDaoImpl implements MatchDao {
 	public MatchActive getMatchActive(int matchId) {
 
 		MatchActive match = null;
-		SessionManager sm = new SessionManager();
 		
+		Transaction tx = null;
 		try {
-			Session session = sm.getSession();
-			Transaction tx = session.beginTransaction();
+			Session session = sm.getNewSession();
+			
+
+			System.out.println("");
+			System.out.println("TX STARTED!!!");
+			System.out.println("");
+			
+			tx = session.beginTransaction();
 			
 			match = session.get(MatchActive.class, matchId);
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 		} catch (Exception e) {
 			match = null;
 			e.printStackTrace();
+			tx.rollback();
 		}
 		return match;
 	}
@@ -253,10 +260,9 @@ public class MatchDaoImpl implements MatchDao {
 	public int getMatchActiveId(int userId) {
 		
 		int matchId = 0;
-		SessionManager sm = new SessionManager();
 		
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 
 			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
@@ -268,7 +274,7 @@ public class MatchDaoImpl implements MatchDao {
 			}
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -278,17 +284,15 @@ public class MatchDaoImpl implements MatchDao {
 
 	@Override
 	public void updateMatchActive(MatchActive match) {
-		
-		SessionManager sm = new SessionManager();
-		
+				
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 
 			session.update(match);
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -300,10 +304,9 @@ public class MatchDaoImpl implements MatchDao {
 	public boolean checkAction(int matchId, int turn) {
 
 		boolean isAction = false;
-		SessionManager sm = new SessionManager();
 		
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 
 			Query q = session.createSQLQuery("select * from match_active where id = :a and turn > :b");
@@ -316,7 +319,7 @@ public class MatchDaoImpl implements MatchDao {
 			}
 			
 			tx.commit();
-			session.close();
+			 session.close();
 			
 		} catch (Exception e) {
 			isAction = false;

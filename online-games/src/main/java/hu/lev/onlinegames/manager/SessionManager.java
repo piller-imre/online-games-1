@@ -18,11 +18,17 @@ import hu.lev.onlinegames.model.User;
 public class SessionManager {
 
 	private Configuration config;
+	ServiceRegistry reg;
+	SessionFactory sf;
+	private Session session;
 
 	// constructror
 	public SessionManager() {
 		try {
-			config = new Configuration()
+			System.out.println("");
+			System.out.println("NEW SESSION MANAGER");
+			System.out.println("");
+			this.config = new Configuration()
 					.configure()
 					.addAnnotatedClass(GameType.class)
 					.addAnnotatedClass(GameTypeOption.class)
@@ -30,6 +36,13 @@ public class SessionManager {
 					.addAnnotatedClass(MatchWaiting.class)
 					.addAnnotatedClass(MatchActive.class)
 					.addAnnotatedClass(Players.class);
+
+			this.reg = new StandardServiceRegistryBuilder()
+					.applySettings(this.config.getProperties())
+					.build();			
+			this.sf = this.config.buildSessionFactory(this.reg);
+		
+			this.session = sf.openSession();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -45,17 +58,24 @@ public class SessionManager {
 
 	// functions	
 	public Session getSession() {
+//		try {
+//			if(this.session == null) {
+//				this.session = sf.openSession();
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		return this.session;
+	}
+
+	public Session getNewSession() {
 		Session session = null;
 		try {
-			ServiceRegistry reg = new StandardServiceRegistryBuilder()
-					.applySettings(this.config.getProperties())
-					.build();			
-			SessionFactory sf = this.config.buildSessionFactory(reg);
-		
 			session = sf.openSession();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return session;
 	}
+	
 }
