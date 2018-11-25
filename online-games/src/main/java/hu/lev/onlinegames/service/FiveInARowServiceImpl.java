@@ -74,12 +74,10 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		int endX = action.getX() + 4;
 		int endY = action.getY() + 4;
 		
-		System.out.println("FIELD LENGTH:" + fields.length);
-		System.out.println("FIELD LENGTH[0]:" + fields[0].length);
-		System.out.println("startX: " + startX);
-		System.out.println("startY: " + startY);
-		System.out.println("endX: " + endX);
-		System.out.println("endY: " + endY);
+//		System.out.println("startX: " + startX);
+//		System.out.println("startY: " + startY);
+//		System.out.println("endX: " + endX);
+//		System.out.println("endY: " + endY);
 		
 		// diagonals first, there is a bigger chance to win this way, save some energy
 		// diagonal from top-left
@@ -213,16 +211,16 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 	
 	private FiveInARowField[][] initWalls(FiveInARowField[][] fields){
 		Random rand = new Random();
-		int numOfTraps = 50;
+		int numOfWalls = 50;
 		int i = 0;
 		int x;
 		int y;
 		
-		while (i < numOfTraps) {
+		while (i < numOfWalls) {
 			x = rand.nextInt(25);
 			y = rand.nextInt(25);
 			if(fields[x][y].getValue() != 3 && fields[x][y].getValue() != 4) {
-				fields[x][y].setValue(4);
+				fields[x][y].setValue(3);
 				i++;
 			}
 		}

@@ -59,12 +59,12 @@ public class MatchServiceImpl implements MatchService {
 	@Override
 	public MatchActive startMatch(MatchStartRq req) {		
 		MatchActive matchActive = null;
-		
-		System.out.println(matchDao.toString());
-		
 		MatchWaiting matchWaiting = matchDao.getMatchWaiting(req.getMatchId());
-		System.out.println(matchWaiting.toString());
 		int [] options = converterService.stringToIntArray(matchWaiting.getOptions());
+		for (int i : options) {
+			System.out.println(i);
+		}
+		
 		String initFields = initFields(
 				matchWaiting.getGameTypeId().getGameTypeId(), options);
 		
@@ -80,8 +80,14 @@ public class MatchServiceImpl implements MatchService {
 
 	@Override
 	public MatchActive checkStart(int userId) {
+		MatchActive match = null;
 		int matchId = matchDao.getMatchActiveId(userId);
-		MatchActive match = matchDao.getMatchActive(matchId);
+		if(matchDao.isWinner(matchId)){
+			matchDao.deleteMatchActive(matchId);
+		} else {
+			match = matchDao.getMatchActive(matchId);
+		}
+		
 		return match;
 	}
 

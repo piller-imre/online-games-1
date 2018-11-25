@@ -28,11 +28,6 @@ public class UserDaoImpl implements UserDao {
 	
 	public UserDaoImpl() {
 		super();
-//		this.sm = new SessionManager();
-
-		System.out.println("");
-		System.out.println("NEW USER DAO");
-		System.out.println("");
 	}
 
 //	@Override

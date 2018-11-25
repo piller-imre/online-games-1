@@ -87,12 +87,10 @@ directives.directive('fiveInARow', [
 			// Add event listener for 'click' events.
 			elem.addEventListener('click', function(event) {
 				if(!vm.disable){
-
 					vm.disable = true;
 
 					var x = event.pageX - elem.offsetLeft;	// get canvas x,	elem.offsetLeft - canvas origo x
 					var y = event.pageY - elem.offsetTop;	// get canvas y		elem.offsetTop - canvas origo y
-
 					var field = man.getClickedField(vm.board, x, y);						// get clicked field by index
 
 					if(field != null){
@@ -118,6 +116,8 @@ directives.directive('fiveInARow', [
 									vm.disable = false;
 								}
 							});
+						}else {
+							vm.disable = false;
 						}
 						
 					}
@@ -161,6 +161,18 @@ directives.directive('fiveInARow', [
 .factory('FiveInARowManager', ['$timeout', '$localStorage', '$state', function($timeout, $localStorage, $state){
 
 	function initiateMatch(initMatch, match, board, ctx){
+
+		if(typeof initMatch.options == "string"){
+			// convert string to int array
+			if(initMatch.options != null){
+				var op = initMatch.options;
+				op = op.substring(1, op.length-1);
+				op = op.split(',').map(function(item) {
+					return parseInt(item, 10);
+				});
+				initMatch.options = op;
+			}
+		}
 		
 		var tempFields = resetFields(board, 0);
 		initMatch.fields = JSON.parse(initMatch.boardstate);
@@ -224,9 +236,9 @@ directives.directive('fiveInARow', [
 
 		if(match.win && match.win > 0){
 			if(match.win == 1){
-				$localStorage.currentUser.userid == match.player1 ? winMsg = "Gratulï¿½lok, nyertï¿½l!" : winMsg = "Sajnos vesztettï¿½l!";
+				$localStorage.currentUser.userid == match.players.player1.id ? winMsg = "Gratulálok, nyertél!" : winMsg = "Sajnos vesztettél!";
 			} else {
-				$localStorage.currentUser.userid == match.player2 ? winMsg = "Gratulï¿½lok, nyertï¿½l!" : winMsg = "Sajnos vesztettï¿½l!";
+				$localStorage.currentUser.userid == match.players.player2.id ? winMsg = "Gratulálok, nyertél!" : winMsg = "Sajnos vesztettél!";
 			}
 			alert(winMsg);
 			$state.go('welcome');
@@ -291,17 +303,6 @@ directives.directive('fiveInARow', [
 			}
 		}
 	};
-
-	// function initOptions(match, board, ctx){
-	// 	if (angular.isDefined(match.options) && match.options != null){
-	// 		if (match.options.indexOf(1) != -1){
-	// 			initTraps(match.fields);
-	// 		}
-	// 		if (match.options.indexOf(2) != -1){
-	// 			initWalls(match.fields, board, ctx);
-	// 		}
-	// 	}
-	// }
 	
 	function resetFields( board, defaultValue){
 		var fields = [];
@@ -360,7 +361,7 @@ directives.directive('fiveInARow', [
 		ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
 
 	}
-
+/*
 	// function initWalls(fields, board, ctx){
 	// 	var numOfWalls = 50;
 	// 	var x = 0;
@@ -398,7 +399,7 @@ directives.directive('fiveInARow', [
 	// 		}
 	// 	}
 	// }
-
+*/
 	function activateTrap(field, board, ctx){
 		// change field value
 		field.value = 3;
@@ -426,7 +427,6 @@ directives.directive('fiveInARow', [
 		activateTrap: activateTrap,
 		drawCharacter: drawCharacter,
 		// drawBoard: drawBoard,
-		// initOptions: initOptions,
 		// resetFields: resetFields,
 		// isClickInBoard: isClickInBoard,
 		// checkWin: checkWin,

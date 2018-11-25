@@ -23,8 +23,9 @@ public class MatchActive {
 	@Column(name = "id")
 	private int id;
 	
-	@OneToOne(fetch = FetchType.EAGER, mappedBy="match", cascade=CascadeType.ALL)
-//	@JsonManagedReference
+	// Warning: need to update manually! .PERSIST type was excluded, because of save problems
+	@OneToOne(fetch = FetchType.EAGER, mappedBy="match", 
+			cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE})
 	private Players players;
 
 	@ManyToOne
@@ -41,7 +42,6 @@ public class MatchActive {
 	@Column(name="options")
 	private String options;
 	
-	@Transient
 	private int win;
 	
 	@Column(name="action")

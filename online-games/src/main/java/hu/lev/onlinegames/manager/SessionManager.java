@@ -25,9 +25,6 @@ public class SessionManager {
 	// constructror
 	public SessionManager() {
 		try {
-			System.out.println("");
-			System.out.println("NEW SESSION MANAGER");
-			System.out.println("");
 			this.config = new Configuration()
 					.configure()
 					.addAnnotatedClass(GameType.class)

@@ -2,6 +2,7 @@ package hu.lev.onlinegames.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -19,7 +19,7 @@ public class Players implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@OneToOne
+	@OneToOne()
 	@JoinColumn(name="match_fk")
 //	@JsonIgnore
 	private MatchActive match;
@@ -50,10 +50,27 @@ public class Players implements Serializable {
 	// toString
 	@Override
 	public String toString() {
-		return "Players [player1=" + player1.getUsername() 
-				+ ", player2=" + player2.getUsername() 
-				+ ", activePlayer=" + activePlayer 
-				+ ", matchId=" + match.getId() + "]";
+		String s = "Players [";
+		
+		if(player1 != null) {
+			s += "player1=" + player1.getUsername();
+		}
+
+		if(player1 != null) {
+			s += ", player2=" + player2.getUsername() ;
+		}
+
+		if(player1 != null) {
+			s += ", activePlayer=" + activePlayer;
+		}
+
+		if(player1 != null) {
+			s += ", matchId=" + match.getId();
+		}
+		
+		s +=  "]";
+		
+		return s;
 	}
 	
 	// getters and setters	

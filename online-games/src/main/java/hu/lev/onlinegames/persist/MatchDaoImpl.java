@@ -126,7 +126,6 @@ public class MatchDaoImpl implements MatchDao {
 		return success;
 	}
 
-	
 	@Override
 	public MatchWaiting getMatchWaiting(int matchId) {
 		
@@ -148,7 +147,6 @@ public class MatchDaoImpl implements MatchDao {
 		return match;
 	}
 	
-
 	@Override
 	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting, String fields) {
 
@@ -156,6 +154,8 @@ public class MatchDaoImpl implements MatchDao {
 		Random rand = new Random();
 		int mixer = rand.nextInt(2) + 1;
 
+		System.out.println("");
+		System.out.println("DAO");
 		try {
 			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
@@ -168,6 +168,7 @@ public class MatchDaoImpl implements MatchDao {
 			
 			matchId = (int) session.save(match);
 
+			System.out.println("new matchActive id: " + matchId);
 			tx.commit();
 			tx = session.beginTransaction();
 			Players players = new Players();
@@ -198,9 +199,9 @@ public class MatchDaoImpl implements MatchDao {
 		return matchId;
 	}
 
+	/*
 	@Override
 	public MatchActive checkStart(int userId) {
-
 		MatchActive match = null;
 		
 		try {
@@ -213,6 +214,14 @@ public class MatchDaoImpl implements MatchDao {
 			
 			if(result != null) {
 				match = getMatchActive((int)result[3]);
+				
+				q = session.createSQLQuery("select * from match_active where id = :a and win > 0");
+				q.setParameter("a", match);
+				result = (Object[]) q.uniqueResult();
+				
+				if(result != null) {
+					deleteMatchActive((int)result[6]);
+				}
 			}
 			
 			tx.commit();
@@ -225,7 +234,8 @@ public class MatchDaoImpl implements MatchDao {
 
 		return match;
 	}
-
+*/
+	
 	@Override
 	public MatchActive getMatchActive(int matchId) {
 
@@ -234,12 +244,6 @@ public class MatchDaoImpl implements MatchDao {
 		Transaction tx = null;
 		try {
 			Session session = sm.getNewSession();
-			
-
-			System.out.println("");
-			System.out.println("TX STARTED!!!");
-			System.out.println("");
-			
 			tx = session.beginTransaction();
 			
 			match = session.get(MatchActive.class, matchId);
@@ -255,7 +259,6 @@ public class MatchDaoImpl implements MatchDao {
 		return match;
 	}
 
-	
 	@Override
 	public int getMatchActiveId(int userId) {
 		
@@ -290,6 +293,7 @@ public class MatchDaoImpl implements MatchDao {
 			Transaction tx = session.beginTransaction();
 
 			session.update(match);
+			session.update(match.getPlayers());
 			
 			tx.commit();
 			 session.close();
@@ -299,7 +303,6 @@ public class MatchDaoImpl implements MatchDao {
 		}
 	}
 
-	
 	@Override
 	public boolean checkAction(int matchId, int turn) {
 
@@ -309,7 +312,7 @@ public class MatchDaoImpl implements MatchDao {
 			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 
-			Query q = session.createSQLQuery("select * from match_active where id = :a and turn > :b");
+			Query q = session.createSQLQuery("select * from match_active where id = :a and (turn > :b || win > 0)");
 			q.setParameter("a", matchId);
 			q.setParameter("b", turn);
 			Object[] result = (Object[]) q.uniqueResult();
@@ -329,4 +332,58 @@ public class MatchDaoImpl implements MatchDao {
 		return isAction;
 	}
 
+	
+	@Override
+	public boolean deleteMatchActive(int id) {
+		boolean success = false;
+		
+		try {
+			Session session = sm.getNewSession();
+			Transaction tx = session.beginTransaction();
+			
+			Players players = new Players();
+			Query q = session.createSQLQuery("delete from match_players where match_fk = :a");
+			q.setParameter("a", id);
+			q.executeUpdate();
+			
+			MatchActive match = new MatchActive();
+			match.setId(id);
+			session.remove(match);
+			
+			tx.commit();
+			 session.close();
+			
+			success = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return success;
+	}
+
+	@Override
+	public boolean isWinner(int matchId) {
+		boolean isWinner = false;
+		try {
+			Session session = sm.getNewSession();
+			Transaction tx = session.beginTransaction();
+				
+			Query q = session.createSQLQuery("select * from match_active where id = :a and win > 0");
+			q.setParameter("a", matchId);
+			Object[] result = (Object[]) q.uniqueResult();
+			
+			if(result != null) {
+				isWinner = true;
+				System.out.println("");
+				System.out.println("VAN NYERTES");
+			}
+			tx.commit();
+			session.close();
+			
+		} catch (Exception e) {
+			isWinner = false;
+			e.printStackTrace();
+		}
+		
+		return isWinner;
+	}
 }

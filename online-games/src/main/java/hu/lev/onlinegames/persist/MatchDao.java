@@ -17,9 +17,10 @@ public interface MatchDao {
 	public int getMatchActiveId(int userId);
 	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting, String fields);
 	public MatchActive getMatchActive(int id);
-	public MatchActive checkStart(int userId);
+//	public MatchActive checkStart(int userId);
 
 	public void updateMatchActive(MatchActive match);
 	public boolean checkAction(int matchId, int turn);
-	public String toString();
+	public boolean deleteMatchActive(int id);
+	public boolean isWinner(int matchId);
 }
