@@ -5,12 +5,13 @@ import org.springframework.stereotype.Service;
 
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.MatchActive;
+import hu.lev.onlinegames.model.MatchDone;
 import hu.lev.onlinegames.model.MatchWaiting;
+import hu.lev.onlinegames.model.User;
 import hu.lev.onlinegames.model.request.MatchStartRq;
 import hu.lev.onlinegames.model.request.MatchWaitingRq;
 import hu.lev.onlinegames.model.response.MatchWaitingResp;
 import hu.lev.onlinegames.persist.MatchDao;
-import hu.lev.onlinegames.persist.MatchDaoImpl;
 
 @Service
 public class MatchServiceImpl implements MatchService {
@@ -69,7 +70,7 @@ public class MatchServiceImpl implements MatchService {
 				matchWaiting.getGameTypeId().getGameTypeId(), options);
 		
 		if(matchWaiting != null) {
-			int id = matchDao.createMatchActive(req.getUserid(), matchWaiting, initFields);
+			int id = matchDao.createAndInsertMatchActive(req.getUserid(), matchWaiting, initFields);
 			if(id > 0) {
 				matchActive = matchDao.getMatchActive(id);
 				matchDao.deleteMatchWaiting(req.getMatchId());
@@ -108,5 +109,37 @@ public class MatchServiceImpl implements MatchService {
 			break;
 		}
 		return fields;
+	}
+
+	
+	@Override
+	public void saveStats(MatchActive matchActive) {
+		boolean player1Win = false;
+		if(matchActive.getWin() == 1) {
+			player1Win = true;
+		}
+		
+		User player1 = matchActive.getPlayers().getPlayer1();
+		User player2 = matchActive.getPlayers().getPlayer2();
+		GameType gameType = matchActive.getGameType();
+
+		// stats for player 1			
+		MatchDone matchDone = matchDao.getMatchDone(gameType, player1);
+		if(matchDone == null) {
+			matchDone = matchDao.createMatchDone(gameType, player1, player1Win);
+			matchDao.insertMatchDone(matchDone);
+		} else {
+			matchDao.updateMatchDone(matchDone, player1Win);
+		}
+			
+		// stats for player 2
+		matchDone = matchDao.getMatchDone(gameType, player2);
+		if(matchDone == null) {
+			matchDone = matchDao.createMatchDone(gameType, player2, !player1Win);
+			matchDao.insertMatchDone(matchDone);
+		} else {
+			matchDao.updateMatchDone(matchDone, !player1Win);
+		}
+			
 	}
 }

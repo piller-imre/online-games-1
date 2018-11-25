@@ -12,8 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hu.lev.onlinegames.model.MatchActive;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
 import hu.lev.onlinegames.model.fiveinarow.FiveInARowField;
-import hu.lev.onlinegames.model.fiveinarow.FiveInARowFields;
-import hu.lev.onlinegames.model.request.FiveInARowCheckActionRq;
 import hu.lev.onlinegames.model.request.MatchActiveRq;
 import hu.lev.onlinegames.persist.MatchDao;
 

@@ -42,6 +42,10 @@ public class User {
 	@JsonIgnore
 	private Players player2;
 
+	@OneToOne(fetch = FetchType.EAGER, mappedBy="player")
+	@JsonIgnore
+	private MatchDone matchDone;
+
 	// constructors
 	public User() {}
 	
@@ -104,6 +108,30 @@ public class User {
 
 	public void setNewMatch(Set<MatchWaiting> newMatch) {
 		this.newMatch = newMatch;
+	}
+
+	public Players getPlayer1() {
+		return player1;
+	}
+
+	public void setPlayer1(Players player1) {
+		this.player1 = player1;
+	}
+
+	public Players getPlayer2() {
+		return player2;
+	}
+
+	public void setPlayer2(Players player2) {
+		this.player2 = player2;
+	}
+
+	public MatchDone getMatchDone() {
+		return matchDone;
+	}
+
+	public void setMatchDone(MatchDone matchDone) {
+		this.matchDone = matchDone;
 	}
 	
 }

@@ -19,7 +19,7 @@ import hu.lev.onlinegames.model.fiveinarow.FiveInARowAction;
 public class MatchActive {
 	
 	@Id
-	@GeneratedValue(generator="increment")
+	@GeneratedValue(generator ="increment")
 	@Column(name = "id")
 	private int id;
 	
@@ -41,7 +41,8 @@ public class MatchActive {
 
 	@Column(name="options")
 	private String options;
-	
+
+	@Column(name="win")
 	private int win;
 	
 	@Column(name="action")

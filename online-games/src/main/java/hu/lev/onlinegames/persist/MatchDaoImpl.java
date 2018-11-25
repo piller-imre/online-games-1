@@ -1,6 +1,8 @@
 package hu.lev.onlinegames.persist;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import hu.lev.onlinegames.manager.SessionManager;
 import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.MatchActive;
+import hu.lev.onlinegames.model.MatchDone;
 import hu.lev.onlinegames.model.MatchWaiting;
 import hu.lev.onlinegames.model.Players;
 import hu.lev.onlinegames.model.User;
@@ -148,7 +151,7 @@ public class MatchDaoImpl implements MatchDao {
 	}
 	
 	@Override
-	public int createMatchActive(int acceptingUserId, MatchWaiting matchWaiting, String fields) {
+	public int createAndInsertMatchActive(int acceptingUserId, MatchWaiting matchWaiting, String fields) {
 
 		int matchId = 0;
 		Random rand = new Random();
@@ -386,4 +389,105 @@ public class MatchDaoImpl implements MatchDao {
 		
 		return isWinner;
 	}
+
+	@Override
+	public int insertMatchDone(MatchDone matchDone) {
+		int id = 0;
+
+		try {
+			Session session = sm.getNewSession();
+			Transaction tx = session.beginTransaction();	
+							
+				id = (int) session.save(matchDone);
+				
+			tx.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return id;
+	}
+
+	@Override
+	public MatchDone getMatchDone(GameType gameType, User player) {
+		MatchDone matchDone = null;
+
+		LocalDate date = LocalDate.now();
+		
+		try {
+			Session session = sm.getNewSession();
+			Transaction tx = session.beginTransaction();	
+							
+				Query q = session.createSQLQuery("select * from match_done where date = :a and game_type_fk = :b and player_fk = :c");
+				q.setParameter("a", date);
+				q.setParameter("b", gameType.getGameTypeId());
+				q.setParameter("c", player.getId());
+				Object[] result = (Object[]) q.uniqueResult();
+				
+				if(result != null) {
+					for (Object o : result) {
+						System.out.println(o);
+					}
+					matchDone = new MatchDone();
+					matchDone.setId((int)result[0]);
+					date = ((java.sql.Date)result[1] ).toLocalDate();
+					matchDone.setDate(date);
+					matchDone.setGameType(session.get(GameType.class, (int)result[2]));
+					matchDone.setMatchCountTotal((int)result[3]);
+					matchDone.setMatchWinTotal((int)result[4]);
+					matchDone.setPlayer(session.get(User.class,(int)result[5]));
+					
+					System.out.println(matchDone.toString());
+				}
+				
+			tx.commit();
+			 session.close();
+		} catch (PersistenceException e) {
+			matchDone = null;
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return matchDone;
+	}
+
+	@Override
+	public MatchDone createMatchDone(GameType gameType, User player, boolean win) {
+		LocalDate date = LocalDate.now();
+		MatchDone match = new MatchDone();
+		match.setDate(date);
+		match.setGameType(gameType);
+		match.setMatchCountTotal(1);
+		match.setPlayer(player);
+		if(win) {
+			match.setMatchWinTotal(1);
+		} else {
+			match.setMatchWinTotal(0);
+		}
+		
+		return match;
+	}
+
+	@Override
+	public void updateMatchDone(MatchDone matchDone, boolean win) {
+		matchDone.incrementCountTotal();
+		if(win) {
+			matchDone.incrementWinTotal();
+		}
+		
+		try {
+			Session session = sm.getNewSession();
+			Transaction tx = session.beginTransaction();	
+							
+				session.update(matchDone);
+				
+			tx.commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
 }

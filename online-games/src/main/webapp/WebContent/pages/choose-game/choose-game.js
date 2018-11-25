@@ -107,6 +107,10 @@ controllers.controller('ChooseGameController', [
 			angular.forEach(vm.options, function(op){
 				op.marked = false;
 			});
+
+			vm.options.sort(function(a, b) { 
+				return (a.id - b.id) || a.name.localeCompare(b.name); 
+			});
 		}
 			
 		function getMatchesWaiting(){

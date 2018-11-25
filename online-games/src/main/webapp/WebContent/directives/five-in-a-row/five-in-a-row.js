@@ -104,12 +104,20 @@ directives.directive('fiveInARow', [
 							$http.post(baseUrl + '/fiveinarow/action', data)
 							.then(function(result){
 								var field = match.fields[match.action.x][match.action.y];
+								
 								if(match.action.value == 4){
 									man.activateTrap(field, vm.board, ctx);
+									field.value = 0;
 								}
+
 								if(match.action.value == 0){
 									man.drawCharacter(field, vm.board, match.players.activePlayer, ctx);
 								}
+								// var lastField = match.fields[match.action.x][match.action.y];
+								// if(lastField.value == -1){
+								// 	lastField.value = 0;
+								// }
+
 								if(result.data){
 									checkAction();
 								} else {
@@ -185,16 +193,6 @@ directives.directive('fiveInARow', [
 
 		initMatch.fields = tempFields;
 		match = initMatch;
-		
-		// match = {
-		// 	matchId : initMatch.id,
-		// 	player1 : initMatch.players.player1,
-		// 	player2 : initMatch.players.player2,
-		// 	activePlayer : initMatch.players.activePlayer,
-		// 	turn: initMatch.turn,
-		// 	fields : tempFields,
-		// 	options : initMatch.options
-		// };
 
 		drawBoard(board, ctx);
 		drawFields(match, board, ctx);
@@ -207,6 +205,14 @@ directives.directive('fiveInARow', [
 		initMatch.action = JSON.parse(initMatch.action);
 		match = initMatch;
 		console.log("WIN: " + match.win);
+
+		initMatch.fields.forEach(function(fieldsCol){
+			fieldsCol.forEach(function(field){
+				if(field.value == -1){
+					field.value = 0;
+				}
+			});
+		});
 
 		// convert string to int array
 		if(match.options != null){
@@ -224,10 +230,11 @@ directives.directive('fiveInARow', [
 			switch (match.action.value) {
 				case 0:
 					var player = match.players.activePlayer == 1 ? 2 : 1;
-					drawCharacter(field, board, player, ctx);		// draw character
+					drawCharacter(field, board, player, ctx);
 					break;
 				case 4:
 					activateTrap(field, board, ctx);
+					field.value = 0;
 					break;
 				default:
 					break;
@@ -402,7 +409,7 @@ directives.directive('fiveInARow', [
 */
 	function activateTrap(field, board, ctx){
 		// change field value
-		field.value = 3;
+		// field.value = -1;
 
 		// change field color to red
 		ctx.fillStyle = "#FF0000";
@@ -415,8 +422,8 @@ directives.directive('fiveInARow', [
 			ctx.fillStyle = board.backgroundColor;
 			ctx.fillRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
 			ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
-			field.value = 0;
 		}, 3000);
+		field.value = 0;
 	}
 
 	return {

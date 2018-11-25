@@ -14,4 +14,5 @@ public interface MatchService {
 	public MatchActive startMatch(MatchStartRq req);
 	public MatchActive checkStart(int userId);
 	public void updateMatchActive(MatchActive match);
+	public void saveStats(MatchActive matchActive);
 }
