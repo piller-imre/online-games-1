@@ -10,7 +10,7 @@ public class PersonalStatsByType {
 	public PersonalStatsByType() {
 		super();
 	}
-	public PersonalStatsByType(String gameType, int allMatches, int winMatches) {
+	public PersonalStatsByType(String gameType, int winMatches, int allMatches) {
 		super();
 		this.gameType = gameType;
 		this.allMatches = allMatches;

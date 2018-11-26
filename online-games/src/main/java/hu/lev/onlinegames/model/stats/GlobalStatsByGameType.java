@@ -5,6 +5,16 @@ public class GlobalStatsByGameType {
 	private String gameType;
 	private int matches;
 	
+	
+	public GlobalStatsByGameType() {
+		super();
+	}
+	public GlobalStatsByGameType(String gameType, int matches) {
+		super();
+		this.gameType = gameType;
+		this.matches = matches;
+	}
+	
 	public String getGameType() {
 		return gameType;
 	}

@@ -2,15 +2,15 @@ package hu.lev.onlinegames.model.stats;
 
 public class Stats {
 
-	private GlobalStats globalstats;
+	private GlobalStats globalStats;
 	private ByTypeStats[] statsByGameType;
 	private PersonalStats personalStats;
 	
-	public GlobalStats getGlobalstats() {
-		return globalstats;
+	public GlobalStats getGlobalStats() {
+		return globalStats;
 	}
-	public void setGlobalstats(GlobalStats globalstats) {
-		this.globalstats = globalstats;
+	public void setGlobalStats(GlobalStats globalStats) {
+		this.globalStats = globalStats;
 	}
 	public ByTypeStats[] getStatsByGameType() {
 		return statsByGameType;

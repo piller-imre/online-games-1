@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import hu.lev.onlinegames.manager.SessionManager;
+import hu.lev.onlinegames.model.GameType;
 import hu.lev.onlinegames.model.stats.ByTypeStats;
 import hu.lev.onlinegames.model.stats.ByTypeStatsUsers;
 import hu.lev.onlinegames.model.stats.GlobalStatsByGameType;
@@ -26,6 +27,7 @@ public class StatsDaoImpl implements StatsDao {
 		super();
 	}
 
+	
 	// global stats
 
 	@Override
@@ -33,7 +35,7 @@ public class StatsDaoImpl implements StatsDao {
 		int allMatches = 0;
 
 		try {
-			Session session = sm.getSession();
+			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
 
 			Query q = session.createSQLQuery("SELECT SUM(match_count_total)/2 FROM match_done");
@@ -65,17 +67,23 @@ public class StatsDaoImpl implements StatsDao {
 			Transaction tx = session.beginTransaction();
 
 			Query q = session.createSQLQuery(
-					"SELECT m.game_type_fk, g.name, SUM(m.match_count_total)/2 FROM match_done m, game_type g where g.id = m.game_type_fk group by m.game_type_fk");
+					"SELECT g.name, SUM(m.match_count_total)/2 FROM match_done m, game_type g where g.id = m.game_type_fk group by m.game_type_fk");
 
-			List<Object> objects = q.list();
-			for (Object object : objects) {
-				for (Object object2 : objects) {
-					System.out.println(object2.toString());
+			List<Object[]> objects = q.list();
+
+			if (objects != null) {			
+				stats = new GlobalStatsByGameType[objects.size()];
+				
+				Object[] o;
+				for (int i = 0; i < objects.size(); i++) {
+					o = objects.get(i);
+					GlobalStatsByGameType stat = 
+							new GlobalStatsByGameType(
+									(String) o[0], 
+									((BigDecimal)o[1]).intValueExact());
+					stats[i] = stat;
 				}
 			}
-			List<GlobalStatsByGameType> statsList = (List<GlobalStatsByGameType>) (Object) objects;
-			stats = new GlobalStatsByGameType[statsList.size()];
-			statsList.toArray(stats);
 
 			tx.commit();
 			 session.close();
@@ -95,12 +103,29 @@ public class StatsDaoImpl implements StatsDao {
 			Transaction tx = session.beginTransaction();
 
 			Query q = session.createSQLQuery(
-					"SELECT u.username, SUM(m.match_won_total), SUM(m.match_count_total) FROM match_done m, user u where u.id = m.player_fk group by m.player_fk order by sum(m.match_won_total) desc");
+					"SELECT u.id, u.username, SUM(m.match_won_total), SUM(m.match_count_total) " 
+					+ "FROM match_done m, user u " 
+					+ "where u.id = m.player_fk "
+					+ "group by m.player_fk " 
+					+ "order by sum(m.match_won_total) desc");
 
-			List<Object> objects = q.list();
-			List<ByTypeStatsUsers> statsList = (List<ByTypeStatsUsers>) (Object) objects;
-			stats = new ByTypeStatsUsers[statsList.size()];
-			statsList.toArray(stats);
+			List<Object[]> objects = q.list();
+
+			if (objects != null) {			
+				stats = new ByTypeStatsUsers[objects.size()];
+				
+				Object[] o;
+				for (int i = 0; i < objects.size(); i++) {
+					o = objects.get(i);
+					ByTypeStatsUsers stat = 
+							new ByTypeStatsUsers(
+									(int)o[0], 
+									(String) o[1], 
+									((BigDecimal)o[2]).intValueExact(), 
+									((BigDecimal)o[3]).intValueExact());
+					stats[i] = stat;
+				}
+			}
 
 			tx.commit();
 			 session.close();
@@ -111,6 +136,7 @@ public class StatsDaoImpl implements StatsDao {
 		return stats;
 	}
 
+	
 	// byType stats
 
 	@Override
@@ -120,14 +146,45 @@ public class StatsDaoImpl implements StatsDao {
 		try {
 			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
+			
+			Query q = session.createQuery("from GameType");
+			List<GameType> gameTypeList = (List<GameType>) q.list();
+			GameType[] gameTypes = new GameType[gameTypeList.size()];
+			gameTypeList.toArray(gameTypes);
 
-			Query q = session.createSQLQuery(
-					"SELECT u.username, SUM(m.match_won_total), SUM(m.match_count_total) FROM match_done m, user u where u.id = m.player_fk and game_type_fk = 1 group by m.player_fk order by sum(m.match_won_total) desc limit 5");
-
-			List<Object> objects = q.list();
-			List<ByTypeStats> statsList = (List<ByTypeStats>) (Object) objects;
-			stats = new ByTypeStats[statsList.size()];
-			statsList.toArray(stats);
+			stats = new ByTypeStats[gameTypes.length];
+			
+			for (int i = 0; i < gameTypes.length; i++) {
+				
+				stats[i] = new ByTypeStats();
+				stats[i].setGameType(gameTypes[i].getGameTypeName());
+				
+				q = session.createSQLQuery(
+						"SELECT u.id, u.username, SUM(m.match_won_total), SUM(m.match_count_total) "
+						+ "FROM match_done m, user u " 
+						+ "where u.id = m.player_fk and game_type_fk = :a " 
+						+ "group by m.player_fk "
+						+ "order by sum(m.match_won_total) desc limit 5");
+				q.setParameter("a", gameTypes[i].getGameTypeId());
+	
+				List<Object[]> objects = q.list();
+	
+				if (objects != null) {	
+					ByTypeStatsUsers[] result = new ByTypeStatsUsers[objects.size()];
+					
+					for(int j = 0; j < objects.size(); j++) {
+						Object[] o = objects.get(j);
+						ByTypeStatsUsers stat = new ByTypeStatsUsers(
+								(int)o[0], 
+								(String) o[1], 
+								((BigDecimal)o[2]).intValueExact(), 
+								((BigDecimal)o[3]).intValueExact());
+						result[j] = stat;
+					}
+					
+					stats[i].setResults(result);
+				}
+			}
 
 			tx.commit();
 			 session.close();
@@ -138,6 +195,7 @@ public class StatsDaoImpl implements StatsDao {
 		return stats;
 	}
 
+	
 	// personal stats
 
 	@Override
@@ -188,12 +246,21 @@ public class StatsDaoImpl implements StatsDao {
 					"SELECT g.name, SUM(m.match_won_total), SUM(m.match_count_total) FROM match_done m, game_type g where g.id = m.game_type_fk and m.player_fk = :a group by m.game_type_fk order by sum(m.match_won_total) desc");
 			q.setParameter("a", id);
 
-			List<Object> objects = q.list();
+			List<Object[]> objects = q.list();
 
-			if (objects != null) {
-				List<PersonalStatsByType> statsList = (List<PersonalStatsByType>) (Object) objects;
-				stats = new PersonalStatsByType[statsList.size()];
-				statsList.toArray(stats);
+			if (objects != null) {			
+				stats = new PersonalStatsByType[objects.size()];
+				
+				Object[] o;
+				for (int i = 0; i < objects.size(); i++) {
+					o = objects.get(i);
+					PersonalStatsByType stat = 
+							new PersonalStatsByType(
+									(String) o[0], 
+									((BigDecimal)o[1]).intValueExact(), 
+									((BigDecimal)o[2]).intValueExact());
+					stats[i] = stat;
+				}
 			}
 
 			tx.commit();

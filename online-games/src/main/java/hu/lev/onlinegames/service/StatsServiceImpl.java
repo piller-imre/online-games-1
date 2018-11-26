@@ -44,8 +44,8 @@ public class StatsServiceImpl implements StatsService {
 	public PersonalStats getPersonalStats(int id) {
 		PersonalStats temp = new PersonalStats();
 		PersonalStats stats = statsDao.setPersonalWinAndTotal(temp, id);
-		stats.setStatsByGametype(statsDao.getPersonalStatsByGameType(id));
-		return null;
+		stats.setStatsByGameType(statsDao.getPersonalStatsByGameType(id));
+		return stats;
 	}
 	
 }

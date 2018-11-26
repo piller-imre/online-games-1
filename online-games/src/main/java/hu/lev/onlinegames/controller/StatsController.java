@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hu.lev.onlinegames.model.stats.ByTypeStats;
 import hu.lev.onlinegames.model.stats.GlobalStats;
 import hu.lev.onlinegames.model.stats.PersonalStats;
+import hu.lev.onlinegames.model.stats.Stats;
 import hu.lev.onlinegames.service.StatsService;
 
 @RestController
@@ -22,7 +23,7 @@ public class StatsController {
 	// GET STATS
     @RequestMapping(value = "/stats/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public void stats(@PathVariable int id) {
+	public Stats stats(@PathVariable int id) {
     	// get global stats
     	GlobalStats globalStats = statsService.getGlobalStats();
     	
@@ -32,6 +33,12 @@ public class StatsController {
     	// get personal stats
     	PersonalStats personalStats = statsService.getPersonalStats(id);
     	
+    	Stats stats = new Stats();
+    	stats.setGlobalStats(globalStats);
+    	stats.setStatsByGameType(byTypeStats);
+    	stats.setPersonalStats(personalStats);
+    	
+    	return stats;
 	}
     
 

@@ -10,7 +10,7 @@ public class ByTypeStatsUsers {
 	public ByTypeStatsUsers() {
 		super();
 	}
-	public ByTypeStatsUsers(int userid, String username, int allMatches, int winMatches) {
+	public ByTypeStatsUsers(int userid, String username, int winMatches, int allMatches) {
 		super();
 		this.userid = userid;
 		this.username = username;

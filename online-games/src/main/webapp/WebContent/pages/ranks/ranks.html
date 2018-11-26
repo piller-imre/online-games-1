@@ -1,6 +1,6 @@
 
 <div id="ranks" class="center">
-    <h1>RANKS</h1>
+    <h1>Ranglisták, statisztikák</h1>
 
     <!-- select which stat -->
     <div class="center">
@@ -31,7 +31,7 @@
                 <th>Játék</th>
                 <th>Meccsek száma</th>
             </tr>
-            <tr ng-repeat="type in globalStats.allMatchesbyGameType">
+            <tr ng-repeat="type in globalStats.allMatchesByGameType">
                 <td>{{type.gameType}}</td>
                 <td>{{type.matches}}</td>
             </tr>
@@ -51,8 +51,8 @@
                 <tr ng-repeat="user in globalStats.globalRanks">
                     <td>{{$index +1}}.</td>
                     <td>{{user.username}}</td>
-                    <td>{{user.allMatches}}</td>
                     <td>{{user.winMatches}}</td>
+                    <td>{{user.allMatches}}</td>
                     <td>{{user.winMatches / user.allMatches * 100 | number: 0}} %</td>
                 </tr>
         </table>
@@ -76,8 +76,8 @@
             <tr ng-repeat="user in statsByGameType[gameIndex].results">
                 <td>{{$index +1}}.</td>
                 <td>{{user.username}}</td>
-                <td>{{user.allMatches}}</td>
                 <td>{{user.winMatches}}</td>
+                <td>{{user.allMatches}}</td>
                 <td>{{user.winMatches / user.allMatches * 100 | number: 0}} %</td>
             </tr>
         </table>
@@ -99,15 +99,17 @@
                     <th>Összes nyertes játszma</th>
                     <th>Összes játszma</th>
                     <th>Nyerési arány</th>
-                    <th>Helyezés</th>
+                    <!-- <th>Helyezés</th> -->
                 </tr>
                 <tr ng-repeat="type in personalStats.statsByGameType">
                     <td>{{type.gameType}}</td>
-                    <td>{{type.allMatches}}</td>
                     <td>{{type.winMatches}}</td>
+                    <td>{{type.allMatches}}</td>
                     <td>{{type.winMatches / type.allMatches * 100 | number: 0}} %</td>
-                    <td>{{type.rank}}.</td>
+                    <!-- <td>{{type.rank}}.</td> -->
                 </tr>
         </table>
     </div>
+    
+    <div class="empty-space-50"></div>
 </div>

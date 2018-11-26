@@ -14,6 +14,9 @@ controllers.controller('RanksController', [
         $http.get(baseUrl + '/stats/' + $localStorage.currentUser.userid)
         .then(function(result){
             console.log(result.data);
+            vm.globalStats = result.data.globalStats;
+            vm.statsByGameType = result.data.statsByGameType;
+            vm.personalStats = result.data.personalStats;
         });
         
         vm.setGameIndex = function (index){
@@ -27,7 +30,7 @@ controllers.controller('RanksController', [
             allMatches: 320,
             allMatchesbyGameType: [
                 {
-                    gameType: "Am≈ëba",
+                    gameType: "Amıba",
                     matches: 300
                 },
                 {
