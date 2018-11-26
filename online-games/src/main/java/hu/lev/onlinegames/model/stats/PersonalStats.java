@@ -3,7 +3,7 @@ package hu.lev.onlinegames.model.stats;
 public class PersonalStats {
 	private int allMatches;
 	private int winMatches;
-	private PersonalRanks[] statsByGametype;
+	private PersonalStatsByType[] statsByGametype;
 	
 	public int getAllMatches() {
 		return allMatches;
@@ -17,10 +17,10 @@ public class PersonalStats {
 	public void setWinMatches(int winMatches) {
 		this.winMatches = winMatches;
 	}
-	public PersonalRanks[] getStatsByGametype() {
+	public PersonalStatsByType[] getStatsByGametype() {
 		return statsByGametype;
 	}
-	public void setStatsByGametype(PersonalRanks[] statsByGametype) {
+	public void setStatsByGametype(PersonalStatsByType[] statsByGametype) {
 		this.statsByGametype = statsByGametype;
 	}
 }

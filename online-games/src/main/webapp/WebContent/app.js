@@ -55,7 +55,8 @@ app.config([ '$urlRouterProvider', '$stateProvider',
 
 			.state('ranks', {
 				url : '/ranks',
-				templateUrl : 'pages/ranks/ranks.html'
+				templateUrl : 'pages/ranks/ranks.html',
+				controller : 'RanksController'
 			})
 
 			.state('credits', {

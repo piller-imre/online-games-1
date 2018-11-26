@@ -3,7 +3,7 @@ package hu.lev.onlinegames.model.stats;
 public class Stats {
 
 	private GlobalStats globalstats;
-	private StatsByGameTypeDetails[] statsByGameType;
+	private ByTypeStats[] statsByGameType;
 	private PersonalStats personalStats;
 	
 	public GlobalStats getGlobalstats() {
@@ -12,10 +12,10 @@ public class Stats {
 	public void setGlobalstats(GlobalStats globalstats) {
 		this.globalstats = globalstats;
 	}
-	public StatsByGameTypeDetails[] getStatsByGameType() {
+	public ByTypeStats[] getStatsByGameType() {
 		return statsByGameType;
 	}
-	public void setStatsByGameType(StatsByGameTypeDetails[] statsByGameType) {
+	public void setStatsByGameType(ByTypeStats[] statsByGameType) {
 		this.statsByGameType = statsByGameType;
 	}
 	public PersonalStats getPersonalStats() {

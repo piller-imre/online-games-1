@@ -2,15 +2,15 @@
 
 field indexes:
 	fields[row][col] = {
-		x (coord),
-		y (coord),
+		xCoord,
+		yCoord,
 		value
 	}
 
 field values:
 	0 - empty	-- null
-	1 - o		-- player 1
-	2 - x		-- player 2
+	1 - x		-- player 1
+	2 - o		-- player 2
 	3 - forbidden -- put elsewhere, 3xx http status codes
 	4 - trap	-- client error, client die
 
@@ -113,10 +113,6 @@ directives.directive('fiveInARow', [
 								if(match.action.value == 0){
 									man.drawCharacter(field, vm.board, match.players.activePlayer, ctx);
 								}
-								// var lastField = match.fields[match.action.x][match.action.y];
-								// if(lastField.value == -1){
-								// 	lastField.value = 0;
-								// }
 
 								if(result.data){
 									checkAction();
@@ -368,45 +364,7 @@ directives.directive('fiveInARow', [
 		ctx.strokeRect(field.xCoord, field.yCoord, board.squareSize, board.squareSize);
 
 	}
-/*
-	// function initWalls(fields, board, ctx){
-	// 	var numOfWalls = 50;
-	// 	var x = 0;
-	// 	var y = 0;
-	// 	var i = 0;
-	// 	while (i<numOfWalls){
-	// 		var x = Math.floor(Math.random() * fields.length);
-	// 		var y = Math.floor(Math.random() * fields[0].length);
-	// 		if(fields[x][y].value != 3 && fields[x][y].value != 4){
-	// 			fields[x][y].value = 3;
 
-	// 			ctx.fillStyle = "#a2c4c4";
-	// 			ctx.strokeStyle = board.lineColor;
-	// 			ctx.fillRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
-	// 			ctx.strokeRect(fields[x][y].xCoord, fields[x][y].yCoord, board.squareSize, board.squareSize);
-
-	// 			i++;
-	// 			console.log(x + "," + y + " - " + fields[x][y].value);
-	// 		}
-	// 	}
-	// }
-
-	// function initTraps(fields){
-	// 	var numOfTraps = 50;
-	// 	var x = 0;
-	// 	var y = 0;
-	// 	var i = 0;
-	// 	while (i<numOfTraps){
-	// 		var x = Math.floor(Math.random() * fields.length);
-	// 		var y = Math.floor(Math.random() * fields[0].length);
-	// 		if(fields[x][y].value != 4 && fields[x][y].value != 3){
-	// 			fields[x][y].value = 4;
-	// 			i++;
-	// 			console.log(x + "," + y + " - " + fields[x][y].value);
-	// 		}
-	// 	}
-	// }
-*/
 	function activateTrap(field, board, ctx){
 		// change field value
 		// field.value = -1;
@@ -432,13 +390,7 @@ directives.directive('fiveInARow', [
 		getClickedField: getClickedField,
 		getMatchReadyToSend: getMatchReadyToSend,
 		activateTrap: activateTrap,
-		drawCharacter: drawCharacter,
-		// drawBoard: drawBoard,
-		// resetFields: resetFields,
-		// isClickInBoard: isClickInBoard,
-		// checkWin: checkWin,
-		// initWalls: initWalls,
-		// initTraps: initTraps,
+		drawCharacter: drawCharacter
 	}
 }]);
 

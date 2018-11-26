@@ -202,42 +202,6 @@ public class MatchDaoImpl implements MatchDao {
 		return matchId;
 	}
 
-	/*
-	@Override
-	public MatchActive checkStart(int userId) {
-		MatchActive match = null;
-		
-		try {
-			Session session = sm.getNewSession();
-			Transaction tx = session.beginTransaction();
-
-			Query q = session.createSQLQuery("select * from match_players where player1_fk = :a or player2_fk = :a");
-			q.setParameter("a", userId);
-			Object[] result = (Object[]) q.uniqueResult();
-			
-			if(result != null) {
-				match = getMatchActive((int)result[3]);
-				
-				q = session.createSQLQuery("select * from match_active where id = :a and win > 0");
-				q.setParameter("a", match);
-				result = (Object[]) q.uniqueResult();
-				
-				if(result != null) {
-					deleteMatchActive((int)result[6]);
-				}
-			}
-			
-			tx.commit();
-			 session.close();
-			
-		} catch (Exception e) {
-			match = null;
-			e.printStackTrace();
-		}
-
-		return match;
-	}
-*/
 	
 	@Override
 	public MatchActive getMatchActive(int matchId) {

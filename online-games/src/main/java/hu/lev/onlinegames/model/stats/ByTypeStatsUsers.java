@@ -1,10 +1,22 @@
 package hu.lev.onlinegames.model.stats;
 
-public class UserStats {
+public class ByTypeStatsUsers {
 	private int userid;
 	private String username;
 	private int allMatches;
 	private int winMatches;
+	
+	
+	public ByTypeStatsUsers() {
+		super();
+	}
+	public ByTypeStatsUsers(int userid, String username, int allMatches, int winMatches) {
+		super();
+		this.userid = userid;
+		this.username = username;
+		this.allMatches = allMatches;
+		this.winMatches = winMatches;
+	}
 	
 	public int getUserid() {
 		return userid;
