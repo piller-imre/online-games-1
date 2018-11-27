@@ -35,10 +35,10 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 	
 	@Override
 	public MatchActiveRq applyAction(MatchActiveRq matchRq) {
-		System.out.println(
-				"INDEXEK: " + matchRq.getAction().getX() + ", " + matchRq.getAction().getY()
-				+ " ÉRTÉK: " + matchRq.getAction().getValue()
-				);
+		// System.out.println(
+		// 		"INDEXEK: " + matchRq.getAction().getX() + ", " + matchRq.getAction().getY()
+		// 		+ " ÉRTÉK: " + matchRq.getAction().getValue()
+		// 		);
 		int x = matchRq.getAction().getX();
 		int y = matchRq.getAction().getY();
 		int originalValue = matchRq.getAction().getValue();
@@ -56,7 +56,7 @@ public class FiveInARowServiceImpl implements FiveInARowService {
 		}
 		
 		matchRq.getFields()[x][y].setValue(newValue);
-		System.out.println("ÚJ ÉRTÉK: " + matchRq.getFields()[matchRq.getAction().getX()][matchRq.getAction().getY()].getValue());
+		// System.out.println("ÚJ ÉRTÉK: " + matchRq.getFields()[matchRq.getAction().getX()][matchRq.getAction().getY()].getValue());
 		
 		return matchRq;
 	}

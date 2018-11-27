@@ -26,7 +26,7 @@ controllers.controller('ChooseGameController', [
 
 		$rootScope.$on('$locationChangeStart', function(event, toState, toParams, fromState, fromParams){ 
 			if(isInGame && toState != thisUrl){
-				console.log("checkStart OFF");
+				// console.log("checkStart OFF");
 				$interval.cancel(waitMatch);
 			}
 		})
@@ -54,9 +54,9 @@ controllers.controller('ChooseGameController', [
 		}
 
 		function checkStart(){
-			console.log("checkStart ON");
+			// console.log("checkStart ON");
 			waitMatch = $interval(function(){
-				console.log(baseUrl + '/match/start/' + $localStorage.currentUser.userid);
+				// console.log(baseUrl + '/match/start/' + $localStorage.currentUser.userid);
 				$http.get(baseUrl + '/match/start/' + $localStorage.currentUser.userid)
 				.then(function(result){
 					if(result.data){
@@ -158,7 +158,7 @@ controllers.controller('ChooseGameController', [
 
 			$http.delete(baseUrl + '/match/' + match.id)
 			.then(function(result){
-				console.log(result);
+				// console.log(result);
 			});
 		}
 

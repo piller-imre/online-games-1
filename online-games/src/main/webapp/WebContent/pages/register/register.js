@@ -14,7 +14,7 @@ controllers.controller('RegisterController', ['$scope', '$rootScope', '$http', f
 			
 			$http.post(url + '/user', user)
 			.then(function (response) {
-				console.log('result: ' + response.data);
+				// console.log('result: ' + response.data);
 				if(response.data > 0){
 					vm.errorText = "Sikerült, ügyes voltál! Jelentkezz be a mókához!";
 				} else if(response.data == 0){

@@ -61,10 +61,11 @@ public class TokenServiceImpl implements TokenService {
 		    claims = Jwts.parser()
 		       .setSigningKey(DatatypeConverter.parseBase64Binary(secret))
 		       .parseClaimsJws(jwt).getBody();
-		    System.out.println("Username: " + claims.getId());
-		    System.out.println("Expiration: " + claims.getExpiration());
+		    // System.out.println("Username: " + claims.getId());
+		    // System.out.println("Expiration: " + claims.getExpiration());
 		} catch (Exception e) {
-			System.out.println("Invalid JWT!");
+			e.printStackTrace();
+			// System.out.println("Invalid JWT!");
 		}
 	    
 	    return claims;

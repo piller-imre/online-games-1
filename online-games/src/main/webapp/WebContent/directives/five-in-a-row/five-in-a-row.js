@@ -95,7 +95,7 @@ directives.directive('fiveInARow', [
 
 					if(field != null){
 						field.value = match.fields[field.x][field.y].value;						// get value of field
-						console.log(field.x + "," + field.y + ' - ' + field.value);
+						// console.log(field.x + "," + field.y + ' - ' + field.value);
 
 						if([0,4].includes(field.value)){
 							match.action = field;
@@ -130,7 +130,7 @@ directives.directive('fiveInARow', [
 
 			function checkAction(){
 				vm.promise = $interval(function(){
-					console.log(baseUrl + '/fiveinarow/checkaction');
+					// console.log(baseUrl + '/fiveinarow/checkaction');
 					$http.get(baseUrl + '/fiveinarow/checkaction', {
 						params: {
 							matchId: match.id,
@@ -155,7 +155,7 @@ directives.directive('fiveInARow', [
 			}
 
 			function stopcheckAction(){
-				console.log("checkAction OFF");
+				// console.log("checkAction OFF");
 				$interval.cancel(vm.promise);
 			}
         }
@@ -200,7 +200,7 @@ directives.directive('fiveInARow', [
 		initMatch.fields = initMatch.boardstate == "" ? null : JSON.parse(initMatch.boardstate);
 		initMatch.action = JSON.parse(initMatch.action);
 		match = initMatch;
-		console.log("WIN: " + match.win);
+		// console.log("WIN: " + match.win);
 
 		initMatch.fields.forEach(function(fieldsCol){
 			fieldsCol.forEach(function(field){

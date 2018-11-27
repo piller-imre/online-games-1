@@ -13,51 +13,6 @@ import hu.lev.onlinegames.persist.MatchDaoImpl;
 public class App {
 	public static void main(String[] args) {
 
-		MatchDaoImpl dao = new MatchDaoImpl();
-		MatchActive match = null;
-		SessionManager sm = new SessionManager();
-		try {
-			Session session = sm.getNewSession();
-			Transaction tx = session.beginTransaction();
-
-				
-				Query q = session.createSQLQuery("select * from match_active where id = :a and win > 0");
-				q.setParameter("a", 2);
-				Object[] result = (Object[]) q.uniqueResult();
-
-				
-				if(result != null) {
-					for (Object o : result) {
-						System.out.println(o);
-						
-					}int id = (int)result[6];
-					result = null;
-					match = null;
-					tx.commit();
-					 session.close();
-						session = sm.getNewSession();
-						tx = session.beginTransaction();
-					Players players = session.get(Players.class, 2);
-					
-					
-					session.remove(players);
-					MatchActive matchka = new MatchActive();
-					matchka.setId(id);
-					session.remove(matchka);
-					
-				}
-				else {
-					System.out.println("nem");
-				}
-			
-			tx.commit();
-			 session.close();
-			
-		} catch (Exception e) {
-			match = null;
-			e.printStackTrace();
-		}
-
 //		boolean win = false;
 //		int player = 2; 
 //		FiveInARowAction action = new FiveInARowAction(4,4,2);
@@ -149,6 +104,11 @@ public class App {
 
 	}
 }
+
+
+
+
+
 
 // user insert test
 //User u = new User("lék", "titok", "áél@vmi.huzat");

@@ -79,7 +79,7 @@ public class MatchController {
 	@ResponseBody
 	public MatchActive start(@RequestBody MatchStartRq req) {
     	
-    	System.out.println(req.toString());
+    	// System.out.println(req.toString());
     	
     	MatchActive match = matchService.startMatch(req);
     	return match;

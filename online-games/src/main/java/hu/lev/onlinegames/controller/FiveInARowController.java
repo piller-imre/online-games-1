@@ -32,9 +32,9 @@ public class FiveInARowController {
 
     		matchRq = fiveInARowService.applyAction(matchRq);
     		boolean win = fiveInARowService.checkWin(matchRq.getFields(), matchRq.getActivePlayer(), matchRq.getAction());
-        	System.out.println("");
-        	System.out.println("WIN: " + win);
-        	System.out.println("");
+        	// System.out.println("");
+        	// System.out.println("WIN: " + win);
+        	// System.out.println("");
         	
         	// handle matchactive
         	matchRq.setCheckedWin(win);

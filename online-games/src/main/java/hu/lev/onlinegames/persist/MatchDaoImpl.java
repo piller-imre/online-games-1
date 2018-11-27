@@ -157,8 +157,8 @@ public class MatchDaoImpl implements MatchDao {
 		Random rand = new Random();
 		int mixer = rand.nextInt(2) + 1;
 
-		System.out.println("");
-		System.out.println("DAO");
+		// System.out.println("");
+		// System.out.println("DAO");
 		try {
 			Session session = sm.getNewSession();
 			Transaction tx = session.beginTransaction();
@@ -171,7 +171,7 @@ public class MatchDaoImpl implements MatchDao {
 			
 			matchId = (int) session.save(match);
 
-			System.out.println("new matchActive id: " + matchId);
+			// System.out.println("new matchActive id: " + matchId);
 			tx.commit();
 			tx = session.beginTransaction();
 			Players players = new Players();
@@ -340,8 +340,8 @@ public class MatchDaoImpl implements MatchDao {
 			
 			if(result != null) {
 				isWinner = true;
-				System.out.println("");
-				System.out.println("VAN NYERTES");
+				// System.out.println("");
+				// System.out.println("VAN NYERTES");
 			}
 			tx.commit();
 			session.close();
@@ -391,7 +391,7 @@ public class MatchDaoImpl implements MatchDao {
 				
 				if(result != null) {
 					for (Object o : result) {
-						System.out.println(o);
+						// System.out.println(o);
 					}
 					matchDone = new MatchDone();
 					matchDone.setId((int)result[0]);
@@ -402,7 +402,7 @@ public class MatchDaoImpl implements MatchDao {
 					matchDone.setMatchWinTotal((int)result[4]);
 					matchDone.setPlayer(session.get(User.class,(int)result[5]));
 					
-					System.out.println(matchDone.toString());
+					// System.out.println(matchDone.toString());
 				}
 				
 			tx.commit();

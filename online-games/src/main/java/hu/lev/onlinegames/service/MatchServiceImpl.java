@@ -63,7 +63,7 @@ public class MatchServiceImpl implements MatchService {
 		MatchWaiting matchWaiting = matchDao.getMatchWaiting(req.getMatchId());
 		int [] options = converterService.stringToIntArray(matchWaiting.getOptions());
 		for (int i : options) {
-			System.out.println(i);
+			// System.out.println(i);
 		}
 		
 		String initFields = initFields(

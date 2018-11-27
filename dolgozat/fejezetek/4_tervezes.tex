@@ -294,9 +294,6 @@ A HTTP protokollnak megfelelően először definiáljuk a klienst (fronendet) é
 	\label{fig:mixed-arch}
 \end{figure}
 
-% Backend
-% Az alkalmazáslogika
-% Authentikáció
 \Section{Backend}
 
 \SubSection{Rétegek}
@@ -355,6 +352,9 @@ Az amőba kontrollere értelem szerűen már a megkezdett, amőba játéktípus�
 \subsubsection{CheckersController}
 Hasonló jellegű kéréseket kell teljesítenie, mint egyéb típusú játékok esetén, a játék sajátosságai miatt minden játéktípusnak külön kontrollerre és metódusokra van szüksége.
 
+\subsubsection{StatsController}
+Feladata a lejátszott meccsek adataiból összeállítani statisztikákat, rangsorokat, majd ezt az adathalmazt elküldeni a frontendnek.
+
 
 % MODEL OSZÁLYOK
 
@@ -397,18 +397,11 @@ A statisztikák generálásához szükséges megőriznünk a játékeredményeke
 \lstinputlisting[caption={\textit{A lejátszott játék modell osztály adattagjai}}, label={lst:match_done}]{kodok/model/match_done.json}
 
 \subsubsection{Enumok}
-A sztringek kezelése kissé nehézkesebb, mint a számoké, ugyanakkor érdemes rögzíteni, hogy melyik szám melyik játékra utal. Ezért a \texttt{játéktípusokat}, és az egyéni szabályok beállításait enumokban fogjuk tárolni.
+A sztringek kezelése kissé nehézkesebb, mint a számoké, ugyanakkor érdemes rögzíteni, hogy melyik szám melyik játékra utal. Ezért a \texttt{játéktípusokat}, és az egyéni szabályok beállításait érdemes enumokban tárolni.
 
 Mivel a különböző játéktípusokhoz különböző egyéni szabályok tartozhatnak, így a \texttt{játékszabályoknak} játéktípusonként egy enum osztályt kell készítenünk.
 
 És mivel a pálya mezőinek is kötött, hogy milyen értékeket lehet adni, így játéktípusonként szükségünk lesz egy-egy \texttt{érték} enumra is.
-
-%TODO STAT OSZTÁLYOKAT IS LEÍRNI!
-
-% Frontend
-% Definiálni, hogy milyen lapokból áll majd az alkalmazás
-% Leírni a játéktér megadási módját, adatszerkezeteket
-
 
 \Section{Frontend}
 
@@ -500,11 +493,17 @@ A mentések sikerességéről visszajelzést jelenít meg (sikeres vagy hibaüze
 \subsubsection{Kijelentkezés}
 A kijelentkezés gombra kattintva a felhasználó kijelentkezhet az alkalmazásból. Az alkalmazás ekkor törli a bejelentkezéskor kapott tokent, majd átirányítja a felhasználót a bejelentkezés oldalra. Külön oldal nem tartozik hozzá.
 
-% TODO: Játékszabályok ellenőrzése
-% Valid lépések ellenőrzése mindkét oldalon
-% Játéklogika elkészítésének tervei
-
 \Section{Játék logika}
+
+A komponenseket ugyan megterveztük, de rengeteg kérdés merül fel azzal kapcsolatban, hogy hogyan fognak ezek a komponensek együtt működni. Hogyan szinkronizáljuk a játék menetét, hogy mindkét játékos (lehetőleg) valós időben lássa a másik lépéseit? Szinkronizáljuk a böngészők eseményeit? Egyáltalán milyen feladatok merülnek fel, amikre a tervezés legelején nem gondolna az ember? Nézzük sorban!
+
+\SubSection{A backend és a frontend kapcsolata}
+Az első és legfontosabb kérdés, hogy hogyan fogja látni az egyik böngésző, hogy mi történik a másikban, pl. ha lép a játékos, hogyan jut át az információ? Ahogy egy pincér egy jó étteremben, a szerver (pincér) kiszolgál, a kliens pedig rendel. Tehát minden eseményt vagy kérést a klienst küld el a szervernek, ill. ha a szerverhez befut egy információ, a szerver nem tolakodik a böngészőhöz, hogy átadja az információt, sőt azt sem tudja, hogy a frontendnek szüksége van rá. Ezért az alkalmazásban minden kommunikációt a frontend kezdeményez.
+
+%TODO
+
+\SubSection{Játék indítása}
+Ha egy játékos elfogad egy kihívást, a játéknak át kell navigálnia mindkét játékost a játéktérre. A kihívott részéről egyszerű a dolgunk, egy állapot és útvonal változtatással gyorsan megoldhatjuk. A kihívó pedig úgy tudhatja meg, hogy elfogadták a kihívást, hogy ő maga kérdezgeti a
 
 \SubSection{Amőba játékmenet}
 ...
