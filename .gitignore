@@ -66,6 +66,8 @@ target/
 *.thm
 *.log
 *.gz
+*.bbl
+*.blg
 
 #tomcat
 apache-tomcat-9.0.4/
