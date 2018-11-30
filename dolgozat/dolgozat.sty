@@ -7,29 +7,29 @@
 \usepackage{amsmath}
 %ams matematikai szimbólumcsomag
 \usepackage{amssymb}
-%színkezelés
+% színkezelés
 \usepackage{color}
-%eps ábrák beszúrása
+% eps ábrák beszúrása
 \usepackage{epsfig}
-%grafikai csomag
+% grafikai csomag
 \usepackage{graphicx}
-%vezérlési szerkezetek
+% vezérlési szerkezetek
 \usepackage{ifthen}
-%array csomag a táblázatokhoz
+% array csomag a táblázatokhoz
 \usepackage{array}
-%saját tételszerû környezetekhez
+% saját tételszerû környezetekhez
 \usepackage{ntheorem}
-%multirow csomag: összevont sorokhoz
+% multirow csomag: összevont sorokhoz
 \usepackage{multirow}
-%szines tablazatok
+% szines tablazatok
 \usepackage{colortbl}
-%ábrakészítés a Tex-kel
+% ábrakészítés a Tex-kel
 \usepackage[metapost]{mfpic}
-%latin2 kódolás - a magyar ékezetes betûk miatt
+% latin2 kódolás - a magyar ékezetes betûk miatt
 \usepackage[utf8]{inputenc}
-%a magyar elválasztáshoz szükséges
+% a magyar elválasztáshoz szükséges
 \usepackage[T1]{fontenc}
-%elválasztást végzõ csomag
+% elválasztást végzõ csomag
 \usepackage[magyar]{babel}
 
 % \newcommand{\myinclude}[1]{%
@@ -38,69 +38,69 @@
 % 
 % \include{#1}}
 
-%myheadings beállítása
+ %myheadings beállítása
 \def\ps@myheadings{%
      \def\@oddfoot{\hfil\thepage}
      \def\@oddhead{}
       }
 
-%fancyhdr beállítása
+% fancyhdr beállítása
 \fancyhead[L]{}
 \fancyhead[R]{}
 \fancyfoot[C]{}
 \fancyfoot[R]{\thepage}
 
-%chapter átdefiniálása
+% chapter átdefiniálása
 \renewcommand\chapter{\if@openright\cleardoublepage\else\clearpage\fi
                     \thispagestyle{myheadings}%
                     \global\@topnum\z@
                     \@afterindentfalse
                     \secdef\@chapter\@schapter}
 
-%Saját fejezet parancs: \Chapter
+% Saját fejezet parancs: \Chapter
 \newcommand{\Chapter}[1]{\chapter{#1}
 \chead{}
 }
 
-%Saját fejezet parancs, rövidítést használhatunk a tartalomjegyzékben: \SChapter
+% Saját fejezet parancs, rövidítést használhatunk a tartalomjegyzékben: \SChapter
 \newcommand{\SChapter}[2]{\chapter[#2]{#1}}
 
-%Alfejezet parancs: \Section
+% Alfejezet parancs: \Section
 \newcommand{\Section}[1]{\section{#1}
 \chead{\textsl{\thesection. #1}}
 }
 
-%Alfejezet parancs, rövidítést használhatunk a fejlécben  és a tartalomjegyzékben is: \SSection
+% Alfejezet parancs, rövidítést használhatunk a fejlécben  és a tartalomjegyzékben is: \SSection
 \newcommand{\SSection}[3]{\section[#3]{#1}
 \chead{\textsl{\thesection. #2}}}
 
-%Al-alfejezet parancs: \SubSection
+% Al-alfejezet parancs: \SubSection
 \newcommand{\SubSection}[1]{\subsection{#1}
 }
 
-%Al-alfejezet parancs, rövidítést használhatunk a tartalomjegyzékben: \SSubSection
+% Al-alfejezet parancs, rövidítést használhatunk a tartalomjegyzékben: \SSubSection
 \newcommand{\SSubSection}[2]{\subsection[#2]{#1}
 }
 
-%Saját referencia - nem teszi hozzá a névelõt, de a pontot igen!
+% Saját referencia - nem teszi hozzá a névelõt, de a pontot igen!
 \newcommand{\myref}[1]{\ref{#1}.}
 
-%Saját magyar referencia - hozzáteszi a névelõt és a pontot!
+% Saját magyar referencia - hozzáteszi a névelõt és a pontot!
 \newcommand{\myaref}[1]{\aref{#1}.}
 
-%táblázatok beállítása
+% táblázatok beállítása
 \renewcommand{\arraystretch}{1.3}  %default: 1 Sorok közötti távolság nagyítása
 
 \setlength{\arrayrulewidth}{0.6pt} %default: 0.6pt A vonalak vastagsága
 
-%A túlcsordulási hibák jelzése a nyomtatási képben vastag, telített téglalappal
+% A túlcsordulási hibák jelzése a nyomtatási képben vastag, telített téglalappal
 \overfullrule10pt
 
-%pont után nem nagyobb a szóköz
+% pont után nem nagyobb a szóköz
 \frenchspacing
 
 
-%Új tételkörnyezetek
+% Új tételkörnyezetek
 \newtheoremstyle{MYhun}%
 {\item[\hskip\labelsep\theorem@headerfont ##2.\ ##1.]}%
 {\item[\hskip\labelsep\theorem@headerfont ##2.\ ##1\ \textnormal{(##3).}]}

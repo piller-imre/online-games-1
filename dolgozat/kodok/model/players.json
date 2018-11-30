@@ -1,0 +1,5 @@
+Players {
+	'player1': <int>,
+	'player2': <int>,
+	'activePlayer': <int>
+}

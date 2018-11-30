@@ -1,0 +1,58 @@
+\begin{thebibliography}{10}
+
+\bibitem{angularjs}
+Angularjs — superheroic javascript mvw framework.
+\newblock \url{https://angularjs.org/}.
+\newblock [online].
+
+\bibitem{tomcat}
+Apache tomcat - welcome!
+\newblock \url{http://tomcat.apache.org/}.
+\newblock [online].
+
+\bibitem{git}
+Git.
+\newblock \url{https://git-scm.com/}.
+\newblock [online].
+
+\bibitem{checkers-rules}
+Kisokos - a dámajáték szabályai.
+\newblock \url{http://mek.oszk.hu/00000/00056/html/133.htm}.
+\newblock [online].
+
+\bibitem{fiveinarow-rules}
+Kisokos - az amőbajátékok szabályai.
+\newblock \url{http://mek.niif.hu/00000/00056/html/132.htm}.
+\newblock [online].
+
+\bibitem{maven}
+Maven – welcome to apache maven.
+\newblock \url{https://maven.apache.org/}.
+\newblock [online].
+
+\bibitem{javaee}
+Mi a java ? - szótár - pc fórum - pc fórum.
+\newblock \url{https://pcforum.hu/szotar/Java}.
+\newblock [online].
+
+\bibitem{mysql}
+Mysql :: Mysql 8.0 reference manual :: 1.3.1 what is mysql?
+\newblock \url{https://dev.mysql.com/doc/refman/8.0/en/what-is-mysql.html}.
+\newblock [online].
+
+\bibitem{session}
+Sessionmentes weboldalak · weblabor.
+\newblock \url{http://weblabor.hu/cikkek/sessionmentes-weboldalak}.
+\newblock [online].
+
+\bibitem{java-web-tech}
+Antal Margit.
+\newblock {\em Java web technológiák}.
+\newblock Scientia Kiadó, 2010.
+
+\bibitem{spring}
+Craig Walls.
+\newblock {\em Spring In Action third edition}.
+\newblock Manning Publications Co., 2011.
+
+\end{thebibliography}

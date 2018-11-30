@@ -1,0 +1,9 @@
+<div>
+    <!-- <p>params: {{match}}</p> -->
+
+    <five-in-a-row ng-if="gameType == 1" init-match="match"></five-in-a-row>
+    <checkers ng-if="gameType == 2"></checkers>    
+    <nine-mans-morris ng-if="gameType == 3"></nine-mans-morris>
+
+    <div ng-if="error" class="alert alert-danger">{{errorMsg}}</div>
+</div>

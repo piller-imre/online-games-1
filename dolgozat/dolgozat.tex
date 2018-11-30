@@ -3,6 +3,18 @@
 \usepackage{dolgozat}
 \usepackage{svg}
 
+\usepackage{listings}
+\usepackage{url}
+\lstset{
+	language=Java,
+	backgroundcolor=\color{white},
+	breaklines=true,
+	captionpos=b,
+	frame=single,
+	keepspaces=true,
+	keywordstyle=\color{blue},	
+}
+
 \begin{document}
 \include{cimlap/cimlap}
 
@@ -23,9 +35,11 @@
 \include{fejezetek/5_implementacio}
 \include{fejezetek/6_tesztek_eredmenyek}
 \include{fejezetek/7_osszegzes}
-
+\include{fejezetek/8_bovitesi_lehetosegek.tex}
 \include{hasznalat/hasznalat}
-\include{irodalomjegyzek/irodalom}
+
+\bibliographystyle{plain}
+\bibliography{irodalomjegyzek/irodalom}
 
 \end{document}
 

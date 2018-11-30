@@ -1,0 +1,7 @@
+REQ = {
+	'userid': <int>,
+	'matchid': <int>
+}
+RES = {
+	'success': <int>
+}

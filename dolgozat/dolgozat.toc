@@ -1,9 +1,0 @@
-\select@language {magyar} \contentsline {chapter}{\numberline {1}Bevezet\IeC {\'e}s}{4}
-\select@language {magyar} \contentsline {chapter}{\numberline {2}Online t\IeC {\'a}bl\IeC {\'a}s j\IeC {\'a}t\IeC {\'e}kok}{5}
-\select@language {magyar} \contentsline {chapter}{\numberline {3}T\IeC {\'a}bl\IeC {\'a}s j\IeC {\'a}t\IeC {\'e}kok specifik\IeC {\'a}ci\IeC {\'o}ja}{6}
-\select@language {magyar} \contentsline {chapter}{\numberline {4}Tervez\IeC {\'e}s}{7}
-\select@language {magyar} \contentsline {chapter}{\numberline {5}Implement\IeC {\'a}ci\IeC {\'o}}{8}
-\select@language {magyar} \contentsline {chapter}{\numberline {6}Tesztek, eredm\IeC {\'e}nyek}{9}
-\select@language {magyar} \contentsline {chapter}{\numberline {7}\IeC {\"O}sszegz\IeC {\'e}s}{10}
-\select@language {magyar} \contentsline {chapter}{Adathordoz\IeC {\'o} haszn\IeC {\'a}lati \IeC {\'u}tmutat\IeC {\'o}}{11}
-\select@language {magyar} \contentsline {chapter}{Irodalomjegyz\'ek}{12}

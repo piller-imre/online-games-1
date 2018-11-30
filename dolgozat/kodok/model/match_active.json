@@ -1,0 +1,8 @@
+MatchActive {
+	'matchid': <int>,
+	'gameType': <enum>,
+	'boardState': <string>,
+	'fields': <Fields>
+	'players': <Players>
+	'turn': <int>
+}

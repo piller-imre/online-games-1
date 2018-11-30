@@ -1,0 +1,98 @@
+<div id="choose-game" class="center container">
+
+    <!-- WAITING MATCH LIST -->
+    <div id="waiting-match-list">
+        <h2>Válassz egy kihívást innen:</h2>
+        <div class="empty-space-20"></div>
+
+        <div ng-if="!isMatchesWaiting">Jelenleg nincs kihívás.</div>
+
+        <div ng-if="isMatchesWaiting">
+            <div>
+                <table class="table table-hover center" ng-model="matchesWaiting">
+                    <tr>
+                        <th>Felhasználó</th>
+                        <th>Játék</th>
+                        <th>Beállítások</th>
+                    </tr>
+                    <tr ng-repeat="match in matchesWaiting" 
+                        ng-click="setSelected(match.id, $index)"
+                        ng-class="{'selected': selectedRow == $index }">
+                        <td>{{ match.username }}</td>
+                        <td>{{ match.gameType.gameTypeName }}</td>
+                        <td>
+                            <table ng-repeat="op in match.gameType.options">
+                                <tr>
+                                    <td>{{ op.name }}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <button ng-click="deleteChallange()" ng-disabled="loading" class="btn btn-primary">Saját törlése</button>
+                <button ng-click="acceptChallange()" ng-disabled="loading" class="btn btn-primary">Kihívás elfogadása</button>
+            </div>
+        </div>
+		<div class="empty-space-20"></div>
+		<div>
+			<button ng-click="getMatchesWaiting()" ng-disabled="loading" class="btn btn-primary">Frissítés</button>
+		</div>
+		<div ng-if="startError" class="alert alert-danger">{{startErrorMsg}}</div>
+    </div>
+
+    <!-- CREATE-MATCH -->
+    <div id="create-match">
+        <h2>Vagy hozz létre egy újat itt:</h2>
+        <div class="empty-space-20"></div>
+
+        <div class="container">
+            <form name="form" novalidate>
+                
+                <div class="form-group">
+                    <legend>Játék:</legend>
+                    <div ng-repeat="type in gameTypes">
+                        <label>
+                        <input 
+                            type="radio" 
+                            name="gametype" 
+                            ng-model="$parent.newMatch.gameTypeId" 
+                            ng-value="type.gameTypeId" 
+                            ng-click="setOptions()" 
+                        />
+                        {{ type.gameTypeName }} 
+                        </label>
+                        <br/>
+                    </div>
+                </div>
+                <div class="form-group"></div>
+                    <legend>Szabályok:</legend>
+                    <div ng-repeat="option in options">
+                        <label>
+                            <input 
+                                type="checkbox" 
+                                name="optionid" 
+                                ng-model="option.marked"
+                                id="option.marked"
+                            />
+                            {{ option.name }}
+                            <br/>
+                        </label>
+                        <br/>
+                    </div>
+                </div>
+                <br/> 
+
+                <div class="empty-space-20"></div>
+
+                <div class="form-group">
+                    <button type="submit" ng-click="createChallange()" ng-disabled="loading" class="btn btn-primary">Létrehozás</button>
+                    <img ng-if="loading" src="img/loading.png" />
+            		<div ng-if="newMatchAlertVisible" ng-class="error == 1 ? 'alert alert-success' : 'alert alert-danger'">{{errorMsg}}</div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

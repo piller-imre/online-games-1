@@ -1,0 +1,22 @@
+REQ = {
+	'userid': <int>,
+	'matchid': <int>
+}
+RES = {
+	'match': {
+		'matchid': <int>,
+		'players': {
+			'player1': <int>,
+			'player2': <int>,
+			'active_player': <int>
+		},
+		'turn': <int>,
+		'winner': <int>,
+		'gameTypeId': <int>
+		'gameTypeName': <str>,
+		'options': [
+			<int>,
+			...
+		]
+	}
+}

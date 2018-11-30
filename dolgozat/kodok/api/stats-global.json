@@ -1,0 +1,21 @@
+REQ = {}
+RES = {
+	globalStats: {
+		'allMatches': <int>,
+		'byGameType': [
+			<int>,
+			...
+		]
+	},
+	globalRanks: [
+		{
+			'userid': <int>,
+			'username': <str>,
+			'allMatches': <int>,
+			'winMatches': <int>,
+		},
+		{
+			...
+		}
+	]
+}

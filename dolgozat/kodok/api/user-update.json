@@ -1,0 +1,9 @@
+REQ = {
+	'userid': <int>,
+	'oldPassword': <str>,
+	'newPassword': <str>,
+	'newPasswordConfirmed': <str>,
+}
+RES = {
+	'success': <boolean>
+}

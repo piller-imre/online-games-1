@@ -98,4 +98,3 @@ _(1-2 oldal)_
 * JWT
 * Táblás játékok implementációjával kapcsolatban leírások (akár szabálygyűjtemény)
 
-
